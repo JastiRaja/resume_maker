@@ -183,11 +183,11 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, templateId, onEdit,
                       </div>
                       <p className="text-gray-700 text-sm mb-2">{project.description}</p>
                       {project.technologies.length > 0 && (
-                        <div className="flex flex-wrap gap-1">
+                        <div className="project-tech-badges flex flex-wrap gap-4">
                           {project.technologies.map((tech, index) => (
                             <span
                               key={index}
-                              className="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded"
+                              className="project-tech-badge bg-purple-100 text-purple-800 text-xs px-6 py-1 rounded inline-block whitespace-nowrap"
                             >
                               {tech}
                             </span>

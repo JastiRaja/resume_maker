@@ -16,3 +16,25 @@
     width: 900px !important;
   }
 }
+
+@media print {
+  .project-tech-badges {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+  }
+  .project-tech-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    vertical-align: middle !important;
+    margin: 2px 4px 2px 0 !important;
+    min-width: 60px;
+    min-height: 24px;
+    padding: 2px 8px !important;
+    box-sizing: border-box;
+    text-align: center !important;
+  }
+}
