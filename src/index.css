@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.force-desktop-preview {
+  max-width: 900px !important;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: block !important;
+}
+
+@media (max-width: 900px) {
+  .force-desktop-preview {
+    min-width: 900px !important;
+    width: 900px !important;
+  }
+}
