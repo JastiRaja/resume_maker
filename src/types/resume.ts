@@ -7,6 +7,7 @@ export interface PersonalInfo {
   location: string;
   linkedin: string;
   website: string;
+  imageUrl?: string;
 }
 
 export interface Experience {
@@ -44,6 +45,19 @@ export interface Project {
   link?: string;
 }
 
+export interface CustomSectionItem {
+  id: string;
+  name: string;
+  description?: string;
+  date?: string;
+}
+
+export interface CustomSection {
+  id: string;
+  title: string;
+  items: CustomSectionItem[];
+}
+
 export interface ResumeData {
   personalInfo: PersonalInfo;
   summary: string;
@@ -51,6 +65,11 @@ export interface ResumeData {
   education: Education[];
   skills: Skill[];
   projects: Project[];
+  customSections?: CustomSection[];
+  theme?: {
+    themeColor: string;
+    textColor: string;
+  };
 }
 
 export interface ResumeTemplate {

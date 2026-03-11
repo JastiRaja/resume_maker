@@ -6,11 +6,10 @@ import CoverLetterPreview from './CoverLetterPreview';
 import { CoverLetterData } from '../types/coverLetter';
 import { generatePDF, generateDOCX } from '../utils/documentGenerator';
 
-interface CoverLetterBuilderProps {
-  onBack: () => void;
-}
+import { useNavigate } from 'react-router-dom';
 
-const CoverLetterBuilder: React.FC<CoverLetterBuilderProps> = ({ onBack }) => {
+const CoverLetterBuilder: React.FC = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState<'template' | 'edit' | 'preview'>('template');
   const [selectedTemplate, setSelectedTemplate] = useState<string>('');
   const [coverLetterData, setCoverLetterData] = useState<CoverLetterData | null>(null);
@@ -73,7 +72,7 @@ const CoverLetterBuilder: React.FC<CoverLetterBuilderProps> = ({ onBack }) => {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <button
-                onClick={onBack}
+                onClick={() => navigate('/')}
                 className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
               >
                 <ArrowLeft className="w-5 h-5" />
@@ -116,13 +115,6 @@ const CoverLetterBuilder: React.FC<CoverLetterBuilderProps> = ({ onBack }) => {
                 >
                   <Download className="w-4 h-4" />
                   <span>PDF</span>
-                </button>
-                <button
-                  onClick={() => handleDownload('docx')}
-                  className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>DOCX</span>
                 </button>
               </div>
             )}

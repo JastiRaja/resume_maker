@@ -1,7 +1,8 @@
 import React from 'react';
-import { Check, Star } from 'lucide-react';
+import { Check, Star, Sparkles } from 'lucide-react';
 import { ResumeData } from '../types/resume';
 import { getResumeTemplates } from '../data/resumeTemplates';
+import ResumePreview from './ResumePreview';
 
 interface ResumeTemplateSelectorProps {
   onSelect: (templateId: string, data: ResumeData) => void;
@@ -27,18 +28,9 @@ const ResumeTemplateSelector: React.FC<ResumeTemplateSelectorProps> = ({ onSelec
             onClick={() => onSelect(template.id, template.sampleData)}
           >
             <div className="relative">
-              <div className="h-64 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-white font-bold text-xl">
-                      {template.sampleData.personalInfo.firstName[0]}
-                      {template.sampleData.personalInfo.lastName[0]}
-                    </span>
-                  </div>
-                  <h3 className="font-semibold text-gray-900">
-                    {template.sampleData.personalInfo.firstName} {template.sampleData.personalInfo.lastName}
-                  </h3>
-                  <p className="text-sm text-gray-600">{template.sampleData.personalInfo.title}</p>
+              <div className="h-96 overflow-hidden relative border-b border-gray-200">
+                <div style={{ transform: 'scale(0.4)', transformOrigin: 'top left', width: '250%', height: '250%' }} className="pointer-events-none absolute top-0 left-0">
+                  <ResumePreview data={template.sampleData} templateId={template.id} isThumbnail={true} />
                 </div>
               </div>
               {template.isPremium && (
@@ -72,6 +64,17 @@ const ResumeTemplateSelector: React.FC<ResumeTemplateSelectorProps> = ({ onSelec
             </div>
           </div>
         ))}
+        
+        {/* Coming Soon Card */}
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border-2 border-dashed border-blue-200 flex flex-col items-center justify-center text-center p-8 min-h-[480px] hover:border-blue-400 hover:bg-blue-50 transition-colors">
+          <div className="w-16 h-16 bg-white shadow-sm text-blue-600 rounded-full flex items-center justify-center mb-6">
+            <Sparkles className="w-8 h-8" />
+          </div>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">More Templates Coming Soon!</h3>
+          <p className="text-gray-600">
+            We're constantly designing new premium templates to help your resume stand out.
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -1351,5 +1351,181 @@ export const getResumeTemplates = (): ResumeTemplate[] => [
         }
       ]
     }
+  },
+  {
+    id: 'navy-professional',
+    name: 'Navy Professional',
+    description: 'Sophisticated dark blue design perfect for modern professionals',
+    category: 'Professional',
+    difficulty: 'Medium',
+    isPremium: true,
+    sampleData: {
+      personalInfo: {
+        firstName: 'Sarah',
+        lastName: 'Johnson',
+        title: 'Senior Software Engineer',
+        email: 'sarah.johnson@email.com',
+        phone: '(555) 123-4567',
+        location: 'San Francisco, CA',
+        linkedin: 'linkedin.com/in/sarahjohnson',
+        website: 'sarahjohnson.dev'
+      },
+      summary: 'Experienced software engineer with 8+ years in full-stack development. Proven track record of leading cross-functional teams and delivering scalable solutions. Passionate about creating user-centric applications and mentoring junior developers.',
+      experience: [
+        {
+          id: '1',
+          company: 'TechCorp Inc.',
+          position: 'Senior Software Engineer',
+          startDate: 'Jan 2020',
+          endDate: 'Present',
+          current: true,
+          description: [
+            'Led development of microservices architecture serving 1M+ users',
+            'Mentored 5 junior developers and conducted code reviews',
+            'Reduced application load time by 40% through performance optimization'
+          ]
+        }
+      ],
+      education: [
+        {
+          id: '1',
+          institution: 'University of California, Berkeley',
+          degree: 'Bachelor of Science',
+          field: 'Computer Science',
+          startDate: '2014',
+          endDate: '2018',
+          gpa: '3.8'
+        }
+      ],
+      skills: [
+        { id: '1', name: 'JavaScript', level: 'Expert', category: 'Programming' },
+        { id: '2', name: 'React', level: 'Expert', category: 'Frontend' }
+      ],
+      projects: [
+        {
+          id: '1',
+          name: 'E-commerce Platform',
+          description: 'Full-stack e-commerce solution with payment integration',
+          technologies: ['React', 'Node.js', 'PostgreSQL'],
+          link: 'github.com/sarahjohnson/ecommerce'
+        }
+      ]
+    }
+  },
+  {
+    id: 'charcoal-executive',
+    name: 'Charcoal Executive',
+    description: 'Elegant charcoal accents for senior and executive roles',
+    category: 'Executive',
+    difficulty: 'Medium',
+    isPremium: true,
+    sampleData: {
+      personalInfo: {
+        firstName: 'Marcus',
+        lastName: 'Johnson',
+        title: 'Founder & CEO',
+        email: 'marcus.johnson@email.com',
+        phone: '(555) 123-4567',
+        location: 'San Francisco, CA',
+        linkedin: 'linkedin.com/in/marcusjohnson',
+        website: 'marcusjohnson.co'
+      },
+      summary: 'Serial entrepreneur with 15+ years of experience building and scaling technology companies. Successfully founded 3 startups with 2 exits totaling $150M+.',
+      experience: [
+        {
+          id: '1',
+          company: 'InnovateTech Solutions',
+          position: 'Founder & CEO',
+          startDate: 'Mar 2020',
+          endDate: 'Present',
+          current: true,
+          description: [
+            'Founded B2B SaaS company serving 500+ enterprise clients',
+            'Raised $25M in Series A funding from top-tier VCs'
+          ]
+        }
+      ],
+      education: [
+        {
+          id: '1',
+          institution: 'Stanford University',
+          degree: 'Master of Science',
+          field: 'Computer Science',
+          startDate: '2006',
+          endDate: '2008'
+        }
+      ],
+      skills: [
+        { id: '1', name: 'Entrepreneurship', level: 'Expert', category: 'Business' },
+        { id: '2', name: 'Fundraising', level: 'Expert', category: 'Business' }
+      ],
+      projects: [
+        {
+          id: '1',
+          name: 'Successful Exit - DataFlow Analytics',
+          description: 'Built and sold analytics platform for $75M to Fortune 500 company',
+          technologies: ['Machine Learning', 'Big Data'],
+          link: 'techcrunch.com'
+        }
+      ]
+    }
+  },
+  {
+    id: 'forest-modern',
+    name: 'Forest Modern',
+    description: 'Fresh design with deep green accents',
+    category: 'Creative',
+    difficulty: 'Medium',
+    isPremium: true,
+    sampleData: {
+      personalInfo: {
+        firstName: 'Michael',
+        lastName: 'Chen',
+        title: 'UX/UI Designer',
+        email: 'michael.chen@email.com',
+        phone: '(555) 987-6543',
+        location: 'New York, NY',
+        linkedin: 'linkedin.com/in/michaelchen',
+        website: 'michaelchen.design'
+      },
+      summary: 'Creative UX/UI designer with 6+ years of experience crafting intuitive digital experiences.',
+      experience: [
+        {
+          id: '1',
+          company: 'Design Studio Pro',
+          position: 'Senior UX Designer',
+          startDate: 'Jun 2021',
+          endDate: 'Present',
+          current: true,
+          description: [
+            'Led UX design for mobile apps with 500K+ downloads',
+            'Conducted user research and usability testing'
+          ]
+        }
+      ],
+      education: [
+        {
+          id: '1',
+          institution: 'Parsons School of Design',
+          degree: 'Bachelor of Fine Arts',
+          field: 'Communication Design',
+          startDate: '2015',
+          endDate: '2019'
+        }
+      ],
+      skills: [
+        { id: '1', name: 'Figma', level: 'Expert', category: 'Design' },
+        { id: '2', name: 'Adobe Creative Suite', level: 'Expert', category: 'Design' }
+      ],
+      projects: [
+        {
+          id: '1',
+          name: 'Mobile Banking App',
+          description: 'Complete UX/UI redesign for banking application',
+          technologies: ['Figma', 'Principle'],
+          link: 'behance.net/michaelchen'
+        }
+      ]
+    }
   }
 ];
