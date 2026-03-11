@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import ResumeBuilder from './components/ResumeBuilder';
 import CoverLetterBuilder from './components/CoverLetterBuilder';
 import LandingPage from './components/LandingPage';
@@ -13,6 +14,7 @@ function App() {
         <Route path="/cover-letter" element={<CoverLetterBuilder />} />
         <Route path="/:pageId" element={<StaticPage />} />
       </Routes>
+      <Analytics />
     </div>
   );
 }
