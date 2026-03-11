@@ -81,25 +81,27 @@ export const StandardPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
           <View wrap={false}>
             <Text style={stdStyles.sectionTitle}>Work Experience</Text>
             {data.experience.length > 0 && (
-              <View style={stdStyles.itemContainer}>
-                <View style={stdStyles.itemHeader}>
-                  <View>
-                    <Text style={stdStyles.itemTitle}>{data.experience[0].position}</Text>
-                    <Text style={[stdStyles.itemSubtitle, { color: themeColorText }]}>{data.experience[0].company}</Text>
-                  </View>
-                  <View style={{ backgroundColor: `${themeColorBg}15`, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12 }}>
-                    <Text style={{ fontSize: 10, color: themeColorText }}>{formatDate(data.experience[0].startDate)} - {formatDate(data.experience[0].endDate)}</Text>
-                  </View>
+              <View style={stdStyles.itemHeader}>
+                <View>
+                  <Text style={stdStyles.itemTitle}>{data.experience[0].position}</Text>
+                  <Text style={[stdStyles.itemSubtitle, { color: themeColorText }]}>{data.experience[0].company}</Text>
                 </View>
-                {data.experience[0].description.map((desc, idx) => (
-                  <View key={idx} style={stdStyles.bulletContainer}>
-                    <Text style={[stdStyles.bulletPoint, { color: themeColorText }]}>•</Text>
-                    <Text style={stdStyles.bulletText}>{desc}</Text>
-                  </View>
-                ))}
+                <View style={{ backgroundColor: `${themeColorBg}15`, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12 }}>
+                  <Text style={{ fontSize: 10, color: themeColorText }}>{formatDate(data.experience[0].startDate)} - {formatDate(data.experience[0].endDate)}</Text>
+                </View>
               </View>
             )}
           </View>
+          {data.experience.length > 0 && (
+            <View style={{ marginBottom: 10 }}>
+              {data.experience[0].description.map((desc, idx) => (
+                <View key={idx} style={stdStyles.bulletContainer}>
+                  <Text style={[stdStyles.bulletPoint, { color: themeColorText }]}>•</Text>
+                  <Text style={stdStyles.bulletText}>{desc}</Text>
+                </View>
+              ))}
+            </View>
+          )}
 
           {data.experience.slice(1).map((exp) => (
             <View key={exp.id} wrap={false} style={stdStyles.itemContainer}>
@@ -155,22 +157,24 @@ export const StandardPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
           <View wrap={false}>
             <Text style={stdStyles.sectionTitle}>Projects</Text>
             {nonEmptyProjects.length > 0 && (
-              <View style={stdStyles.itemContainer}>
-                <View style={stdStyles.itemHeader}>
-                  <Text style={stdStyles.itemTitle}>{nonEmptyProjects[0].name}</Text>
-                  {nonEmptyProjects[0].link ? <Text style={{ fontSize: 9, color: themeColorText, textDecoration: 'none' }}>{nonEmptyProjects[0].link as string}</Text> : null}
-                </View>
-                {nonEmptyProjects[0].description && <Text style={stdStyles.projectDesc}>{nonEmptyProjects[0].description}</Text>}
-                {nonEmptyProjects[0].technologies.length > 0 && (
-                  <View style={stdStyles.projectTechList}>
-                    {nonEmptyProjects[0].technologies.map((tech, idx) => (
-                      <Text key={idx} style={stdStyles.projectTech}>{tech}</Text>
-                    ))}
-                  </View>
-                )}
+              <View style={stdStyles.itemHeader}>
+                <Text style={stdStyles.itemTitle}>{nonEmptyProjects[0].name}</Text>
+                {nonEmptyProjects[0].link ? <Text style={{ fontSize: 9, color: themeColorText, textDecoration: 'none' }}>{nonEmptyProjects[0].link as string}</Text> : null}
               </View>
             )}
           </View>
+          {nonEmptyProjects.length > 0 && (
+            <View style={{ marginBottom: 10 }}>
+              {nonEmptyProjects[0].description && <Text style={stdStyles.projectDesc}>{nonEmptyProjects[0].description}</Text>}
+              {nonEmptyProjects[0].technologies.length > 0 && (
+                <View style={stdStyles.projectTechList}>
+                  {nonEmptyProjects[0].technologies.map((tech, idx) => (
+                    <Text key={idx} style={stdStyles.projectTech}>{tech}</Text>
+                  ))}
+                </View>
+              )}
+            </View>
+          )}
 
           {nonEmptyProjects.slice(1).map((project) => (
             <View key={project.id} wrap={false} style={stdStyles.itemContainer}>
@@ -312,6 +316,26 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
             ))}
           </View>
         )}
+
+        {/* Custom Sections (Moved to left sidebar) */}
+        {data.customSections?.map((section) => section.items.length > 0 && (
+          <View key={section.id} wrap={false} style={{ marginBottom: 10 }}>
+            <Text style={colStyles.sectionTitleLeft}>{section.title}</Text>
+            {section.items.map((item) => (
+              <View key={item.id} style={{ marginBottom: 8 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
+                  <Text style={{ fontSize: 10, color: '#FFFFFF', fontWeight: 'bold' }}>{item.name}</Text>
+                </View>
+                {item.date && (
+                  <Text style={{ fontSize: 8, color: 'rgba(255,255,255,0.6)', marginBottom: 2 }}>{item.date}</Text>
+                )}
+                {item.description && (
+                  <Text style={{ fontSize: 9, color: 'rgba(255,255,255,0.8)', lineHeight: 1.3 }}>{item.description}</Text>
+                )}
+              </View>
+            ))}
+          </View>
+        ))}
       </View>
 
       <View style={colStyles.rightCol}>
@@ -330,25 +354,27 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
             <View wrap={false}>
               <Text style={[colStyles.sectionTitleRight, { borderBottomColor: themeColorBg }]}>Experience</Text>
               {data.experience.length > 0 && (
-                <View style={colStyles.expItemRight}>
-                  <View style={colStyles.expHeaderRight}>
-                    <View>
-                      <Text style={colStyles.expTitleRight}>{data.experience[0].position}</Text>
-                      <Text style={[colStyles.expCompanyRight, { color: themeColorText }]}>{data.experience[0].company}</Text>
-                    </View>
-                    <View style={{ backgroundColor: '#F3F4F6', borderRadius: 4, paddingHorizontal: 6, paddingVertical: 3 }}>
-                      <Text style={{ fontSize: 9, color: '#4B5563', fontWeight: 'bold' }}>{formatDate(data.experience[0].startDate)} - {formatDate(data.experience[0].endDate)}</Text>
-                    </View>
+                <View style={colStyles.expHeaderRight}>
+                  <View>
+                    <Text style={colStyles.expTitleRight}>{data.experience[0].position}</Text>
+                    <Text style={[colStyles.expCompanyRight, { color: themeColorText }]}>{data.experience[0].company}</Text>
                   </View>
-                  {data.experience[0].description.map((desc, idx) => (
-                    <View key={idx} style={colStyles.bulletContainerRight}>
-                      <Text style={[colStyles.bulletPointRight, { color: themeColorText }]}>•</Text>
-                      <Text style={colStyles.bulletTextRight}>{desc}</Text>
-                    </View>
-                  ))}
+                  <View style={{ backgroundColor: '#F3F4F6', borderRadius: 4, paddingHorizontal: 6, paddingVertical: 3 }}>
+                    <Text style={{ fontSize: 9, color: '#4B5563', fontWeight: 'bold' }}>{formatDate(data.experience[0].startDate)} - {formatDate(data.experience[0].endDate)}</Text>
+                  </View>
                 </View>
               )}
             </View>
+            {data.experience.length > 0 && (
+              <View style={{ marginBottom: 12 }}>
+                {data.experience[0].description.map((desc, idx) => (
+                  <View key={idx} style={colStyles.bulletContainerRight}>
+                    <Text style={[colStyles.bulletPointRight, { color: themeColorText }]}>•</Text>
+                    <Text style={colStyles.bulletTextRight}>{desc}</Text>
+                  </View>
+                ))}
+              </View>
+            )}
 
             {data.experience.slice(1).map((exp) => (
               <View key={exp.id} wrap={false} style={colStyles.expItemRight}>
@@ -377,22 +403,24 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
             <View wrap={false}>
               <Text style={[colStyles.sectionTitleRight, { borderBottomColor: themeColorBg }]}>Projects</Text>
               {nonEmptyProjects.length > 0 && (
-                <View style={colStyles.expItemRight}>
-                  <View style={colStyles.expHeaderRight}>
-                    <Text style={colStyles.expTitleRight}>{nonEmptyProjects[0].name}</Text>
-                    {nonEmptyProjects[0].link ? <Text style={{ fontSize: 9, color: themeColorText }}>{nonEmptyProjects[0].link as string}</Text> : null}
-                  </View>
-                  {nonEmptyProjects[0].description && <Text style={colStyles.projectDescRight}>{nonEmptyProjects[0].description}</Text>}
-                  {nonEmptyProjects[0].technologies && nonEmptyProjects[0].technologies.length > 0 && (
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 4 }}>
-                      {nonEmptyProjects[0].technologies.map((tech, idx) => (
-                        <Text key={idx} style={{ fontSize: 8, color: '#6B7280', backgroundColor: '#F3F4F6', paddingVertical: 2, paddingHorizontal: 4, borderRadius: 2 }}>{tech}</Text>
-                      ))}
-                    </View>
-                  )}
+                <View style={colStyles.expHeaderRight}>
+                  <Text style={colStyles.expTitleRight}>{nonEmptyProjects[0].name}</Text>
+                  {nonEmptyProjects[0].link ? <Text style={{ fontSize: 9, color: themeColorText }}>{nonEmptyProjects[0].link as string}</Text> : null}
                 </View>
               )}
             </View>
+            {nonEmptyProjects.length > 0 && (
+              <View style={{ marginBottom: 12 }}>
+                {nonEmptyProjects[0].description && <Text style={colStyles.projectDescRight}>{nonEmptyProjects[0].description}</Text>}
+                {nonEmptyProjects[0].technologies && nonEmptyProjects[0].technologies.length > 0 && (
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 4 }}>
+                    {nonEmptyProjects[0].technologies.map((tech, idx) => (
+                      <Text key={idx} style={{ fontSize: 8, color: '#6B7280', backgroundColor: '#F3F4F6', paddingVertical: 2, paddingHorizontal: 4, borderRadius: 2 }}>{tech}</Text>
+                    ))}
+                  </View>
+                )}
+              </View>
+            )}
 
             {nonEmptyProjects.slice(1).map((project) => (
               <View key={project.id} wrap={false} style={colStyles.expItemRight}>
@@ -412,31 +440,6 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
             ))}
           </View>
         )}
-
-        {/* Custom Sections */}
-        {data.customSections?.map((section) => section.items.length > 0 && (
-          <View key={section.id}>
-            <Text style={[colStyles.sectionTitleRight, { borderBottomColor: themeColorBg }]}>{section.title}</Text>
-            {section.items.map((item) => (
-              <View key={item.id} style={colStyles.expItemRight}>
-                <View style={colStyles.expHeaderRight}>
-                  <Text style={colStyles.expTitleRight}>{item.name}</Text>
-                  {item.date ? (
-                    <View style={{ backgroundColor: '#F3F4F6', borderRadius: 4, paddingHorizontal: 6, paddingVertical: 3 }}>
-                      <Text style={{ fontSize: 9, color: '#4B5563', fontWeight: 'bold' }}>{item.date}</Text>
-                    </View>
-                  ) : null}
-                </View>
-                {item.description && (
-                  <View style={colStyles.bulletContainerRight}>
-                    <Text style={[colStyles.bulletPointRight, { color: themeColorText }]}>•</Text>
-                    <Text style={colStyles.bulletTextRight}>{item.description}</Text>
-                  </View>
-                )}
-              </View>
-            ))}
-          </View>
-        ))}
       </View>
     </Page>
   );
@@ -504,23 +507,25 @@ export const CenteredPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
               </View>
             </View>
             {data.experience.length > 0 && (
-              <View style={cntStyles.itemContainer}>
-                <View style={cntStyles.itemHeader}>
-                  <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 8 }}>
-                    <Text style={cntStyles.itemTitle}>{data.experience[0].position}</Text>
-                    <Text style={[cntStyles.itemSubtitle, { color: themeColorText }]}>{data.experience[0].company}</Text>
-                  </View>
-                  <Text style={cntStyles.itemDate}>{formatDate(data.experience[0].startDate)} - {formatDate(data.experience[0].endDate)}</Text>
+              <View style={cntStyles.itemHeader}>
+                <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 8 }}>
+                  <Text style={cntStyles.itemTitle}>{data.experience[0].position}</Text>
+                  <Text style={[cntStyles.itemSubtitle, { color: themeColorText }]}>{data.experience[0].company}</Text>
                 </View>
-                {data.experience[0].description.map((desc, idx) => (
-                  <View key={idx} style={cntStyles.bulletContainer}>
-                    <Text style={cntStyles.bulletPoint}>•</Text>
-                    <Text style={cntStyles.bulletText}>{desc}</Text>
-                  </View>
-                ))}
+                <Text style={cntStyles.itemDate}>{formatDate(data.experience[0].startDate)} - {formatDate(data.experience[0].endDate)}</Text>
               </View>
             )}
           </View>
+          {data.experience.length > 0 && (
+            <View style={{ marginBottom: 12 }}>
+              {data.experience[0].description.map((desc, idx) => (
+                <View key={idx} style={cntStyles.bulletContainer}>
+                  <Text style={cntStyles.bulletPoint}>•</Text>
+                  <Text style={cntStyles.bulletText}>{desc}</Text>
+                </View>
+              ))}
+            </View>
+          )}
           
           {data.experience.slice(1).map((exp) => (
             <View key={exp.id} wrap={false} style={cntStyles.itemContainer}>
@@ -588,22 +593,24 @@ export const CenteredPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
               </View>
             </View>
             {nonEmptyProjects.length > 0 && (
-              <View style={cntStyles.itemContainer}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
-                  <Text style={cntStyles.itemTitle}>{nonEmptyProjects[0].name}</Text>
-                  {nonEmptyProjects[0].link ? <Text style={{ fontSize: 9, color: themeColorText }}>{nonEmptyProjects[0].link as string}</Text> : null}
-                </View>
-                {nonEmptyProjects[0].description && <Text style={cntStyles.projectDesc}>{nonEmptyProjects[0].description}</Text>}
-                {nonEmptyProjects[0].technologies && nonEmptyProjects[0].technologies.length > 0 && (
-                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 4, marginTop: 4 }}>
-                    {nonEmptyProjects[0].technologies.map((tech, idx) => (
-                      <Text key={idx} style={{ fontSize: 8, color: '#6B7280', backgroundColor: '#F3F4F6', paddingVertical: 3, paddingHorizontal: 6, borderRadius: 2 }}>{tech}</Text>
-                    ))}
-                  </View>
-                )}
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
+                <Text style={cntStyles.itemTitle}>{nonEmptyProjects[0].name}</Text>
+                {nonEmptyProjects[0].link ? <Text style={{ fontSize: 9, color: themeColorText }}>{nonEmptyProjects[0].link as string}</Text> : null}
               </View>
             )}
           </View>
+          {nonEmptyProjects.length > 0 && (
+            <View style={{ marginBottom: 12 }}>
+              {nonEmptyProjects[0].description && <Text style={cntStyles.projectDesc}>{nonEmptyProjects[0].description}</Text>}
+              {nonEmptyProjects[0].technologies && nonEmptyProjects[0].technologies.length > 0 && (
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 4, marginTop: 4 }}>
+                  {nonEmptyProjects[0].technologies.map((tech, idx) => (
+                    <Text key={idx} style={{ fontSize: 8, color: '#6B7280', backgroundColor: '#F3F4F6', paddingVertical: 3, paddingHorizontal: 6, borderRadius: 2 }}>{tech}</Text>
+                  ))}
+                </View>
+              )}
+            </View>
+          )}
 
           {nonEmptyProjects.slice(1).map((project) => (
             <View key={project.id} wrap={false} style={cntStyles.itemContainer}>

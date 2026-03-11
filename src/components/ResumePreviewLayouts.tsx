@@ -375,6 +375,28 @@ export const TwoColumnLayout: React.FC<LayoutProps> = ({ data, themeColorText, t
             </div>
           </div>
         )}
+
+        {/* Custom Sections (Moved to sidebar for space-saving) */}
+        {data.customSections?.map((section) => section.items.length > 0 && (
+          <div key={section.id} className="mb-8 text-left">
+            <h2 className="text-xs font-bold text-white/70 uppercase tracking-widest mb-4 border-b border-white/20 pb-2">{section.title}</h2>
+            <div className="space-y-4">
+              {section.items.map((item) => (
+                <div key={item.id}>
+                  {item.date && (
+                    <div className="text-xs text-white/60 mb-1 font-semibold">{item.date}</div>
+                  )}
+                  <div className="flex justify-between items-start mb-1">
+                    <h3 className="font-bold text-white text-sm">{item.name}</h3>
+                  </div>
+                  {item.description && (
+                    <p className="text-white/80 text-sm leading-relaxed mt-1">{item.description}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Right Column (Main Content) */}
@@ -470,38 +492,6 @@ export const TwoColumnLayout: React.FC<LayoutProps> = ({ data, themeColorText, t
             </div>
           </div>
         )}
-
-        {/* Custom Sections */}
-        {data.customSections?.map((section) => section.items.length > 0 && (
-          <div key={section.id} className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3 tracking-tight">
-              <span className="w-8 h-1.5 inline-block rounded-full" style={{ backgroundColor: themeColorBg }}></span>
-              {section.title}
-            </h2>
-            <div className="space-y-8">
-              {section.items.map((item) => (
-                <div key={item.id}>
-                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3">
-                    <h3 className="text-xl font-bold text-gray-900">{item.name}</h3>
-                    {item.date && (
-                      <span className="text-sm bg-gray-100 text-gray-600 font-medium px-3 py-1.5 rounded-md sm:mt-0 mt-2 inline-block">
-                        {item.date}
-                      </span>
-                    )}
-                  </div>
-                  {item.description && (
-                    <ul className="text-gray-700 text-[15px] space-y-2.5 mt-2">
-                      <li className="flex items-start">
-                        <span className="mr-3 mt-1" style={{ color: themeColorText }}>▹</span>
-                        <span className="leading-relaxed">{item.description}</span>
-                      </li>
-                    </ul>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   );

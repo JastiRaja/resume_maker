@@ -2,6 +2,61 @@ import React, { useState, useRef } from 'react';
 import { Plus, Trash2, ArrowRight, Upload, Image as ImageIcon, X } from 'lucide-react';
 import { ResumeData, Experience, Education, Skill } from '../types/resume';
 
+const TechnologyInput = ({ technologies, onChange }: { technologies: string[], onChange: (techs: string[]) => void }) => {
+  const [inputValue, setInputValue] = useState('');
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      addTechnology();
+    }
+  };
+
+  const addTechnology = () => {
+    const trimmedValue = inputValue.trim();
+    // Don't add completely empty strings, and avoid duplicates if exactly matching
+    if (trimmedValue && !technologies.includes(trimmedValue)) {
+      onChange([...technologies, trimmedValue]);
+    }
+    setInputValue('');
+  };
+
+  const removeTechnology = (techToRemove: string) => {
+    onChange(technologies.filter(tech => tech !== techToRemove));
+  };
+
+  return (
+    <div className="w-full">
+      {technologies.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-2">
+          {technologies.map((tech, index) => (
+            <span key={index} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+              {tech}
+              <button 
+                type="button" 
+                onClick={(e) => { e.preventDefault(); removeTechnology(tech); }}
+                className="flex items-center justify-center w-4 h-4 rounded-full hover:bg-blue-200 text-blue-600 focus:outline-none"
+                title={`Remove ${tech}`}
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+      <input
+        type="text"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+        onBlur={addTechnology}
+        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        placeholder={technologies.length === 0 ? "e.g., React, Node.js (Press Enter to add)" : "Add more technologies..."}
+      />
+    </div>
+  );
+};
+
 interface ResumeEditorProps {
   initialData: ResumeData | null;
   onDataUpdate: (data: ResumeData) => void;
@@ -655,13 +710,10 @@ const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData, onDataUpdate, 
                   />
                 </div>
                 <div className="mt-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Technologies (comma separated)</label>
-                  <input
-                    type="text"
-                    value={project.technologies.join(', ')}
-                    onChange={(e) => updateProject(project.id, 'technologies', e.target.value.split(',').map(t => t.trim()).filter(Boolean))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., React, Node.js, AWS"
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Technologies</label>
+                  <TechnologyInput 
+                    technologies={project.technologies} 
+                    onChange={(newTechs) => updateProject(project.id, 'technologies', newTechs)} 
                   />
                 </div>
               </div>
