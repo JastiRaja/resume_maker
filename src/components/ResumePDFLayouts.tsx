@@ -78,9 +78,31 @@ export const StandardPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
 
       {data.experience.length > 0 && (
         <View style={stdStyles.section}>
-          <Text style={stdStyles.sectionTitle}>Work Experience</Text>
-          {data.experience.map((exp) => (
-            <View key={exp.id} style={stdStyles.itemContainer}>
+          <View wrap={false}>
+            <Text style={stdStyles.sectionTitle}>Work Experience</Text>
+            {data.experience.length > 0 && (
+              <View style={stdStyles.itemContainer}>
+                <View style={stdStyles.itemHeader}>
+                  <View>
+                    <Text style={stdStyles.itemTitle}>{data.experience[0].position}</Text>
+                    <Text style={[stdStyles.itemSubtitle, { color: themeColorText }]}>{data.experience[0].company}</Text>
+                  </View>
+                  <View style={{ backgroundColor: `${themeColorBg}15`, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12 }}>
+                    <Text style={{ fontSize: 10, color: themeColorText }}>{formatDate(data.experience[0].startDate)} - {formatDate(data.experience[0].endDate)}</Text>
+                  </View>
+                </View>
+                {data.experience[0].description.map((desc, idx) => (
+                  <View key={idx} style={stdStyles.bulletContainer}>
+                    <Text style={[stdStyles.bulletPoint, { color: themeColorText }]}>•</Text>
+                    <Text style={stdStyles.bulletText}>{desc}</Text>
+                  </View>
+                ))}
+              </View>
+            )}
+          </View>
+
+          {data.experience.slice(1).map((exp) => (
+            <View key={exp.id} wrap={false} style={stdStyles.itemContainer}>
               <View style={stdStyles.itemHeader}>
                 <View>
                   <Text style={stdStyles.itemTitle}>{exp.position}</Text>
@@ -103,9 +125,21 @@ export const StandardPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
 
       {data.education.length > 0 && (
         <View style={stdStyles.section}>
-          <Text style={stdStyles.sectionTitle}>Education</Text>
-          {data.education.map((edu) => (
-            <View key={edu.id} style={[stdStyles.itemContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
+          <View wrap={false}>
+            <Text style={stdStyles.sectionTitle}>Education</Text>
+            {data.education.length > 0 && (
+              <View style={[stdStyles.itemContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
+                <View>
+                  <Text style={stdStyles.itemTitle}>{data.education[0].degree}{data.education[0].field ? ` in ${data.education[0].field}` : ''}</Text>
+                  <Text style={[stdStyles.itemSubtitle, { color: themeColorText }]}>{data.education[0].institution}</Text>
+                </View>
+                <Text style={stdStyles.itemDate}>{formatDate(data.education[0].endDate)}</Text>
+              </View>
+            )}
+          </View>
+          
+          {data.education.slice(1).map((edu) => (
+            <View wrap={false} key={edu.id} style={[stdStyles.itemContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
               <View>
                 <Text style={stdStyles.itemTitle}>{edu.degree}{edu.field ? ` in ${edu.field}` : ''}</Text>
                 <Text style={[stdStyles.itemSubtitle, { color: themeColorText }]}>{edu.institution}</Text>
@@ -118,9 +152,28 @@ export const StandardPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
 
       {nonEmptyProjects.length > 0 && (
         <View style={stdStyles.section}>
-          <Text style={stdStyles.sectionTitle}>Projects</Text>
-          {nonEmptyProjects.map((project) => (
-            <View key={project.id} style={stdStyles.itemContainer}>
+          <View wrap={false}>
+            <Text style={stdStyles.sectionTitle}>Projects</Text>
+            {nonEmptyProjects.length > 0 && (
+              <View style={stdStyles.itemContainer}>
+                <View style={stdStyles.itemHeader}>
+                  <Text style={stdStyles.itemTitle}>{nonEmptyProjects[0].name}</Text>
+                  {nonEmptyProjects[0].link ? <Text style={{ fontSize: 9, color: themeColorText, textDecoration: 'none' }}>{nonEmptyProjects[0].link as string}</Text> : null}
+                </View>
+                {nonEmptyProjects[0].description && <Text style={stdStyles.projectDesc}>{nonEmptyProjects[0].description}</Text>}
+                {nonEmptyProjects[0].technologies.length > 0 && (
+                  <View style={stdStyles.projectTechList}>
+                    {nonEmptyProjects[0].technologies.map((tech, idx) => (
+                      <Text key={idx} style={stdStyles.projectTech}>{tech}</Text>
+                    ))}
+                  </View>
+                )}
+              </View>
+            )}
+          </View>
+
+          {nonEmptyProjects.slice(1).map((project) => (
+            <View key={project.id} wrap={false} style={stdStyles.itemContainer}>
               <View style={stdStyles.itemHeader}>
                 <Text style={stdStyles.itemTitle}>{project.name}</Text>
                 {project.link ? <Text style={{ fontSize: 9, color: themeColorText, textDecoration: 'none' }}>{project.link as string}</Text> : null}
@@ -139,13 +192,20 @@ export const StandardPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
       )}
 
       {data.skills.length > 0 && (
-        <View style={stdStyles.section}>
+        <View style={stdStyles.section} wrap={false}>
           <Text style={stdStyles.sectionTitle}>Skills</Text>
-          <View style={stdStyles.skillsContainer}>
+          <View style={[stdStyles.skillsContainer, { flexDirection: 'row', flexWrap: 'wrap', gap: 15 }]}>
             {data.skills.map((skill) => (
-              <View key={skill.id} style={{ backgroundColor: '#F9FAFB', border: '1px solid #F3F4F6', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 6, minWidth: 100 }}>
-                <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#1F2937', marginBottom: 2 }}>{skill.name}</Text>
-                <Text style={{ fontSize: 8, color: '#6B7280' }}>{skill.level}</Text>
+              <View key={skill.id} style={{ width: '45%' }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
+                  <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#1F2937' }}>{skill.name}</Text>
+                  {skill.level && <Text style={{ fontSize: 8, color: '#6B7280' }}>{skill.level}</Text>}
+                </View>
+                {skill.level && (
+                  <View style={{ width: '100%', height: 4, backgroundColor: '#E5E7EB', borderRadius: 2 }}>
+                    <View style={{ height: 4, backgroundColor: themeColorBg, borderRadius: 2, width: skill.level === 'Beginner' ? '25%' : skill.level === 'Intermediate' ? '50%' : skill.level === 'Advanced' ? '75%' : '100%' }} />
+                  </View>
+                )}
               </View>
             ))}
           </View>
@@ -223,11 +283,13 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
         {data.personalInfo.website && <Text style={colStyles.contactItemLeft}>{data.personalInfo.website}</Text>}
 
         {data.skills.length > 0 && (
-          <View>
+          <View wrap={false}>
             <Text style={colStyles.sectionTitleLeft}>Skills</Text>
             {data.skills.map((skill) => (
               <View key={skill.id} style={{ marginBottom: 8 }}>
-                <Text style={{ fontSize: 10, color: '#FFFFFF', marginBottom: 2 }}>{skill.name}</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
+                  <Text style={{ fontSize: 10, color: '#FFFFFF' }}>{skill.name}</Text>
+                </View>
                 {skill.level && (
                   <View style={{ width: '100%', height: 4, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 2 }}>
                     <View style={{ height: 4, backgroundColor: '#FFFFFF', borderRadius: 2, width: skill.level === 'Beginner' ? '25%' : skill.level === 'Intermediate' ? '50%' : skill.level === 'Advanced' ? '75%' : '100%' }} />
@@ -239,7 +301,7 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
         )}
 
         {data.education.length > 0 && (
-          <View>
+          <View wrap={false}>
             <Text style={colStyles.sectionTitleLeft}>Education</Text>
             {data.education.map((edu) => (
               <View key={edu.id} style={colStyles.eduItemLeft}>
@@ -257,7 +319,7 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
         <Text style={[colStyles.title, { color: themeColorText }]}>{data.personalInfo.title}</Text>
 
         {data.summary && (
-          <View>
+          <View wrap={false}>
             <Text style={[colStyles.sectionTitleRight, { borderBottomColor: themeColorBg }]}>Profile</Text>
             <Text style={colStyles.summaryTextRight}>{data.summary}</Text>
           </View>
@@ -265,9 +327,31 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
 
         {data.experience.length > 0 && (
           <View>
-            <Text style={[colStyles.sectionTitleRight, { borderBottomColor: themeColorBg }]}>Experience</Text>
-            {data.experience.map((exp) => (
-              <View key={exp.id} style={colStyles.expItemRight}>
+            <View wrap={false}>
+              <Text style={[colStyles.sectionTitleRight, { borderBottomColor: themeColorBg }]}>Experience</Text>
+              {data.experience.length > 0 && (
+                <View style={colStyles.expItemRight}>
+                  <View style={colStyles.expHeaderRight}>
+                    <View>
+                      <Text style={colStyles.expTitleRight}>{data.experience[0].position}</Text>
+                      <Text style={[colStyles.expCompanyRight, { color: themeColorText }]}>{data.experience[0].company}</Text>
+                    </View>
+                    <View style={{ backgroundColor: '#F3F4F6', borderRadius: 4, paddingHorizontal: 6, paddingVertical: 3 }}>
+                      <Text style={{ fontSize: 9, color: '#4B5563', fontWeight: 'bold' }}>{formatDate(data.experience[0].startDate)} - {formatDate(data.experience[0].endDate)}</Text>
+                    </View>
+                  </View>
+                  {data.experience[0].description.map((desc, idx) => (
+                    <View key={idx} style={colStyles.bulletContainerRight}>
+                      <Text style={[colStyles.bulletPointRight, { color: themeColorText }]}>•</Text>
+                      <Text style={colStyles.bulletTextRight}>{desc}</Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+            </View>
+
+            {data.experience.slice(1).map((exp) => (
+              <View key={exp.id} wrap={false} style={colStyles.expItemRight}>
                 <View style={colStyles.expHeaderRight}>
                   <View>
                     <Text style={colStyles.expTitleRight}>{exp.position}</Text>
@@ -290,9 +374,28 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
 
         {nonEmptyProjects.length > 0 && (
           <View>
-            <Text style={[colStyles.sectionTitleRight, { borderBottomColor: themeColorBg }]}>Projects</Text>
-            {nonEmptyProjects.map((project) => (
-              <View key={project.id} style={colStyles.expItemRight}>
+            <View wrap={false}>
+              <Text style={[colStyles.sectionTitleRight, { borderBottomColor: themeColorBg }]}>Projects</Text>
+              {nonEmptyProjects.length > 0 && (
+                <View style={colStyles.expItemRight}>
+                  <View style={colStyles.expHeaderRight}>
+                    <Text style={colStyles.expTitleRight}>{nonEmptyProjects[0].name}</Text>
+                    {nonEmptyProjects[0].link ? <Text style={{ fontSize: 9, color: themeColorText }}>{nonEmptyProjects[0].link as string}</Text> : null}
+                  </View>
+                  {nonEmptyProjects[0].description && <Text style={colStyles.projectDescRight}>{nonEmptyProjects[0].description}</Text>}
+                  {nonEmptyProjects[0].technologies && nonEmptyProjects[0].technologies.length > 0 && (
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 4 }}>
+                      {nonEmptyProjects[0].technologies.map((tech, idx) => (
+                        <Text key={idx} style={{ fontSize: 8, color: '#6B7280', backgroundColor: '#F3F4F6', paddingVertical: 2, paddingHorizontal: 4, borderRadius: 2 }}>{tech}</Text>
+                      ))}
+                    </View>
+                  )}
+                </View>
+              )}
+            </View>
+
+            {nonEmptyProjects.slice(1).map((project) => (
+              <View key={project.id} wrap={false} style={colStyles.expItemRight}>
                 <View style={colStyles.expHeaderRight}>
                   <Text style={colStyles.expTitleRight}>{project.name}</Text>
                   {project.link ? <Text style={{ fontSize: 9, color: themeColorText }}>{project.link as string}</Text> : null}
@@ -393,14 +496,34 @@ export const CenteredPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
 
       {data.experience.length > 0 && (
         <View>
-          <View style={cntStyles.sectionTitleContainer}>
-            <View style={[cntStyles.sectionTitleLine, { backgroundColor: themeColorBg }]} />
-            <View style={cntStyles.sectionTitleWrapper}>
-              <Text style={cntStyles.sectionTitle}>Professional Experience</Text>
+          <View wrap={false}>
+            <View style={cntStyles.sectionTitleContainer}>
+              <View style={[cntStyles.sectionTitleLine, { backgroundColor: themeColorBg }]} />
+              <View style={cntStyles.sectionTitleWrapper}>
+                <Text style={cntStyles.sectionTitle}>Professional Experience</Text>
+              </View>
             </View>
+            {data.experience.length > 0 && (
+              <View style={cntStyles.itemContainer}>
+                <View style={cntStyles.itemHeader}>
+                  <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 8 }}>
+                    <Text style={cntStyles.itemTitle}>{data.experience[0].position}</Text>
+                    <Text style={[cntStyles.itemSubtitle, { color: themeColorText }]}>{data.experience[0].company}</Text>
+                  </View>
+                  <Text style={cntStyles.itemDate}>{formatDate(data.experience[0].startDate)} - {formatDate(data.experience[0].endDate)}</Text>
+                </View>
+                {data.experience[0].description.map((desc, idx) => (
+                  <View key={idx} style={cntStyles.bulletContainer}>
+                    <Text style={cntStyles.bulletPoint}>•</Text>
+                    <Text style={cntStyles.bulletText}>{desc}</Text>
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
-          {data.experience.map((exp) => (
-            <View key={exp.id} style={cntStyles.itemContainer}>
+          
+          {data.experience.slice(1).map((exp) => (
+            <View key={exp.id} wrap={false} style={cntStyles.itemContainer}>
               <View style={cntStyles.itemHeader}>
                 <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 8 }}>
                   <Text style={cntStyles.itemTitle}>{exp.position}</Text>
@@ -421,14 +544,28 @@ export const CenteredPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
 
       {data.education.length > 0 && (
         <View>
-          <View style={cntStyles.sectionTitleContainer}>
-            <View style={[cntStyles.sectionTitleLine, { backgroundColor: themeColorBg }]} />
-            <View style={cntStyles.sectionTitleWrapper}>
-              <Text style={cntStyles.sectionTitle}>Education</Text>
+          <View wrap={false}>
+            <View style={cntStyles.sectionTitleContainer}>
+              <View style={[cntStyles.sectionTitleLine, { backgroundColor: themeColorBg }]} />
+              <View style={cntStyles.sectionTitleWrapper}>
+                <Text style={cntStyles.sectionTitle}>Education</Text>
+              </View>
             </View>
+            {data.education.length > 0 && (
+              <View style={cntStyles.itemContainer}>
+                <View style={cntStyles.itemHeader}>
+                  <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 8 }}>
+                    <Text style={cntStyles.itemTitle}>{data.education[0].degree}{data.education[0].field ? ` in ${data.education[0].field}` : ''}</Text>
+                    <Text style={[cntStyles.itemSubtitle, { color: themeColorText }]}>{data.education[0].institution}</Text>
+                  </View>
+                  <Text style={cntStyles.itemDate}>{formatDate(data.education[0].endDate)}</Text>
+                </View>
+              </View>
+            )}
           </View>
-          {data.education.map((edu) => (
-            <View key={edu.id} style={cntStyles.itemContainer}>
+          
+          {data.education.slice(1).map((edu) => (
+            <View key={edu.id} wrap={false} style={cntStyles.itemContainer}>
               <View style={cntStyles.itemHeader}>
                 <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 8 }}>
                   <Text style={cntStyles.itemTitle}>{edu.degree}{edu.field ? ` in ${edu.field}` : ''}</Text>
@@ -443,14 +580,33 @@ export const CenteredPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
 
       {nonEmptyProjects.length > 0 && (
         <View>
-          <View style={cntStyles.sectionTitleContainer}>
-            <View style={[cntStyles.sectionTitleLine, { backgroundColor: themeColorBg }]} />
-            <View style={cntStyles.sectionTitleWrapper}>
-              <Text style={cntStyles.sectionTitle}>Selected Projects</Text>
+          <View wrap={false}>
+            <View style={cntStyles.sectionTitleContainer}>
+              <View style={[cntStyles.sectionTitleLine, { backgroundColor: themeColorBg }]} />
+              <View style={cntStyles.sectionTitleWrapper}>
+                <Text style={cntStyles.sectionTitle}>Selected Projects</Text>
+              </View>
             </View>
+            {nonEmptyProjects.length > 0 && (
+              <View style={cntStyles.itemContainer}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
+                  <Text style={cntStyles.itemTitle}>{nonEmptyProjects[0].name}</Text>
+                  {nonEmptyProjects[0].link ? <Text style={{ fontSize: 9, color: themeColorText }}>{nonEmptyProjects[0].link as string}</Text> : null}
+                </View>
+                {nonEmptyProjects[0].description && <Text style={cntStyles.projectDesc}>{nonEmptyProjects[0].description}</Text>}
+                {nonEmptyProjects[0].technologies && nonEmptyProjects[0].technologies.length > 0 && (
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 4, marginTop: 4 }}>
+                    {nonEmptyProjects[0].technologies.map((tech, idx) => (
+                      <Text key={idx} style={{ fontSize: 8, color: '#6B7280', backgroundColor: '#F3F4F6', paddingVertical: 3, paddingHorizontal: 6, borderRadius: 2 }}>{tech}</Text>
+                    ))}
+                  </View>
+                )}
+              </View>
+            )}
           </View>
-          {nonEmptyProjects.map((project) => (
-            <View key={project.id} style={cntStyles.itemContainer}>
+
+          {nonEmptyProjects.slice(1).map((project) => (
+            <View key={project.id} wrap={false} style={cntStyles.itemContainer}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
                 <Text style={cntStyles.itemTitle}>{project.name}</Text>
                 {project.link ? <Text style={{ fontSize: 9, color: themeColorText }}>{project.link as string}</Text> : null}
@@ -469,7 +625,7 @@ export const CenteredPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
       )}
 
       {data.skills.length > 0 && (
-        <View>
+        <View wrap={false}>
           <View style={cntStyles.sectionTitleContainer}>
             <View style={[cntStyles.sectionTitleLine, { backgroundColor: themeColorBg }]} />
             <View style={cntStyles.sectionTitleWrapper}>
