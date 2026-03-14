@@ -80,7 +80,7 @@ const ResumeBuilder: React.FC = () => {
                 <span>Back</span>
               </button>
               <div className="flex items-center space-x-2">
-                <img src="/images/Gemini_Generated_Image_ftxroqftxroqftxr.png" alt="Eco Resume Logo" className="w-6 h-6 object-contain" />
+                <img src="/images/logo.png" alt="Eco Resume Logo" className="w-6 h-6 object-contain" />
                 <span className="text-xl font-semibold text-gray-900">Eco Resume</span>
               </div>
             </div>

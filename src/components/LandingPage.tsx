@@ -59,7 +59,7 @@ const LandingPage: React.FC = () => {
             <div className="flex items-center space-x-3">
               <div className="relative group">
                 <div className="absolute inset-0 bg-blue-500 rounded-full blur-md opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                <img src="/images/Gemini_Generated_Image_ftxroqftxroqftxr.png" alt="Eco Resume Logo" className="relative w-12 h-12 object-contain" />
+                <img src="/images/logo.png" alt="Eco Resume Logo" className="relative w-12 h-12 object-contain" />
               </div>
               <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">Eco Resume</span>
             </div>
@@ -209,7 +209,7 @@ const LandingPage: React.FC = () => {
           <div className="grid md:grid-cols-4 gap-12 md:gap-8 mb-16">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <img src="/images/Gemini_Generated_Image_ftxroqftxroqftxr.png" alt="Eco Resume Logo" className="w-12 h-12 " />
+                <img src="/images/logo.png" alt="Eco Resume Logo" className="w-12 h-12 " />
                 <span className="text-lg font-bold">Eco Resume</span>
               </div>
               <p className="text-gray-400">
