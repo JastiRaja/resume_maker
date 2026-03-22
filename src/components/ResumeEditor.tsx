@@ -353,7 +353,10 @@ const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData, onDataUpdate, 
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold text-gray-900">Edit Your Resume</h2>
         <button
-          onClick={onNext}
+          onClick={() => {
+            onDataUpdate(formData);
+            onNext();
+          }}
           className="flex items-center space-x-2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
         >
           <span>Preview</span>

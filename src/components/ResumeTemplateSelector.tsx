@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Check, Star, Sparkles } from 'lucide-react';
 import { ResumeData } from '../types/resume';
 import { getResumeTemplates } from '../data/resumeTemplates';
@@ -9,7 +9,7 @@ interface ResumeTemplateSelectorProps {
 }
 
 const ResumeTemplateSelector: React.FC<ResumeTemplateSelectorProps> = ({ onSelect }) => {
-  const templates = getResumeTemplates();
+  const templates = useMemo(() => getResumeTemplates(), []);
 
   return (
     <div className="py-8">

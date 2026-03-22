@@ -1,14 +1,18 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Edit3, Download, Palette } from 'lucide-react';
 import { ResumeData } from '../types/resume';
-import { StandardLayout, TwoColumnLayout, CenteredLayout } from './ResumePreviewLayouts';
+import { isCenteredResumeTemplate, isTwoColumnResumeTemplate } from '../constants/resumeTemplateLayouts';
+import { StandardLayout, TwoColumnLayout, CenteredLayout, YellowSidebarLayout, NavySidebarLayout, FormalRedLayout, TimelineDarkLayout, GeometricBlueLayout, ProfessionalNavyHeaderLayout, CleanBlueAccentLayout } from './ResumePreviewLayouts';
 
 interface ResumePreviewProps {
   data: ResumeData | null;
   templateId: string;
   onEdit?: () => void;
-  onDownload?: (format: 'pdf' | 'docx') => void;
+  /** Second arg is the exact resume snapshot shown in the preview (keeps PDF in sync with the screen). */
+  onDownload?: (format: 'pdf' | 'docx', dataSnapshot?: ResumeData) => void;
   onDataUpdate?: (data: ResumeData) => void;
+  /** Keeps parent in sync with the data currently rendered (e.g. header PDF uses the same payload as the preview). */
+  onVisibleData?: (data: ResumeData) => void;
   isThumbnail?: boolean;
 }
 
@@ -19,7 +23,7 @@ const hexToRgba = (hex: string, alpha: number) => {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
-const ResumePreview: React.FC<ResumePreviewProps> = ({ data, templateId, onEdit, onDownload, onDataUpdate, isThumbnail = false }) => {
+const ResumePreview: React.FC<ResumePreviewProps> = ({ data, templateId, onEdit, onDownload, onDataUpdate, onVisibleData, isThumbnail = false }) => {
   const previewRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -30,6 +34,12 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, templateId, onEdit,
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  const onVisibleDataRef = useRef(onVisibleData);
+  onVisibleDataRef.current = onVisibleData;
+  useEffect(() => {
+    if (!isThumbnail && data) onVisibleDataRef.current?.(data);
+  }, [data, isThumbnail]);
+
   if (!data) return null;
 
   // Determine rendering theme and layout based on templateId
@@ -38,10 +48,24 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, templateId, onEdit,
   let defaultThemeColorBg = '#2563EB'; // bg-blue-600
   let defaultThemeColorBorder = '#BFDBFE'; // border-blue-200
 
-  if (['creative-designer', 'tech-innovator', 'entry-level', 'navy-professional', 'charcoal-executive', 'forest-modern'].includes(templateId)) {
+  if (isTwoColumnResumeTemplate(templateId)) {
     LayoutComponent = TwoColumnLayout;
-  } else if (['executive-premium', 'minimalist-elegant', 'academic-researcher', 'marketing-specialist', 'dr-robert-kim', 'david-park'].includes(templateId) || templateId === 'executive' || templateId === 'manager') {
+  } else if (isCenteredResumeTemplate(templateId)) {
     LayoutComponent = CenteredLayout;
+  } else if (templateId === 'modern-yellow') {
+    LayoutComponent = YellowSidebarLayout;
+  } else if (templateId === 'navy-sidebar') {
+    LayoutComponent = NavySidebarLayout;
+  } else if (templateId === 'formal-red') {
+    LayoutComponent = FormalRedLayout;
+  } else if (templateId === 'timeline-dark') {
+    LayoutComponent = TimelineDarkLayout;
+  } else if (templateId === 'geometric-blue') {
+    LayoutComponent = GeometricBlueLayout;
+  } else if (templateId === 'professional-navy') {
+    LayoutComponent = ProfessionalNavyHeaderLayout;
+  } else if (templateId === 'clean-blue') {
+    LayoutComponent = CleanBlueAccentLayout;
   }
 
   // Set colors based on templateId
@@ -55,13 +79,13 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, templateId, onEdit,
     defaultThemeColorText = '#16A34A'; defaultThemeColorBg = '#16A34A'; defaultThemeColorBorder = '#BBF7D0';
   } else if (templateId === 'marketing-specialist') {
     defaultThemeColorText = '#4F46E5'; defaultThemeColorBg = '#4F46E5'; defaultThemeColorBorder = '#C7D2FE';
-  } else if (templateId === 'healthcare-professional') {
+  } else if (templateId === 'healthcare-professional' || templateId === 'healthcare-nursing') {
     defaultThemeColorText = '#0D9488'; defaultThemeColorBg = '#0D9488'; defaultThemeColorBorder = '#99F6E4';
   } else if (templateId === 'minimalist-elegant') {
     defaultThemeColorText = '#111827'; defaultThemeColorBg = '#111827'; defaultThemeColorBorder = '#E5E7EB';
   } else if (templateId === 'tech-innovator') {
     defaultThemeColorText = '#0891B2'; defaultThemeColorBg = '#0891B2'; defaultThemeColorBorder = '#CFFAFE';
-  } else if (templateId === 'sales-professional') {
+  } else if (templateId === 'sales-professional' || templateId === 'sales-representative') {
     defaultThemeColorText = '#EA580C'; defaultThemeColorBg = '#EA580C'; defaultThemeColorBorder = '#FED7AA';
   } else if (templateId === 'academic-researcher') {
     defaultThemeColorText = '#B91C1C'; defaultThemeColorBg = '#B91C1C'; defaultThemeColorBorder = '#FECACA';
@@ -71,6 +95,20 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, templateId, onEdit,
     defaultThemeColorText = '#27272A'; defaultThemeColorBg = '#27272A'; defaultThemeColorBorder = '#D4D4D8';
   } else if (templateId === 'forest-modern') {
     defaultThemeColorText = '#065F46'; defaultThemeColorBg = '#065F46'; defaultThemeColorBorder = '#6EE7B7';
+  } else if (templateId === 'modern-yellow') {
+    defaultThemeColorText = '#ca8a04'; defaultThemeColorBg = '#eab308'; defaultThemeColorBorder = '#fef08a';
+  } else if (templateId === 'navy-sidebar') {
+    defaultThemeColorText = '#1e3a8a'; defaultThemeColorBg = '#1e40af'; defaultThemeColorBorder = '#bfdbfe';
+  } else if (templateId === 'formal-red') {
+    defaultThemeColorText = '#be123c'; defaultThemeColorBg = '#be123c'; defaultThemeColorBorder = '#fecdd3';
+  } else if (templateId === 'timeline-dark') {
+    defaultThemeColorText = '#1e293b'; defaultThemeColorBg = '#334155'; defaultThemeColorBorder = '#cbd5e1';
+  } else if (templateId === 'geometric-blue') {
+    defaultThemeColorText = '#2563eb'; defaultThemeColorBg = '#3b82f6'; defaultThemeColorBorder = '#bfdbfe';
+  } else if (templateId === 'professional-navy') {
+    defaultThemeColorText = '#1E293B'; defaultThemeColorBg = '#1E293B'; defaultThemeColorBorder = '#cbd5e1';
+  } else if (templateId === 'clean-blue') {
+    defaultThemeColorText = '#2563EB'; defaultThemeColorBg = '#2563EB'; defaultThemeColorBorder = '#bfdbfe';
   }
 
   const themeColorText = data?.theme?.textColor || defaultThemeColorText;
@@ -96,7 +134,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, templateId, onEdit,
       previewEl.classList.add('force-desktop-preview');
     }
     if (onDownload) {
-      await onDownload(format);
+      await onDownload(format, data);
     }
     if (previewEl) {
       previewEl.classList.remove('force-desktop-preview');

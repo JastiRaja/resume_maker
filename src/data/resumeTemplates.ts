@@ -1,6 +1,6 @@
 import { ResumeTemplate } from '../types/resume';
 
-export const getResumeTemplates = (): ResumeTemplate[] => [
+const resumeTemplatesBase: ResumeTemplate[] = [
   {
     id: 'modern-professional',
     name: 'Modern Professional',
@@ -1122,8 +1122,8 @@ export const getResumeTemplates = (): ResumeTemplate[] => [
     }
   },
   {
-    id: 'sales-professional',
-    name: 'Sales Professional',
+    id: 'sales-representative',
+    name: 'Sales Representative',
     description: 'Optimized for sales and marketing job applications.',
     category: 'Sales',
     difficulty: 'Easy',
@@ -1279,7 +1279,7 @@ export const getResumeTemplates = (): ResumeTemplate[] => [
     }
   },
   {
-    id: 'healthcare-professional',
+    id: 'healthcare-nursing',
     name: 'Healthcare Professional',
     description: 'Tailored for nurses, doctors, and healthcare workers.',
     category: 'Healthcare',
@@ -1527,5 +1527,631 @@ export const getResumeTemplates = (): ResumeTemplate[] => [
         }
       ]
     }
+  },
+  {
+    id: 'timeline-dark',
+    name: 'Timeline Dark',
+    description: 'A modern two-column layout featuring a prominent dark header and a vertical timeline connecting your experience.',
+    category: 'Technology',
+    difficulty: 'Medium',
+    isPremium: true,
+    sampleData: {
+      personalInfo: {
+        firstName: 'Jonathan',
+        lastName: 'Rivera',
+        title: 'AI & Machine Learning Engineer',
+        email: 'jonathan.rivera@email.com',
+        phone: '(555) 789-0123',
+        location: 'Seattle, WA',
+        linkedin: 'linkedin.com/in/jonathanrivera',
+        website: 'github.com/jrivera-ai'
+      },
+      summary: 'Results-driven AI & Machine Learning Engineer with 5+ years of experience designing, training, and deploying scalable machine learning models. Specialized in Natural Language Processing (NLP) and Large Language Models (LLMs). Passionate about leveraging data to solve complex real-world problems and optimize business workflows.',
+      experience: [
+        {
+          id: '1',
+          company: 'Nexus AI Solutions',
+          position: 'Senior Machine Learning Engineer',
+          startDate: 'Jan 2022',
+          endDate: 'Present',
+          current: true,
+          description: [
+            'Architected and deployed a custom RAG (Retrieval-Augmented Generation) pipeline using LangChain and vector databases, increasing customer support deflection by 40%.',
+            'Fine-tuned open-source LLMs (Llama 3, Mistral) on proprietary domain data, achieving a 25% improvement in domain-specific accuracy over base models.',
+            'Optimized model inference latency by 60% using TensorRT and vLLM on AWS EC2 GPU instances.',
+            'Mentored 3 junior data scientists and established MLOps best practices using MLflow and GitHub Actions.'
+          ]
+        },
+        {
+          id: '2',
+          company: 'DataProphet Technologies',
+          position: 'Data Scientist',
+          startDate: 'Jun 2019',
+          endDate: 'Dec 2021',
+          current: false,
+          description: [
+            'Developed predictive churn models using XGBoost and Scikit-learn, enabling the retention team to save $1.2M in annual recurring revenue.',
+            'Built end-to-end automated data pipelines using Apache Airflow and PySpark to process over 500GB of log data daily.',
+            'Designed A/B testing frameworks to evaluate the effectiveness of newly deployed recommendation algorithms.'
+          ]
+        }
+      ],
+      education: [
+        {
+          id: '1',
+          institution: 'University of Washington',
+          degree: 'Master of Science',
+          field: 'Computer Science (Machine Learning Focus)',
+          startDate: '2017',
+          endDate: '2019'
+        },
+        {
+          id: '2',
+          institution: 'Oregon State University',
+          degree: 'Bachelor of Science',
+          field: 'Mathematics',
+          startDate: '2013',
+          endDate: '2017'
+        }
+      ],
+      skills: [
+        { id: '1', name: 'Python', level: 'Expert', category: 'Programming' },
+        { id: '2', name: 'PyTorch / TensorFlow', level: 'Expert', category: 'Machine Learning' },
+        { id: '3', name: 'Scikit-learn / XGBoost', level: 'Advanced', category: 'Machine Learning' },
+        { id: '4', name: 'NLP & LLMs (Transformers)', level: 'Advanced', category: 'Artificial Intelligence' },
+        { id: '5', name: 'SQL / PostgreSQL', level: 'Advanced', category: 'Data Engineering' },
+        { id: '6', name: 'Docker / Kubernetes', level: 'Intermediate', category: 'MLOps' }
+      ],
+      projects: [
+        {
+          id: '1',
+          name: 'Semantic Medical Search Engine',
+          description: 'A semantic search tool built for medical researchers to query millions of PubMed abstracts using vector embeddings.',
+          technologies: ['PyTorch', 'HuggingFace', 'Pinecone', 'FastAPI', 'React'],
+          link: 'github.com/jrivera-ai/med-search'
+        }
+      ]
+    }
+  },
+  {
+    id: 'navy-sidebar',
+    name: 'Navy Sidebar',
+    description: 'A clean two-column design with a striking navy sidebar to highlight contact details and technical skills.',
+    category: 'Data',
+    difficulty: 'Easy',
+    isPremium: false,
+    sampleData: {
+      personalInfo: {
+        firstName: 'Elena',
+        lastName: 'Rostova',
+        title: 'Senior Data Analyst',
+        email: 'elena.rostova@email.com',
+        phone: '(555) 345-6789',
+        location: 'Austin, TX',
+        linkedin: 'linkedin.com/in/elenarostova',
+        website: 'tableau.com/public/erostova'
+      },
+      summary: 'Detail-oriented Senior Data Analyst with 7+ years of experience transforming complex datasets into actionable business intelligence. Expert in SQL, Python, and data visualization tools like Tableau and Power BI. Proven ability to bridge the gap between technical data and executive decision-making.',
+      experience: [
+        {
+          id: '1',
+          company: 'FinTech Innovations',
+          position: 'Senior Data Analyst',
+          startDate: 'Mar 2021',
+          endDate: 'Present',
+          current: true,
+          description: [
+            'Spearheaded the migration of legacy Excel-based reporting to automated Tableau dashboards, saving the analytics team 20 hours per week.',
+            'Collaborated with the product team to define KPI metrics, increasing tracking accuracy of user acquisition by 35%.',
+            'Developed complex SQL queries and materialized views in Snowflake to support executive-level reporting.',
+            'Presented weekly data insights to C-suite executives, directly influencing Q4 marketing budget allocation.'
+          ]
+        },
+        {
+          id: '2',
+          company: 'RetailPulse Analytics',
+          position: 'Data Analyst',
+          startDate: 'Aug 2017',
+          endDate: 'Feb 2021',
+          current: false,
+          description: [
+            'Analyzed multi-channel customer journey data using Python (Pandas, NumPy) to identify drop-off points, resulting in a 15% increase in conversion rate.',
+            'Designed and maintained 15+ interactive dashboards in Power BI for regional sales managers.',
+            'Conducted statistical significance testing for ongoing marketing A/B tests.',
+            'Cleaned and processed raw sales data from historical logs to prepare for predictive modeling.'
+          ]
+        }
+      ],
+      education: [
+        {
+          id: '1',
+          institution: 'University of Texas at Austin',
+          degree: 'Master of Science',
+          field: 'Business Analytics',
+          startDate: '2015',
+          endDate: '2017'
+        },
+        {
+          id: '2',
+          institution: 'Texas A&M University',
+          degree: 'Bachelor of Business Administration',
+          field: 'Finance',
+          startDate: '2011',
+          endDate: '2015'
+        }
+      ],
+      skills: [
+        { id: '1', name: 'SQL (PostgreSQL, Snowflake)', level: 'Expert', category: 'Data Analysis' },
+        { id: '2', name: 'Tableau / Power BI', level: 'Expert', category: 'Visualization' },
+        { id: '3', name: 'Python (Pandas, NumPy)', level: 'Advanced', category: 'Programming' },
+        { id: '4', name: 'A/B Testing & Experimentation', level: 'Advanced', category: 'Statistics' },
+        { id: '5', name: 'Advanced Excel', level: 'Expert', category: 'Data Analysis' },
+        { id: '6', name: 'Strategic Communication', level: 'Expert', category: 'Soft Skills' }
+      ],
+      projects: [
+        {
+          id: '1',
+          name: 'Global Sales Dashboard',
+          description: 'An interactive public Tableau dashboard visualizing a dummy retail dataset across global regions, demonstrating advanced calculated fields and parameters.',
+          technologies: ['Tableau', 'SQL', 'Data Cleaning'],
+          link: 'tableau.com/public/erostova/sales'
+        }
+      ]
+    }
+  },
+  {
+    id: 'modern-yellow',
+    name: 'Modern Yellow',
+    description: 'A striking split layout featuring a bold yellow sidebar to highlight contact details and skills.',
+    category: 'Creative',
+    difficulty: 'Medium',
+    isPremium: false,
+    sampleData: {
+      personalInfo: {
+        firstName: 'Lou',
+        lastName: 'Alvarez',
+        title: 'Spanish Tutor',
+        email: 'lou.alvarez@email.com',
+        phone: '(555) 555-5555',
+        location: 'Santa Clara, CA 95050',
+        linkedin: 'linkedin.com/in/loualvarez',
+        website: 'loualvarez.education'
+      },
+      summary: 'Talented tutor offering outstanding communication and problem-solving skills. Foster positive learning environment by encouraging students to develop individual skills. Specializing in 1:1 instruction, team collaboration and relations with students, parents and support staff. Smart candidate with six years of experience that seeks to become a teacher to provide an excellent learning environment.',
+      experience: [
+        {
+          id: '1',
+          company: "Learning Bee's",
+          position: 'Spanish Tutor',
+          startDate: 'Apr 2020',
+          endDate: 'Present',
+          current: true,
+          description: [
+            'Instruct students on Spanish grammar, pronunciation, spelling, vocabulary, composition and dialogue.',
+            'Develop lessons incorporating cultural norms and traditions for Spanish-speaking countries around the world.',
+            'Teach pronunciation tactics, introduce essential words and conduct reading drills weekly for groups of eight elementary students.'
+          ]
+        },
+        {
+          id: '2',
+          company: 'Santa Clara Children Community Center',
+          position: 'Special Education Volunteer',
+          startDate: 'Aug 2018',
+          endDate: 'Mar 2020',
+          current: false,
+          description: [
+            'Facilitated administration and scoring of standardized tests and assessments to draw meaningful data regarding learning and growth.',
+            'Kept open and frequent communication with 10 families to provide regular updates on child\'s academic progress and individualized needs.',
+            'Delivered efficient instruction by assisting with lesson planning and materials preparation.'
+          ]
+        }
+      ],
+      education: [
+        {
+          id: '1',
+          institution: 'California State University, San Bernardino',
+          degree: 'Bachelor of Arts',
+          field: 'Spanish Education',
+          startDate: '2013',
+          endDate: '2017'
+        }
+      ],
+      skills: [
+        { id: '1', name: 'Individualized instruction', level: 'Expert', category: 'Teaching' },
+        { id: '2', name: 'Elementary education', level: 'Advanced', category: 'Teaching' },
+        { id: '3', name: 'Spanish language writing assessments', level: 'Advanced', category: 'Teaching' },
+        { id: '4', name: 'Progress reporting', level: 'Intermediate', category: 'Administration' },
+        { id: '5', name: 'Verbal and written communication', level: 'Expert', category: 'Soft Skills' }
+      ],
+      projects: []
+    }
+  },
+  {
+    id: 'formal-red',
+    name: 'Formal Red',
+    description: 'A classic formal resume with elegant serif fonts and distinguished red accents.',
+    category: 'Professional',
+    difficulty: 'Easy',
+    isPremium: false,
+    sampleData: {
+      personalInfo: {
+        firstName: 'Susan',
+        lastName: 'Stone',
+        title: 'Marketing Manager',
+        email: 'susan.stone@email.com',
+        phone: '(555) 465-6312',
+        location: '77 Serial Drive, Austin, TX 78705',
+        linkedin: 'linkedin.com/in/susanstone',
+        website: 'susanstone.com'
+      },
+      summary: 'Experienced and energetic Marketing Manager with over seven years of experience effectively managing marketing projects from conception to completion. Adept in using digital marketing platforms to increase sales and overall company productivity. Experienced in preparing and overseeing online and print marketing campaigns, resulting in an increase in partner relations for the company. Adept in monitoring and reporting marketing objectives, to maintain necessary internal communications within the company.',
+      experience: [
+        {
+          id: '1',
+          company: 'Zane Telecommunications',
+          position: 'Marketing Manager',
+          startDate: 'Nov 2011',
+          endDate: 'Aug 2019',
+          current: false,
+          description: [
+            'Effectively managed creative projects, promoting a superior corporate image.',
+            'Designed and implemented direct mail campaigns, resulting in a 10% sales increase per quarter.',
+            'Developed and maintained internal and external relationships, which were crucial to company enhancement and success.',
+            'Assessed the strategies of competitors, while avidly working to increase our own productivity.'
+          ]
+        },
+        {
+          id: '2',
+          company: 'Freelance',
+          position: 'Online Marketing Consultant',
+          startDate: 'Aug 2009',
+          endDate: 'Jun 2017',
+          current: false,
+          description: [
+            'Researched the motivations of users and consumers to better understand company goals.',
+            'Put forth carefully planned strategies to improve company business.',
+            'Planned, executed, and led online marketing tactics, resulting in wide range company advancements.'
+          ]
+        }
+      ],
+      education: [
+        {
+          id: '1',
+          institution: 'Harvard College',
+          degree: 'Master of Marketing',
+          field: '',
+          startDate: '2009',
+          endDate: '2012'
+        }
+      ],
+      skills: [
+        { id: '1', name: 'Excellent Communication Skills', level: 'Expert', category: 'Soft Skills' },
+        { id: '2', name: 'Project Management Skills', level: 'Expert', category: 'Management' },
+        { id: '3', name: 'Creativity and Problem Solving', level: 'Advanced', category: 'Soft Skills' },
+        { id: '4', name: 'Digital Marketing', level: 'Advanced', category: 'Marketing' },
+        { id: '5', name: 'Industry Trends & Sales Forecasting', level: 'Intermediate', category: 'Marketing' }
+      ],
+      projects: []
+    }
+  },
+  {
+    id: 'geometric-blue',
+    name: 'Geometric Blue',
+    description: 'A modern design featuring a striking geometric header and clearly structured timeline sections.',
+    category: 'Creative',
+    difficulty: 'Medium',
+    isPremium: true,
+    sampleData: {
+      personalInfo: {
+        firstName: 'Lorna',
+        lastName: 'Alvarado',
+        title: 'Marketing Manager',
+        email: 'lorna.alvarado@email.com',
+        phone: '+123-456-7890',
+        location: '123 Anywhere St., Any City',
+        linkedin: 'linkedin.com/in/lornaalvarado',
+        website: 'www.reallygreatsite.com'
+      },
+      summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      experience: [
+        {
+          id: '1',
+          company: 'Arowwai Industries',
+          position: 'Product Design Manager',
+          startDate: 'Jan 2016',
+          endDate: 'Dec 2020',
+          current: false,
+          description: [
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut quam eget, luctus sollicitudin neque.'
+          ]
+        },
+        {
+          id: '2',
+          company: 'Arowwai Industries',
+          position: 'Marketing Manager',
+          startDate: 'Jan 2019',
+          endDate: 'Dec 2020',
+          current: false,
+          description: [
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut quam eget, luctus sollicitudin neque.'
+          ]
+        }
+      ],
+      education: [
+        {
+          id: '1',
+          institution: 'Borcelle University',
+          degree: 'Bachelor of Business Management',
+          field: '',
+          startDate: '2016',
+          endDate: '2020'
+        }
+      ],
+      skills: [
+        { id: '1', name: 'Management Skills', level: 'Expert', category: 'Skills' },
+        { id: '2', name: 'Creativity', level: 'Expert', category: 'Skills' },
+        { id: '3', name: 'Digital Marketing', level: 'Advanced', category: 'Skills' },
+        { id: '4', name: 'Negotiation', level: 'Advanced', category: 'Skills' },
+        { id: '5', name: 'Critical Thinking', level: 'Advanced', category: 'Skills' }
+      ],
+      projects: []
+    }
+  },
+  {
+    id: 'professional-navy',
+    name: 'Professional Navy',
+    description: 'A distinguished navy blue header coupled with a classic two-column presentation, ideal for experienced data analysts and engineers.',
+    category: 'Data',
+    difficulty: 'Medium',
+    isPremium: true,
+    sampleData: {
+      personalInfo: {
+        firstName: 'Sebastian',
+        lastName: 'Martin',
+        title: 'Business Intelligence Engineer | Data Analysis Expert',
+        email: 'help@enhancv.com',
+        phone: '',
+        location: 'Fort Worth, Texas',
+        linkedin: 'linkedin.com/in/smartin',
+        website: ''
+      },
+      summary: 'Versatile Business Intelligence Engineer with over four years\' experience specializing in data modeling and creating dashboard visualizations. Proven ability of querying databases using SQL, associated with Tableau expertise and a demonstrated history of engineering comprehensive BI solutions. Created 50+ reports aiding decision making process.',
+      experience: [
+        {
+          id: '1',
+          company: 'IBM',
+          position: 'Senior Business Intelligence Engineer',
+          startDate: 'Jan 2017',
+          endDate: 'Dec 2021',
+          current: false,
+          description: [
+            'Responsible for developing and maintaining a robust and scalable data platform, and delivering insightful reports to support business strategy and decision making.',
+            'Developed 25+ dashboards using Tableau, improving business\'s decision making by 30%.',
+            'Reduced data discrepancies by 40% utilizing complex SQL statements during data analysis process.',
+            'Optimized 30+ individual reports leading to a 20% improvement in performance and ease of interpretation.',
+            'Designed and implemented a dimensional model that supported 100+ users and saved 15% of time.'
+          ]
+        },
+        {
+          id: '2',
+          company: 'Accenture',
+          position: 'Business Intelligence Analyst',
+          startDate: 'Jan 2015',
+          endDate: 'Dec 2017',
+          current: false,
+          description: [
+            'Responsible for developing and executing data queries and conducting analyses.',
+            'Built 4 complex data models using SQL, improving data analysis efficiency by 20%.',
+            'Handled 200+ ticket changes in JIRA improving traceability and accountability.',
+            'Led the performance optimization of 50+ visualizations, enhancing usability by 30%.'
+          ]
+        },
+        {
+          id: '3',
+          company: 'Dell Technologies',
+          position: 'Junior Business Intelligence Developer',
+          startDate: 'Jan 2013',
+          endDate: 'Dec 2015',
+          current: false,
+          description: [
+            'Assisted in the design and development of data models and reporting solutions.',
+            'Assisted in the development of 10+ visualizations in Tableau, improving usability by 15%.',
+            'Worked on analyzing and debugging complex SQL statements.',
+            'Aided in designing a dimensional model that improved report generation time by 10%.'
+          ]
+        }
+      ],
+      education: [
+        {
+          id: '1',
+          institution: 'University of Texas at Arlington',
+          degree: 'Master\'s Degree in Data Science',
+          field: '',
+          startDate: '2011',
+          endDate: '2013'
+        },
+        {
+          id: '2',
+          institution: 'Texas State University',
+          degree: 'Bachelor\'s Degree in Computer Science',
+          field: '',
+          startDate: '2007',
+          endDate: '2011'
+        }
+      ],
+      skills: [
+        { id: '1', name: 'Analytical skills', level: 'Expert', category: 'Strengths' },
+        { id: '2', name: 'Attention to Detail', level: 'Expert', category: 'Strengths' },
+        { id: '3', name: 'Problem-solving', level: 'Expert', category: 'Strengths' },
+        { id: '4', name: 'SQL', level: 'Expert', category: 'Technical' },
+        { id: '5', name: 'Tableau', level: 'Expert', category: 'Technical' },
+        { id: '6', name: 'Data Analysis', level: 'Expert', category: 'Technical' },
+        { id: '7', name: 'Data Modeling', level: 'Expert', category: 'Technical' },
+        { id: '8', name: 'Looker', level: 'Expert', category: 'Technical' },
+        { id: '9', name: 'Power BI', level: 'Expert', category: 'Technical' },
+        { id: '10', name: 'Change Management', level: 'Advanced', category: 'Process' },
+        { id: '11', name: 'JIRA', level: 'Advanced', category: 'Tools' },
+        { id: '12', name: 'ServiceNow', level: 'Advanced', category: 'Tools' }
+      ],
+      projects: [
+        {
+          id: '1',
+          name: 'Analytical skills',
+          description: 'In my previous role at IBM, leveraged my analytical skills to build 25+ dashboards, improving the business decision-making process by 30%.',
+          technologies: [],
+          link: ''
+        },
+        {
+          id: '2',
+          name: 'Attention to Detail',
+          description: 'At Accenture, attention to detail aided in the reduction of data discrepancies by 40% during the data analysis process.',
+          technologies: [],
+          link: ''
+        },
+        {
+          id: '3',
+          name: 'Problem-solving',
+          description: 'Used problem-solving skills at Dell to design a dimensional model, leading to a 10% improvement in report generation time.',
+          technologies: [],
+          link: ''
+        }
+      ]
+    }
+  },
+  {
+    id: 'clean-blue',
+    name: 'Clean Blue Accent',
+    description: 'A crisp, high-contrast resume template utilizing bright blue text accents and clear section separations.',
+    category: 'Data',
+    difficulty: 'Medium',
+    isPremium: true,
+    sampleData: {
+      personalInfo: {
+        firstName: 'Sophie',
+        lastName: 'Martin',
+        title: 'Senior Data Engineer | Azure Data & Analytics | ETL Architect',
+        email: 'help@enhancv.com',
+        phone: '+1-(234)-555-1234',
+        location: 'Indianapolis, Indiana',
+        linkedin: 'linkedin.com/in/sophiem',
+        website: ''
+      },
+      summary: 'Eager to leverage my 5+ years in Data Engineering, with specialization in Azure\'s Data ecosystem and Python development. Excited about crafting data-driven solutions, my contributions have significantly improved business processes. Most notably, architecting a cloud-based data warehousing solution that increased data retrieval efficiency by 30%.',
+      experience: [
+        {
+          id: '1',
+          company: 'DataCorp Technologies',
+          position: 'Senior Data Engineer',
+          startDate: 'Jan 2019',
+          endDate: 'Present',
+          current: true,
+          description: [
+            'Led the design and development of a scalable Azure-based analytics platform, improving data processing speed by 40%.',
+            'Integrated Apache Spark with Azure Databricks to streamline data pipeline constructions, reducing system latency by 25%.',
+            'Standardized cloud-based data warehouse ETL processes which accelerated project delivery times by 15%.',
+            'Authored reusable code libraries that reduced development effort, contributing to a 20% reduction in project costs.',
+            'Established and enforced naming standards for cloud-based data warehousing solutions, ensuring consistency and clarity across projects.',
+            'Facilitated project planning by effectively estimating technical tasks, resulting in superior sprint execution and 100% on-time delivery.'
+          ]
+        },
+        {
+          id: '2',
+          company: 'TechLogic Solutions',
+          position: 'Data Engineer',
+          startDate: 'Jun 2016',
+          endDate: 'Dec 2018',
+          current: false,
+          description: [
+            'Developed extensive ETL pipelines utilizing Azure Data Factory, leading to a 30% increase in workflow efficiency.',
+            'Architected robust data models that supported business intelligence insights, driving a 25% lift in data-driven decision making.',
+            'Optimized Azure SQL database performance, cutting storage costs by 18% without compromising on speed.',
+            'Implemented CI/CD pipelines within Azure DevOps to enhance team productivity and shorten release cycles.',
+            'Designed and rolled out a comprehensive Azure App Service plan, improving application availability by 99.9%.'
+          ]
+        },
+        {
+          id: '3',
+          company: 'Innovative Analytics',
+          position: 'Data Analyst',
+          startDate: 'Mar 2013',
+          endDate: 'May 2016',
+          current: false,
+          description: [
+            'Executed complex SQL queries to analyze customer data, increasing actionable insights by 35%.',
+            'Integrated Power BI dashboards to visualize analytics, which enhanced reporting capabilities for stakeholders.',
+            'Automated routine data processing tasks, saving the team an average of 10 hours per week.',
+            'Collaborated with cross-functional teams to identify and seize business opportunities through data analytics.'
+          ]
+        }
+      ],
+      education: [
+        {
+          id: '1',
+          institution: 'Indiana University Bloomington',
+          degree: 'Master of Science in Data Science',
+          field: '',
+          startDate: '2011',
+          endDate: '2013'
+        },
+        {
+          id: '2',
+          institution: 'Purdue University',
+          degree: 'Bachelor of Science in Computer Science',
+          field: '',
+          startDate: '2007',
+          endDate: '2011'
+        }
+      ],
+      skills: [
+        { id: '1', name: 'Azure Data Factory', level: 'Expert', category: 'Tech' },
+        { id: '2', name: 'Azure Synapse', level: 'Expert', category: 'Tech' },
+        { id: '3', name: 'Azure SQL', level: 'Expert', category: 'Tech' },
+        { id: '4', name: 'Azure Data Lake', level: 'Expert', category: 'Tech' },
+        { id: '5', name: 'Azure App Service', level: 'Expert', category: 'Tech' },
+        { id: '6', name: 'Apache Spark', level: 'Expert', category: 'Tech' }
+      ],
+      projects: [
+        {
+          id: '1',
+          name: 'Azure Data Insights Toolkit',
+          description: 'An open-source library for simplifying data visualization on Azure. Enhanced user reporting capabilities.',
+          technologies: [],
+          link: 'github.com/DataInsightToolkit'
+        },
+        {
+          id: '2',
+          name: 'Streamlined ETL Framework',
+          description: 'Developed a lightweight ETL framework for Azure services, optimizing data workflow for small to medium-sized enterprises.',
+          technologies: [],
+          link: 'github.com/StreamlinedETL'
+        }
+      ],
+      customSections: [
+        {
+          id: 'achievements',
+          title: 'Achievements',
+          items: [
+            { id: '1', name: 'Architected Major Data Warehouse Solution', description: 'Played a pivotal role in architecting a cloud-based data warehousing solution that increased data retrieval efficiency by 30%.', date: '' },
+            { id: '2', name: 'Led Successful Analytics Platform Overhaul', description: 'Spearheaded the overhaul of the analytics platform, enhancing data processing speeds by 40%.', date: '' },
+            { id: '3', name: 'Recognized for Innovation in Data Engineering', description: 'Received the \'Innovator of the Year\' award for creating reusable code libraries that reduced overall development efforts.', date: '' },
+            { id: '4', name: 'Optimized Azure SQL Resources', description: 'Successfully optimized Azure SQL resource usage, slashing costs by 18% while maintaining high performance.', date: '' }
+          ]
+        },
+        {
+          id: 'courses',
+          title: 'Courses',
+          items: [
+            { id: '1', name: 'Certified Azure Data Engineer', description: 'Earned certification focusing on Azure Data Engineering, learning to design and implement data solutions on Microsoft Azure. Provided by Microsoft.', date: '' },
+            { id: '2', name: 'Data Modeling & ETL Processes with Azure', description: 'Advanced course on Azure data modeling and ETL processes, focusing on scalability and best practices. Provided by Coursera.', date: '' }
+          ]
+        }
+      ]
+    }
   }
 ];
+
+export const getResumeTemplates = (): ResumeTemplate[] =>
+  resumeTemplatesBase.map((t) => ({
+    ...t,
+    sampleData: structuredClone(t.sampleData),
+  }));

@@ -1,6 +1,6 @@
 # Eco Resume
 
-Eco Resume is a modern, premium web application built to help professionals create stunning, ATS-optimized resumes and cover letters with ease. Featuring a sleek glassmorphic UI, dynamic theme customization, and multiple export formats, Eco Resume empowers job seekers to stand out from the competition.
+,Lou Alvarez
 
 ## Features
 
@@ -62,6 +62,34 @@ npm run build
 ```
 
 This will generate a `dist` folder containing the optimized static files, ready to be deployed to your hosting provider (such as Vercel, Netlify, or GitHub Pages).
+
+## 🏗 Architecture & Technical Deep Dive
+
+If you are a developer looking to understand or extend Eco Resume, this section provides a high-level overview of our core mechanics, specifically how we manage dynamic templates and handle exact format document downloads.
+
+### 1. The Template Engine
+
+The resume template system is built using a purely isolated, data-driven architecture in React.
+
+*   **Data Model**: All user input converges into a single, standardized `ResumeData` TypeScript interface. This strict separation decouples the raw content from the presentation layers.
+*   **Layout Component Hierarchy**: All templates are pure React Functional Components located in `src/components/ResumePreviewLayouts.tsx`. These components accept standard props (`data`, `themeColorText`, `themeColorBg`) and use generic HTML/Tailwind CSS structures to paint the `ResumeData` object in a distinct visual hierarchy (e.g., standard, two-column, modern split, or geometric).
+*   **Template Registry**: `src/data/resumeTemplates.ts` acts as the master template registry. Adding a new template simply requires appending a configuration object (with a unique ID, descriptive name, and mock sample data) to the `getResumeTemplates` array framework.
+*   **Dynamic Routing**: Inside `src/components/ResumePreview.tsx`, the selected `templateId` dynamically matches to the imported Layout component, automatically applying the respective fallback color scheme unless the user overrides it natively via color pickers. 
+
+### 2. PDF & Document Generation Mechanism
+
+Eco Resume generates high-fidelity exports that perfectly preserve visual integrity and styling.
+
+#### Rendering Exact PDF Formatting
+We harness true browser capabilities to recreate pixel-accurate PDFs corresponding exactly to your live HTML preview:
+*   **CSS Print Context Rendering (`window.print()`)**: When a user triggers "Export PDF", we apply specific print-media CSS or `@page` CSS directives to strip out the application interface wrapper overhead (like the Builder navigation, sidebars, and tools).
+*   **Computed Layouts**: Because the builder relies purely on DOM & styling, the browser's native print-to-PDF engine captures the exact computed layouts representing the HTML preview. It naturally captures flexboxes, absolute positional layouts, and dynamic Tailwind grids representing the resume. 
+*   **Alternative Fallback**: In more robust configurations, we rely on PDF generation engines like `@react-pdf/renderer` or `html2pdf.js` by intercepting the `#resume-preview` node and translating standard CSS strings directly into `React-PDF`'s localized vector mappings.
+
+#### Native DOCX Generation
+For the Word Document format, we leverage the `docx` library.
+*   **Abstract Abstraction Model**: Instead of rendering from an image context, the DOCX engine parses the abstract `ResumeData` JSON natively.
+*   **Node Reconciliation**: It maps the abstract object cleanly into Microsoft Word proprietary elements (Paragraphs, TextRuns, Document Sections, and Tables), maintaining structural text integrity so the resume file is easily parseable by Applicant Tracking Systems (ATS) downstream.
 
 ## License
 

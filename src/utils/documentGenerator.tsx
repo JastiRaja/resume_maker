@@ -1,36 +1,12 @@
-import { pdf } from '@react-pdf/renderer';
-import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, BorderStyle } from 'docx';
+import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, BorderStyle, AlignmentType } from 'docx';
 import { ResumeData } from '../types/resume';
 import { CoverLetterData } from '../types/coverLetter';
-import { ResumePDF } from '../components/ResumePDF';
-import { CoverLetterPDF } from '../components/CoverLetterPDF';
+import { isCenteredResumeTemplate, isTwoColumnResumeTemplate } from '../constants/resumeTemplateLayouts';
 
 // Type for document children elements
 type DocumentElement = Paragraph;
 
-export const generatePDF = async (data: ResumeData | CoverLetterData, type: 'resume' | 'cover-letter', templateId?: string) => {
-  try {
-    const doc = type === 'resume' 
-      ? <ResumePDF data={data as ResumeData} templateId={templateId} /> 
-      : <CoverLetterPDF data={data as CoverLetterData} />;
-    
-    const blob = await pdf(doc).toBlob();
-    
-    const fileName = type === 'resume' ? 
-      `${(data as ResumeData).personalInfo?.firstName}_${(data as ResumeData).personalInfo?.lastName}_Resume.pdf` :
-      `${(data as CoverLetterData).senderInfo?.name.replace(' ', '_')}_Cover_Letter.pdf`;
-    
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = fileName;
-    link.click();
-    URL.revokeObjectURL(url);
-
-  } catch (error) {
-    console.error('Error generating PDF:', error);
-  }
-};
+type DocAlignment = (typeof AlignmentType)[keyof typeof AlignmentType];
 
 export const generateDOCX = async (data: ResumeData | CoverLetterData, type: 'resume' | 'cover-letter', templateId?: string) => {
   try {
@@ -43,9 +19,10 @@ export const generateDOCX = async (data: ResumeData | CoverLetterData, type: 're
     }
 
     const blob = await Packer.toBlob(doc);
+    const sanitize = (s: string) => s.trim().replace(/\s+/g, '_');
     const fileName = type === 'resume' ? 
-      `${(data as ResumeData).personalInfo?.firstName}_${(data as ResumeData).personalInfo?.lastName}_Resume.docx` :
-      `${(data as CoverLetterData).senderInfo?.name.replace(' ', '_')}_Cover_Letter.docx`;
+      `${sanitize((data as ResumeData).personalInfo?.firstName || '')}_${sanitize((data as ResumeData).personalInfo?.lastName || '')}_Resume.docx` :
+      `${sanitize((data as CoverLetterData).senderInfo?.name || '')}_Cover_Letter.docx`;
 
     // Create download link
     const link = document.createElement('a');
@@ -82,13 +59,13 @@ const createResumeDocument = (data: ResumeData, templateId?: string): Document =
     defaultThemeColorText = '#16A34A'; defaultThemeColorBg = '#16A34A';
   } else if (safeTemplateId === 'marketing-specialist') {
     defaultThemeColorText = '#4F46E5'; defaultThemeColorBg = '#4F46E5';
-  } else if (safeTemplateId === 'healthcare-professional') {
+  } else if (safeTemplateId === 'healthcare-professional' || safeTemplateId === 'healthcare-nursing') {
     defaultThemeColorText = '#0D9488'; defaultThemeColorBg = '#0D9488';
   } else if (safeTemplateId === 'minimalist-elegant') {
     defaultThemeColorText = '#111827'; defaultThemeColorBg = '#111827';
   } else if (safeTemplateId === 'tech-innovator') {
     defaultThemeColorText = '#0891B2'; defaultThemeColorBg = '#0891B2';
-  } else if (safeTemplateId === 'sales-professional') {
+  } else if (safeTemplateId === 'sales-professional' || safeTemplateId === 'sales-representative') {
     defaultThemeColorText = '#EA580C'; defaultThemeColorBg = '#EA580C';
   } else if (safeTemplateId === 'academic-researcher') {
     defaultThemeColorText = '#B91C1C'; defaultThemeColorBg = '#B91C1C';
@@ -98,13 +75,27 @@ const createResumeDocument = (data: ResumeData, templateId?: string): Document =
     defaultThemeColorText = '#27272A'; defaultThemeColorBg = '#27272A';
   } else if (safeTemplateId === 'forest-modern') {
     defaultThemeColorText = '#065F46'; defaultThemeColorBg = '#065F46';
+  } else if (safeTemplateId === 'modern-yellow') {
+    defaultThemeColorText = '#ca8a04'; defaultThemeColorBg = '#eab308';
+  } else if (safeTemplateId === 'navy-sidebar') {
+    defaultThemeColorText = '#1e3a8a'; defaultThemeColorBg = '#1e40af';
+  } else if (safeTemplateId === 'formal-red') {
+    defaultThemeColorText = '#be123c'; defaultThemeColorBg = '#be123c';
+  } else if (safeTemplateId === 'timeline-dark') {
+    defaultThemeColorText = '#1e293b'; defaultThemeColorBg = '#334155';
+  } else if (safeTemplateId === 'geometric-blue') {
+    defaultThemeColorText = '#2563eb'; defaultThemeColorBg = '#3b82f6';
+  } else if (safeTemplateId === 'professional-navy') {
+    defaultThemeColorText = '#1E293B'; defaultThemeColorBg = '#1E293B';
+  } else if (safeTemplateId === 'clean-blue') {
+    defaultThemeColorText = '#2563EB'; defaultThemeColorBg = '#2563EB';
   }
 
   const themeColorText = hexToDocxColor(data.theme?.textColor || defaultThemeColorText);
   const themeColorBg = hexToDocxColor(data.theme?.themeColor || defaultThemeColorBg);
 
-  const isTwoColumn = ['creative-designer', 'tech-innovator', 'entry-level', 'navy-professional', 'charcoal-executive', 'forest-modern'].includes(safeTemplateId);
-  const isCentered = ['executive-premium', 'minimalist-elegant', 'academic-researcher', 'marketing-specialist'].includes(safeTemplateId) || safeTemplateId.includes('executive') || safeTemplateId.includes('manager');
+  const isTwoColumn = isTwoColumnResumeTemplate(safeTemplateId);
+  const isCentered = isCenteredResumeTemplate(safeTemplateId);
 
   const nonEmptyProjects = data.projects.filter(
     (project) =>
@@ -114,9 +105,9 @@ const createResumeDocument = (data: ResumeData, templateId?: string): Document =
       (project.technologies && project.technologies.some((t) => t.trim()))
   );
 
-  const children: any[] = [];
+  const children: (Paragraph | Table)[] = [];
 
-  const addHeader = (align: any) => [
+  const addHeader = (align: DocAlignment) => [
     new Paragraph({
       alignment: align,
       children: [
@@ -159,7 +150,7 @@ const createResumeDocument = (data: ResumeData, templateId?: string): Document =
     })
   ];
 
-  const addSectionTitle = (title: string, align: any, highlightColor: string = themeColorText) => 
+  const addSectionTitle = (title: string, align: DocAlignment, highlightColor: string = themeColorText) => 
     new Paragraph({
       alignment: align,
       spacing: { before: 200, after: 100 },
@@ -249,7 +240,7 @@ const createResumeDocument = (data: ResumeData, templateId?: string): Document =
             spacing: { after: 100 },
             children: [
               new TextRun({
-                text: `${edu.degree} in ${edu.field}`,
+                text: `${edu.degree}${edu.field?.trim() ? ` in ${edu.field.trim()}` : ''}`,
                 bold: true,
                 size: 22
               }),
@@ -357,8 +348,8 @@ const createResumeDocument = (data: ResumeData, templateId?: string): Document =
     }
   } else {
     // Two Column Layout
-    const leftCol: any[] = [];
-    const rightCol: any[] = [];
+    const leftCol: Paragraph[] = [];
+    const rightCol: Paragraph[] = [];
 
     // Left Col Content (Header / Contact / Education / Skills)
     leftCol.push(

@@ -1,7 +1,13 @@
 import React from 'react';
 import { Document, Font } from '@react-pdf/renderer';
 import { ResumeData } from '../types/resume';
-import { StandardPDFLayout, TwoColumnPDFLayout, CenteredPDFLayout } from './ResumePDFLayouts';
+import { isCenteredResumeTemplate, isTwoColumnResumeTemplate } from '../constants/resumeTemplateLayouts';
+import {
+  StandardPDFLayout, TwoColumnPDFLayout, CenteredPDFLayout,
+  YellowSidebarPDFLayout, NavySidebarPDFLayout, FormalRedPDFLayout,
+  TimelineDarkPDFLayout, GeometricBluePDFLayout,
+  ProfessionalNavyHeaderPDFLayout, CleanBlueAccentPDFLayout
+} from './ResumePDFLayouts';
 
 // Register standard fonts
 Font.register({
@@ -26,15 +32,43 @@ export const ResumePDF: React.FC<ResumePDFProps> = ({ data, templateId = 'modern
 
   const safeTemplateId = String(templateId || 'modern-professional');
 
-  if (['creative-designer', 'tech-innovator', 'entry-level', 'navy-professional', 'charcoal-executive', 'forest-modern'].includes(safeTemplateId)) {
+  if (safeTemplateId === 'modern-yellow') {
+    LayoutComponent = YellowSidebarPDFLayout;
+  } else if (safeTemplateId === 'navy-sidebar') {
+    LayoutComponent = NavySidebarPDFLayout;
+  } else if (safeTemplateId === 'formal-red') {
+    LayoutComponent = FormalRedPDFLayout;
+  } else if (safeTemplateId === 'timeline-dark') {
+    LayoutComponent = TimelineDarkPDFLayout;
+  } else if (safeTemplateId === 'geometric-blue') {
+    LayoutComponent = GeometricBluePDFLayout;
+  } else if (safeTemplateId === 'professional-navy') {
+    LayoutComponent = ProfessionalNavyHeaderPDFLayout;
+  } else if (safeTemplateId === 'clean-blue') {
+    LayoutComponent = CleanBlueAccentPDFLayout;
+  } else if (isTwoColumnResumeTemplate(safeTemplateId)) {
     LayoutComponent = TwoColumnPDFLayout;
-  } else if (['executive-premium', 'minimalist-elegant', 'academic-researcher', 'marketing-specialist', 'dr-robert-kim', 'david-park'].includes(safeTemplateId) || safeTemplateId === 'executive' || safeTemplateId === 'manager') {
+  } else if (isCenteredResumeTemplate(safeTemplateId)) {
     LayoutComponent = CenteredPDFLayout;
   }
 
   // Set colors based on templateId hex equivalents
   if (safeTemplateId === 'modern-professional') {
     defaultThemeColorText = '#2563EB'; defaultThemeColorBg = '#2563EB'; defaultThemeColorBorder = '#BFDBFE';
+  } else if (safeTemplateId === 'modern-yellow') {
+    defaultThemeColorText = '#ca8a04'; defaultThemeColorBg = '#eab308'; defaultThemeColorBorder = '#fef08a';
+  } else if (safeTemplateId === 'navy-sidebar') {
+    defaultThemeColorText = '#1e3a8a'; defaultThemeColorBg = '#1e40af'; defaultThemeColorBorder = '#bfdbfe';
+  } else if (safeTemplateId === 'formal-red') {
+    defaultThemeColorText = '#be123c'; defaultThemeColorBg = '#be123c'; defaultThemeColorBorder = '#fecdd3';
+  } else if (safeTemplateId === 'timeline-dark') {
+    defaultThemeColorText = '#1e293b'; defaultThemeColorBg = '#334155'; defaultThemeColorBorder = '#cbd5e1';
+  } else if (safeTemplateId === 'geometric-blue') {
+    defaultThemeColorText = '#2563eb'; defaultThemeColorBg = '#3b82f6'; defaultThemeColorBorder = '#bfdbfe';
+  } else if (safeTemplateId === 'professional-navy') {
+    defaultThemeColorText = '#1E293B'; defaultThemeColorBg = '#1E293B'; defaultThemeColorBorder = '#cbd5e1';
+  } else if (safeTemplateId === 'clean-blue') {
+    defaultThemeColorText = '#2563EB'; defaultThemeColorBg = '#2563EB'; defaultThemeColorBorder = '#bfdbfe';
   } else if (safeTemplateId === 'creative-designer') {
     defaultThemeColorText = '#9333EA'; defaultThemeColorBg = '#9333EA'; defaultThemeColorBorder = '#E9D5FF';
   } else if (safeTemplateId === 'executive-premium') {
@@ -43,13 +77,13 @@ export const ResumePDF: React.FC<ResumePDFProps> = ({ data, templateId = 'modern
     defaultThemeColorText = '#16A34A'; defaultThemeColorBg = '#16A34A'; defaultThemeColorBorder = '#BBF7D0';
   } else if (safeTemplateId === 'marketing-specialist') {
     defaultThemeColorText = '#4F46E5'; defaultThemeColorBg = '#4F46E5'; defaultThemeColorBorder = '#C7D2FE';
-  } else if (safeTemplateId === 'healthcare-professional') {
+  } else if (safeTemplateId === 'healthcare-professional' || safeTemplateId === 'healthcare-nursing') {
     defaultThemeColorText = '#0D9488'; defaultThemeColorBg = '#0D9488'; defaultThemeColorBorder = '#99F6E4';
   } else if (safeTemplateId === 'minimalist-elegant') {
     defaultThemeColorText = '#111827'; defaultThemeColorBg = '#111827'; defaultThemeColorBorder = '#E5E7EB';
   } else if (safeTemplateId === 'tech-innovator') {
     defaultThemeColorText = '#0891B2'; defaultThemeColorBg = '#0891B2'; defaultThemeColorBorder = '#CFFAFE';
-  } else if (safeTemplateId === 'sales-professional') {
+  } else if (safeTemplateId === 'sales-professional' || safeTemplateId === 'sales-representative') {
     defaultThemeColorText = '#EA580C'; defaultThemeColorBg = '#EA580C'; defaultThemeColorBorder = '#FED7AA';
   } else if (safeTemplateId === 'academic-researcher') {
     defaultThemeColorText = '#B91C1C'; defaultThemeColorBg = '#B91C1C'; defaultThemeColorBorder = '#FECACA';
