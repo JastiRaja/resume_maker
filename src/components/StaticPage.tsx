@@ -2,8 +2,22 @@ import React from 'react';
 import { ArrowLeft } from 'lucide-react';
 
 import { useParams, Link } from 'react-router-dom';
+import { CookieSettingsLink } from './CookieSettingsLink';
+import {
+  privacyPolicyContent,
+  termsOfServiceContent,
+  cookiePolicyContent,
+} from '../content/legalPagesContent';
 
-export type StaticPageId = 'about' | 'privacy' | 'terms' | 'help' | 'contact' | 'faq' | 'templates';
+export type StaticPageId =
+  | 'about'
+  | 'privacy'
+  | 'terms'
+  | 'cookies'
+  | 'help'
+  | 'contact'
+  | 'faq'
+  | 'templates';
 
 const pageContent: Record<StaticPageId, { title: string; content: React.ReactNode }> = {
   about: {
@@ -18,31 +32,15 @@ const pageContent: Record<StaticPageId, { title: string; content: React.ReactNod
   },
   privacy: {
     title: 'Privacy Policy',
-    content: (
-      <div className="space-y-4">
-        <p>Your privacy is important to us. This Privacy Policy outlines how we collect, use, and protect your personal information.</p>
-        <h3 className="text-xl font-semibold mt-6 mb-2">Information We Collect</h3>
-        <p>We collect information you provide directly to us when using our resume builder, including your name, contact details, work history, and educational background.</p>
-        <h3 className="text-xl font-semibold mt-6 mb-2">How We Use Your Information</h3>
-        <p>The information we collect is used solely to generate your resume and cover letter documents. We do not sell your personal data to third parties.</p>
-        <h3 className="text-xl font-semibold mt-6 mb-2">Data Security</h3>
-        <p>We implement appropriate technical and organizational measures to protect your personal data against unauthorized or unlawful processing, accidental loss, destruction, or damage.</p>
-      </div>
-    )
+    content: privacyPolicyContent,
   },
   terms: {
     title: 'Terms of Service',
-    content: (
-      <div className="space-y-4">
-        <p>By using Eco Resume, you agree to these Terms of Service.</p>
-        <h3 className="text-xl font-semibold mt-6 mb-2">User Responsibilities</h3>
-        <p>You are explicitly responsible for the accuracy and truthfulness of the information you include in your created resumes and cover letters.</p>
-        <h3 className="text-xl font-semibold mt-6 mb-2">Intellectual Property</h3>
-        <p>The templates, designs, and software provided by Eco Resume are protected by copyright and other intellectual property laws. You may use them for personal, non-commercial purposes only.</p>
-        <h3 className="text-xl font-semibold mt-6 mb-2">Limitation of Liability</h3>
-        <p>Eco Resume is provided "as is" without any warranties. We shall not be liable for any damages resulting from the use or inability to use our services.</p>
-      </div>
-    )
+    content: termsOfServiceContent,
+  },
+  cookies: {
+    title: 'Cookie Policy',
+    content: cookiePolicyContent,
   },
   help: {
     title: 'Help Center',
@@ -196,7 +194,19 @@ const StaticPage: React.FC = () => {
       </main>
 
       <footer className="bg-gray-900 text-white py-8 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 text-center text-gray-400">
+        <div className="max-w-7xl mx-auto px-4 text-center text-gray-400 space-y-3">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
+            <Link to="/privacy" className="hover:text-white transition-colors">
+              Privacy
+            </Link>
+            <Link to="/terms" className="hover:text-white transition-colors">
+              Terms
+            </Link>
+            <Link to="/cookies" className="hover:text-white transition-colors">
+              Cookies
+            </Link>
+            <CookieSettingsLink className="text-sm text-gray-400 hover:text-white transition-colors underline-offset-2 hover:underline" />
+          </div>
           <p>&copy; {new Date().getFullYear()} Eco Resume. All rights reserved.</p>
         </div>
       </footer>

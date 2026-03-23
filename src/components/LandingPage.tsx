@@ -2,6 +2,7 @@ import React from 'react';
 import { FileText, Edit3, Download, Briefcase, Mail, Star, ArrowRight } from 'lucide-react';
 
 import { Link } from 'react-router-dom';
+import { CookieSettingsLink } from './CookieSettingsLink';
 
 const LandingPage: React.FC = () => {
   const features = [
@@ -238,14 +239,20 @@ const LandingPage: React.FC = () => {
                 <li><Link to="/about" className="hover:text-white transition-colors">About</Link></li>
                 <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
                 <li><Link to="/terms" className="hover:text-white transition-colors">Terms</Link></li>
+                <li><Link to="/cookies" className="hover:text-white transition-colors">Cookie Policy</Link></li>
+                <li>
+                  <CookieSettingsLink className="text-gray-400 hover:text-white transition-colors underline-offset-2 hover:underline" />
+                </li>
               </ul>
             </div>
           </div>
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
             <p>&copy; {new Date().getFullYear()} Eco Resume. All rights reserved.</p>
-            <div className="flex space-x-6">
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
               <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
               <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+              <Link to="/cookies" className="hover:text-white transition-colors">Cookie Policy</Link>
+              <CookieSettingsLink />
             </div>
           </div>
         </div>
