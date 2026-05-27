@@ -2147,6 +2147,109 @@ const resumeTemplatesBase: ResumeTemplate[] = [
         }
       ]
     }
+  },
+  {
+    id: 'classic-split',
+    name: 'Classic Split-Column',
+    description: 'A formal serif template featuring top/bottom bordered headers, a centered summary, and a vertical two-column layout.',
+    category: 'Formal',
+    difficulty: 'Medium',
+    isPremium: false,
+    sampleData: {
+      personalInfo: {
+        firstName: 'Anny',
+        lastName: 'Voque',
+        title: 'QA Manual Tester',
+        email: 'anny.voque@example.com',
+        phone: '(555) 019-2834',
+        location: 'Chicago, IL',
+        linkedin: 'linkedin.com/in/annyvoque',
+        website: 'annyvoque.qa'
+      },
+      summary: 'Experienced Quality Assurance Manual Tester with a strong background in software testing methodologies.\nProficient in designing, writing, and executing comprehensive test cases for web and mobile applications.\nSkilled in utilizing defect tracking systems and collaborating with development teams to ensure high-quality software delivery.\nAdept at functional testing, regression testing, and API testing using industry-standard tools.\nCommitted to improving product quality through meticulous attention to detail and thorough test execution.',
+      experience: [
+        {
+          id: '1',
+          company: 'Eli Software Services Pvt Ltd',
+          position: 'QA Manual Tester',
+          startDate: '2022',
+          endDate: 'Present',
+          current: true,
+          description: [
+            'Conducted thorough manual testing of various software applications, ensuring adherence to quality standards and requirements.',
+            'Developed and executed test plans, test cases, and test scripts to identify defects and ensure optimal software performance.',
+            'Collaborated with cross-functional teams, including developers and business analysts, to understand and ensure effective test coverage.',
+            'Participated in daily stand-ups, sprint reviews, and defect triage meetings to discuss issues, prioritize tasks, and ensure timely resolution.',
+            'Utilized defect tracking tools to report, monitor, and verify bug fixes, ensuring consistent communication with stakeholders.',
+            'Provided valuable feedback and suggestions for improvements based on testing results, contributing to continuous enhancement of product quality.',
+            'Conducted regression testing to validate software modifications and ensure existing functionalities remained intact.'
+          ]
+        }
+      ],
+      education: [
+        {
+          id: '1',
+          institution: 'State University of Science and Technology',
+          degree: 'Bachelor of Science',
+          field: 'Computer Engineering',
+          startDate: '2016',
+          endDate: '2020'
+        }
+      ],
+      skills: [
+        { id: '1', name: 'Manual Testing', level: 'Expert', category: 'Testing' },
+        { id: '2', name: 'Test Planning & Execution', level: 'Expert', category: 'Testing' },
+        { id: '3', name: 'Test Case Development', level: 'Expert', category: 'Testing' },
+        { id: '4', name: 'Defect Tracking & Reporting', level: 'Advanced', category: 'Testing' },
+        { id: '5', name: 'Regression Testing', level: 'Advanced', category: 'Testing' },
+        { id: '6', name: 'Cross-functional Collaboration', level: 'Advanced', category: 'Soft Skills' },
+        { id: '7', name: 'Agile Methodologies', level: 'Advanced', category: 'Methodology' },
+        { id: '8', name: 'Problem-solving', level: 'Advanced', category: 'Soft Skills' },
+        { id: '9', name: 'Attention to Detail', level: 'Expert', category: 'Soft Skills' }
+      ],
+      projects: [
+        {
+          id: '1',
+          name: 'Project Alpha',
+          description: 'Role: QA Engineer\nTeam size: 8\nOperating System: Windows\n\nA comprehensive industrial monitoring platform that integrates sensor data and real-time analytics to optimize electrical system operations and prevent failures.',
+          technologies: ['Manual Testing', 'Postman API testing']
+        },
+        {
+          id: '2',
+          name: 'Project Beta',
+          description: 'Role: QA Engineer\nTeam size: 5\nOperating System: Windows\n\nAn automated safety management system designed to coordinate lockout and tagout procedures for industrial equipment, incorporating wireless status tracking.',
+          technologies: ['Manual Testing', 'Postman API testing']
+        }
+      ],
+      customSections: [
+        {
+          id: 'certifications',
+          title: 'Certifications',
+          items: [
+            { id: 'c1', name: 'Global QA Institute - Certified Software Tester', description: '', date: '' }
+          ]
+        },
+        {
+          id: 'languages',
+          title: 'Languages',
+          items: [
+            { id: 'l1', name: 'English', description: '', date: '' },
+            { id: 'l2', name: 'Spanish', description: '', date: '' },
+            { id: 'l3', name: 'French', description: '', date: '' }
+          ]
+        },
+        {
+          id: 'hobbies',
+          title: 'Hobbies',
+          items: [
+            { id: 'h1', name: 'Swimming', description: '', date: '' },
+            { id: 'h2', name: 'Cycling', description: '', date: '' },
+            { id: 'h3', name: 'Reading', description: '', date: '' },
+            { id: 'h4', name: 'Photography', description: '', date: '' }
+          ]
+        }
+      ]
+    }
   }
 ];
 

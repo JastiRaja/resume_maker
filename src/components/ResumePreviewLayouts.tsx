@@ -11,6 +11,25 @@ export interface LayoutProps {
 
 export const formatDate = (date: string) => date || 'Present';
 
+export const formatEducationDates = (startDate?: string, endDate?: string) => {
+  const start = (startDate || '').trim();
+  const end = (endDate || '').trim();
+  
+  if (!start && !end) return '';
+  if (!start) return end;
+  if (!end) return start;
+  
+  if (end.toLowerCase() === 'present') {
+    return `${start} - Present`;
+  }
+  
+  if (end.includes(start)) {
+    return end;
+  }
+  
+  return `${start} - ${end}`;
+};
+
 export const getNonEmptyProjects = (data: ResumeData) => data.projects.filter(
   (project) =>
     project.name.trim() ||
@@ -943,7 +962,7 @@ export const NavySidebarLayout: React.FC<LayoutProps> = ({ data, themeColorText,
                     {edu.degree}{edu.field ? `, ${edu.field}` : ''}, {edu.institution}
                   </h3>
                   <p className="text-xs text-gray-400 uppercase font-semibold mb-1 tracking-wider">
-                    {formatDate(edu.startDate)} — {formatDate(edu.endDate)}
+                    {formatEducationDates(edu.startDate, edu.endDate)}
                   </p>
                 </div>
               ))}
@@ -1120,7 +1139,7 @@ export const FormalRedLayout: React.FC<LayoutProps> = ({ data, themeColorText })
                     {edu.institution}, {edu.degree}
                   </h3>
                   <p className="text-[13px] text-gray-500 italic font-sans tracking-wide">
-                    {formatDate(edu.startDate)} — {formatDate(edu.endDate)}
+                    {formatEducationDates(edu.startDate, edu.endDate)}
                   </p>
                 </div>
               ))}
@@ -1286,7 +1305,7 @@ export const TimelineDarkLayout: React.FC<LayoutProps> = ({ data, themeColorText
                      <div className="absolute -left-10 top-1.5 w-3 h-3 rounded-full border-[3px] border-white z-20" style={{ backgroundColor: themeColorBg }}></div>
                      <div className="mb-1 font-bold text-[15px] text-gray-900 flex justify-between items-center">
                        <span>{edu.degree}</span>
-                       <span className="text-[13px] text-gray-500 font-normal">{formatDate(edu.startDate)} - {formatDate(edu.endDate)}</span>
+                       <span className="text-[13px] text-gray-500 font-normal">{formatEducationDates(edu.startDate, edu.endDate)}</span>
                      </div>
                      <div className="text-[14px] font-medium text-gray-700">{edu.institution}</div>
                    </div>
@@ -1441,7 +1460,7 @@ export const GeometricBlueLayout: React.FC<LayoutProps> = ({ data, themeColorTex
                   <div className="absolute -left-[31px] top-1.5 w-3 h-3 rounded-full border-2 border-white" style={{ backgroundColor: themeColorBg }}></div>
                   <div className="flex justify-between items-baseline mb-1">
                     <h3 className="text-[15px] font-bold text-gray-800">{edu.degree}</h3>
-                    <span className="text-[12px] text-gray-500 font-medium">{formatDate(edu.startDate)} - {formatDate(edu.endDate)}</span>
+                    <span className="text-[12px] text-gray-500 font-medium">{formatEducationDates(edu.startDate, edu.endDate)}</span>
                   </div>
                   <div className="text-[14px] text-gray-600 italic font-medium">{edu.institution}</div>
                 </div>
@@ -1589,7 +1608,7 @@ export const ProfessionalNavyHeaderLayout: React.FC<LayoutProps> = ({ data }) =>
                     <h3 className="text-[16px] font-semibold text-gray-800 mb-1">{edu.degree}</h3>
                     <div className="flex items-center justify-between mb-2 text-[14px]">
                       <span className="font-bold text-[#1E293B]">{edu.institution}</span>
-                      <span className="flex items-center gap-1 text-gray-500 font-medium whitespace-nowrap"><Calendar className="w-3.5 h-3.5"/> {formatDate(edu.startDate)} - {formatDate(edu.endDate)}</span>
+                      <span className="flex items-center gap-1 text-gray-500 font-medium whitespace-nowrap"><Calendar className="w-3.5 h-3.5"/> {formatEducationDates(edu.startDate, edu.endDate)}</span>
                     </div>
                   </div>
                 ))}
@@ -1723,7 +1742,7 @@ export const CleanBlueAccentLayout: React.FC<LayoutProps> = ({ data, themeColorT
                     <h3 className="text-[16px] font-bold text-gray-800 mb-1">{edu.degree}</h3>
                     <div className="flex items-center justify-between mb-2 text-[14px]">
                       <span className="font-bold" style={{ color: themeColorText || '#2563EB' }}>{edu.institution}</span>
-                      <span className="flex items-center gap-1 text-gray-500 font-medium whitespace-nowrap"><Calendar className="w-3.5 h-3.5"/> {formatDate(edu.startDate)} - {formatDate(edu.endDate)}</span>
+                      <span className="flex items-center gap-1 text-gray-500 font-medium whitespace-nowrap"><Calendar className="w-3.5 h-3.5"/> {formatEducationDates(edu.startDate, edu.endDate)}</span>
                     </div>
                   </div>
                 ))}
@@ -1787,6 +1806,373 @@ export const CleanBlueAccentLayout: React.FC<LayoutProps> = ({ data, themeColorT
             </div>
           )}
           
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const ClassicSplitLayout: React.FC<LayoutProps> = ({ data, themeColorText, themeColorBg, themeColorBorder }) => {
+  const nonEmptyProjects = getNonEmptyProjects(data);
+
+  // Separate sections for Certifications, Languages, Hobbies
+  const certificationsSection = data.customSections?.find(s => s.title.toLowerCase().includes('certif'));
+  const languagesSection = data.customSections?.find(s => s.title.toLowerCase().includes('lang'));
+  const hobbiesSection = data.customSections?.find(s => s.title.toLowerCase().includes('hobb'));
+  const otherCustomSections = data.customSections?.filter(s => 
+    s !== certificationsSection && s !== languagesSection && s !== hobbiesSection
+  ) || [];
+
+  return (
+    <div className="font-serif text-gray-900 bg-white p-5 max-w-4xl mx-auto leading-snug">
+      {/* Header */}
+      <div 
+        className="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-2 mb-4"
+        style={{ borderColor: themeColorBorder }}
+      >
+        <div className="flex-1">
+          <h1 
+            className="text-3xl font-normal tracking-wide text-gray-900 mb-0.5 border-b pb-0.5 uppercase inline-block"
+            style={{ borderColor: themeColorBorder }}
+          >
+            {data.personalInfo.firstName} {data.personalInfo.lastName}
+          </h1>
+          <p 
+            className="text-lg font-sans tracking-wide mt-0.5"
+            style={{ color: themeColorText }}
+          >
+            {data.personalInfo.title}
+          </p>
+        </div>
+        
+        {/* Contact details */}
+        <div className="flex flex-col items-start md:items-end gap-1.5 text-[13px] mt-2 md:mt-0 font-sans text-gray-700">
+          {data.personalInfo.phone && (
+            <div className="flex items-center gap-2">
+              <span>{data.personalInfo.phone}</span>
+              <span 
+                className="w-5 h-5 rounded-full text-white flex items-center justify-center"
+                style={{ backgroundColor: themeColorBg }}
+              >
+                <Phone className="w-3 h-3" />
+              </span>
+            </div>
+          )}
+          {data.personalInfo.email && (
+            <div className="flex items-center gap-2">
+              <span>{data.personalInfo.email}</span>
+              <span 
+                className="w-5 h-5 rounded-full text-white flex items-center justify-center"
+                style={{ backgroundColor: themeColorBg }}
+              >
+                <Mail className="w-3 h-3" />
+              </span>
+            </div>
+          )}
+          {data.personalInfo.location && (
+            <div className="flex items-center gap-2">
+              <span>{data.personalInfo.location}</span>
+              <span 
+                className="w-5 h-5 rounded-full text-white flex items-center justify-center"
+                style={{ backgroundColor: themeColorBg }}
+              >
+                <MapPin className="w-3 h-3" />
+              </span>
+            </div>
+          )}
+          {data.personalInfo.linkedin && (
+            <div className="flex items-center gap-2">
+              <span>{data.personalInfo.linkedin}</span>
+              <span 
+                className="w-5 h-5 rounded-full text-white flex items-center justify-center"
+                style={{ backgroundColor: themeColorBg }}
+              >
+                <Linkedin className="w-3 h-3" />
+              </span>
+            </div>
+          )}
+          {data.personalInfo.website && (
+            <div className="flex items-center gap-2">
+              <span>{data.personalInfo.website}</span>
+              <span 
+                className="w-5 h-5 rounded-full text-white flex items-center justify-center"
+                style={{ backgroundColor: themeColorBg }}
+              >
+                <Globe className="w-3 h-3" />
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Summary Section */}
+      {data.summary && (
+        <div className="mb-4 text-center">
+          <div 
+            className="inline-block border-t border-b py-0.5 px-3 mb-2"
+            style={{ borderColor: themeColorBorder }}
+          >
+            <h2 className="text-base font-bold tracking-widest uppercase">Summary</h2>
+          </div>
+          <ul className="text-left text-[13px] text-gray-800 space-y-1 list-disc pl-5">
+            {data.summary.split('\n').map((line, index) => (
+              <li key={index} className="leading-relaxed">
+                {line.trim().startsWith('•') ? line.trim().substring(1).trim() : line.trim()}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Two Column Layout split by vertical line */}
+      <div 
+        className="flex flex-col md:flex-row gap-6 border-t pt-4"
+        style={{ borderColor: themeColorBorder }}
+      >
+        {/* Left Column (38%) */}
+        <div 
+          className="w-full md:w-[38%] pr-4 border-r-0 md:border-r"
+          style={{ borderColor: themeColorBorder }}
+        >
+          {/* Education */}
+          {data.education.length > 0 && (
+            <div className="mb-4">
+              <div 
+                className="inline-block border-t border-b py-0.5 px-2 mb-2"
+                style={{ borderColor: themeColorBorder }}
+              >
+                <h2 className="text-sm font-bold tracking-widest uppercase">Education</h2>
+              </div>
+              <div className="space-y-2.5 text-[13px]">
+                {data.education.map((edu) => (
+                  <div key={edu.id} className="text-gray-800">
+                    <h3 className="font-bold text-gray-900">{edu.institution}</h3>
+                    <p className="text-gray-700 mt-1">
+                      {edu.degree}{edu.field ? ` in ${edu.field}` : ''}{formatEducationDates(edu.startDate, edu.endDate) ? ` - ${formatEducationDates(edu.startDate, edu.endDate)}` : ''}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Skills */}
+          {data.skills.length > 0 && (
+            <div className="mb-4">
+              <div 
+                className="inline-block border-t border-b py-0.5 px-2 mb-2"
+                style={{ borderColor: themeColorBorder }}
+              >
+                <h2 className="text-sm font-bold tracking-widest uppercase">Skills</h2>
+              </div>
+              <ul className="list-disc pl-5 space-y-0.5 text-[13px] text-gray-800">
+                {data.skills.map((skill) => (
+                  <li key={skill.id} className="leading-relaxed">
+                    {skill.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Certifications (Parsed Custom Section) */}
+          {certificationsSection && certificationsSection.items.length > 0 && (
+            <div className="mb-4">
+              <div 
+                className="inline-block border-t border-b py-0.5 px-2 mb-2"
+                style={{ borderColor: themeColorBorder }}
+              >
+                <h2 className="text-sm font-bold tracking-widest uppercase">{certificationsSection.title}</h2>
+              </div>
+              <ul className="list-disc pl-5 space-y-0.5 text-[13px] text-gray-800">
+                {certificationsSection.items.map((item) => (
+                  <li key={item.id} className="leading-relaxed">
+                    {item.name}{item.description ? ` - ${item.description}` : ''}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Languages (Parsed Custom Section) */}
+          {languagesSection && languagesSection.items.length > 0 && (
+            <div className="mb-4">
+              <div 
+                className="inline-block border-t border-b py-0.5 px-2 mb-2"
+                style={{ borderColor: themeColorBorder }}
+              >
+                <h2 className="text-sm font-bold tracking-widest uppercase">{languagesSection.title}</h2>
+              </div>
+              <ul className="list-disc pl-5 space-y-0.5 text-[13px] text-gray-800">
+                {languagesSection.items.map((item) => (
+                  <li key={item.id} className="leading-relaxed">
+                    {item.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Hobbies (Parsed Custom Section) */}
+          {hobbiesSection && hobbiesSection.items.length > 0 && (
+            <div className="mb-4">
+              <div 
+                className="inline-block border-t border-b py-0.5 px-2 mb-2"
+                style={{ borderColor: themeColorBorder }}
+              >
+                <h2 className="text-sm font-bold tracking-widest uppercase">{hobbiesSection.title}</h2>
+              </div>
+              <ul className="list-disc pl-5 space-y-0.5 text-[13px] text-gray-800">
+                {hobbiesSection.items.map((item) => (
+                  <li key={item.id} className="leading-relaxed">
+                    {item.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Other Custom Sections */}
+          {otherCustomSections.map((section) => (
+            <div key={section.id} className="mb-4">
+              <div 
+                className="inline-block border-t border-b py-0.5 px-2 mb-2"
+                style={{ borderColor: themeColorBorder }}
+              >
+                <h2 className="text-sm font-bold tracking-widest uppercase">{section.title}</h2>
+              </div>
+              <ul className="list-disc pl-5 space-y-1 text-[13px] text-gray-800">
+                {section.items.map((item) => (
+                  <li key={item.id} className="leading-relaxed">
+                    <strong className="text-gray-900">{item.name}</strong>
+                    {item.date && <span className="text-gray-500 text-xs ml-2">({item.date})</span>}
+                    {item.description && <p className="text-gray-700 mt-1">{item.description}</p>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+
+        {/* Right Column (62%) */}
+        <div className="w-full md:w-[62%] pl-4">
+          {/* Professional Experience */}
+          {data.experience.length > 0 && (
+            <div className="mb-4">
+              <div 
+                className="inline-block border-t border-b py-0.5 px-2 mb-2"
+                style={{ borderColor: themeColorBorder }}
+              >
+                <h2 className="text-sm font-bold tracking-widest uppercase">Professional Experience</h2>
+              </div>
+              <div className="space-y-4">
+                {data.experience.map((exp) => {
+                  const hasCompanyOrLocation = exp.company.trim() || (exp.location && exp.location.trim());
+                  const hasDates = exp.startDate.trim() || exp.endDate.trim();
+                  
+                  // If everything is completely empty, let's not render the divider and Present - Present
+                  if (!exp.position.trim() && !hasCompanyOrLocation && !hasDates && (!exp.description || exp.description.length === 0)) {
+                    return null;
+                  }
+
+                  return (
+                    <div key={exp.id}>
+                      {exp.position.trim() ? (
+                        <h3 className="text-sm font-bold text-gray-900">{exp.position}</h3>
+                      ) : (
+                        <h3 className="text-sm font-bold text-gray-400 italic">Position</h3>
+                      )}
+                      
+                      {(hasCompanyOrLocation || hasDates) && (
+                        <p className="text-[13px] font-sans italic mt-0.5 mb-1" style={{ color: themeColorText }}>
+                          {hasCompanyOrLocation && (
+                            <span>{exp.company}{exp.location ? `, ${exp.location}` : ''}</span>
+                          )}
+                          {hasCompanyOrLocation && hasDates && <span> | </span>}
+                          {hasDates && (
+                            <span>
+                              {exp.startDate.trim() || 'Present'} - {exp.endDate.trim() || 'Present'}
+                            </span>
+                          )}
+                        </p>
+                      )}
+                      {exp.description.length > 0 && (
+                        <ul className="list-disc pl-5 space-y-1 text-[13px] text-gray-800">
+                          {exp.description.map((bullet, idx) => (
+                            <li key={idx} className="leading-relaxed">
+                              {bullet}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Projects */}
+          {nonEmptyProjects.length > 0 && (
+            <div className="mb-4">
+              <div 
+                className="inline-block border-t border-b py-0.5 px-2 mb-2"
+                style={{ borderColor: themeColorBorder }}
+              >
+                <h2 className="text-sm font-bold tracking-widest uppercase">Projects</h2>
+              </div>
+              <div className="space-y-4">
+                {nonEmptyProjects.map((project) => {
+                  return (
+                    <div key={project.id} className="text-[13px] text-gray-800">
+                      <div className="grid grid-cols-[80px_auto] gap-x-2 gap-y-0.5 font-sans">
+                        <span className="font-bold text-gray-700">Title</span>
+                        <span className="font-bold text-gray-900">: {project.name}</span>
+                        {project.technologies.length > 0 && (
+                          <>
+                            <span className="font-bold text-gray-700">Technologies</span>
+                            <span className="text-gray-800">: {project.technologies.join(', ')}</span>
+                          </>
+                        )}
+                        {project.link && (
+                          <>
+                            <span className="font-bold text-gray-700">Link</span>
+                            <span className="hover:underline" style={{ color: themeColorText }}>
+                              : <a href={project.link.startsWith('http') ? project.link : `https://${project.link}`} target="_blank" rel="noopener noreferrer">{project.link}</a>
+                            </span>
+                          </>
+                        )}
+                      </div>
+                      
+                      {project.description && (
+                        <div className="mt-1 pl-0">
+                          {project.description.split('\n').map((line, lineIdx) => {
+                            const trimmed = line.trim();
+                            if (!trimmed) return <div key={lineIdx} className="h-2" />;
+                            const match = trimmed.match(/^([^:]+):(.*)$/);
+                            if (match && match[1].length < 20 && !trimmed.toLowerCase().startsWith('http')) {
+                              return (
+                                <div key={lineIdx} className="grid grid-cols-[120px_auto] gap-x-2 font-sans mb-0.5">
+                                  <span className="font-bold text-gray-700">{match[1].trim()}</span>
+                                  <span className="text-gray-800">: {match[2].trim()}</span>
+                                </div>
+                              );
+                            }
+                            return (
+                              <p key={lineIdx} className="leading-relaxed mb-1 font-serif">
+                                {trimmed}
+                              </p>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

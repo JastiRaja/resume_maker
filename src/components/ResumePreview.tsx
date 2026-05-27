@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Edit3, Download, Palette } from 'lucide-react';
 import { ResumeData } from '../types/resume';
 import { isCenteredResumeTemplate, isTwoColumnResumeTemplate } from '../constants/resumeTemplateLayouts';
-import { StandardLayout, TwoColumnLayout, CenteredLayout, YellowSidebarLayout, NavySidebarLayout, FormalRedLayout, TimelineDarkLayout, GeometricBlueLayout, ProfessionalNavyHeaderLayout, CleanBlueAccentLayout } from './ResumePreviewLayouts';
+import { StandardLayout, TwoColumnLayout, CenteredLayout, YellowSidebarLayout, NavySidebarLayout, FormalRedLayout, TimelineDarkLayout, GeometricBlueLayout, ProfessionalNavyHeaderLayout, CleanBlueAccentLayout, ClassicSplitLayout } from './ResumePreviewLayouts';
 
 interface ResumePreviewProps {
   data: ResumeData | null;
@@ -66,6 +66,8 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, templateId, onEdit,
     LayoutComponent = ProfessionalNavyHeaderLayout;
   } else if (templateId === 'clean-blue') {
     LayoutComponent = CleanBlueAccentLayout;
+  } else if (templateId === 'classic-split') {
+    LayoutComponent = ClassicSplitLayout;
   }
 
   // Set colors based on templateId
@@ -109,6 +111,8 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, templateId, onEdit,
     defaultThemeColorText = '#1E293B'; defaultThemeColorBg = '#1E293B'; defaultThemeColorBorder = '#cbd5e1';
   } else if (templateId === 'clean-blue') {
     defaultThemeColorText = '#2563EB'; defaultThemeColorBg = '#2563EB'; defaultThemeColorBorder = '#bfdbfe';
+  } else if (templateId === 'classic-split') {
+    defaultThemeColorText = '#1F2937'; defaultThemeColorBg = '#1F2937'; defaultThemeColorBorder = '#D1D5DB';
   }
 
   const themeColorText = data?.theme?.textColor || defaultThemeColorText;

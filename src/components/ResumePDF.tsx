@@ -6,7 +6,8 @@ import {
   StandardPDFLayout, TwoColumnPDFLayout, CenteredPDFLayout,
   YellowSidebarPDFLayout, NavySidebarPDFLayout, FormalRedPDFLayout,
   TimelineDarkPDFLayout, GeometricBluePDFLayout,
-  ProfessionalNavyHeaderPDFLayout, CleanBlueAccentPDFLayout
+  ProfessionalNavyHeaderPDFLayout, CleanBlueAccentPDFLayout,
+  ClassicSplitPDFLayout
 } from './ResumePDFLayouts';
 
 // Register standard fonts
@@ -46,6 +47,8 @@ export const ResumePDF: React.FC<ResumePDFProps> = ({ data, templateId = 'modern
     LayoutComponent = ProfessionalNavyHeaderPDFLayout;
   } else if (safeTemplateId === 'clean-blue') {
     LayoutComponent = CleanBlueAccentPDFLayout;
+  } else if (safeTemplateId === 'classic-split') {
+    LayoutComponent = ClassicSplitPDFLayout;
   } else if (isTwoColumnResumeTemplate(safeTemplateId)) {
     LayoutComponent = TwoColumnPDFLayout;
   } else if (isCenteredResumeTemplate(safeTemplateId)) {
@@ -69,6 +72,8 @@ export const ResumePDF: React.FC<ResumePDFProps> = ({ data, templateId = 'modern
     defaultThemeColorText = '#1E293B'; defaultThemeColorBg = '#1E293B'; defaultThemeColorBorder = '#cbd5e1';
   } else if (safeTemplateId === 'clean-blue') {
     defaultThemeColorText = '#2563EB'; defaultThemeColorBg = '#2563EB'; defaultThemeColorBorder = '#bfdbfe';
+  } else if (safeTemplateId === 'classic-split') {
+    defaultThemeColorText = '#1F2937'; defaultThemeColorBg = '#1F2937'; defaultThemeColorBorder = '#D1D5DB';
   } else if (safeTemplateId === 'creative-designer') {
     defaultThemeColorText = '#9333EA'; defaultThemeColorBg = '#9333EA'; defaultThemeColorBorder = '#E9D5FF';
   } else if (safeTemplateId === 'executive-premium') {

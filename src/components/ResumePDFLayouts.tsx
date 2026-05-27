@@ -11,6 +11,25 @@ export interface PDFLayoutProps {
 
 export const formatDate = (date: string) => date || 'Present';
 
+export const formatEducationDates = (startDate?: string, endDate?: string) => {
+  const start = (startDate || '').trim();
+  const end = (endDate || '').trim();
+  
+  if (!start && !end) return '';
+  if (!start) return end;
+  if (!end) return start;
+  
+  if (end.toLowerCase() === 'present') {
+    return `${start} - Present`;
+  }
+  
+  if (end.includes(start)) {
+    return end;
+  }
+  
+  return `${start} - ${end}`;
+};
+
 export const getNonEmptyProjects = (data: ResumeData) => data.projects.filter(
   (project) =>
     project.name.trim() ||
@@ -242,7 +261,7 @@ export const StandardPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
                   <Text style={stdStyles.itemTitle}>{data.education[0].degree}{data.education[0].field ? ` in ${data.education[0].field}` : ''}</Text>
                   <Text style={[stdStyles.itemSubtitle, { color: themeColorText }]}>{data.education[0].institution}</Text>
                 </View>
-                <Text style={stdStyles.itemDate}>{formatDate(data.education[0].endDate)}</Text>
+                <Text style={stdStyles.itemDate}>{formatEducationDates(data.education[0].startDate, data.education[0].endDate)}</Text>
               </View>
             )}
           </View>
@@ -253,7 +272,7 @@ export const StandardPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
                 <Text style={stdStyles.itemTitle}>{edu.degree}{edu.field ? ` in ${edu.field}` : ''}</Text>
                 <Text style={[stdStyles.itemSubtitle, { color: themeColorText }]}>{edu.institution}</Text>
               </View>
-              <Text style={stdStyles.itemDate}>{formatDate(edu.endDate)}</Text>
+              <Text style={stdStyles.itemDate}>{formatEducationDates(edu.startDate, edu.endDate)}</Text>
             </View>
           ))}
         </View>
@@ -466,7 +485,7 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
             <Text style={colStyles.sectionTitleLeft}>Education</Text>
             {data.education.map((edu) => (
               <View key={edu.id} style={colStyles.eduItemLeft}>
-                <Text style={colStyles.eduDateLeft}>{formatDate(edu.endDate)}</Text>
+                <Text style={colStyles.eduDateLeft}>{formatEducationDates(edu.startDate, edu.endDate)}</Text>
                 <Text style={colStyles.eduDegreeLeft}>{edu.degree}</Text>
                 <Text style={colStyles.eduInstLeft}>{edu.institution}</Text>
               </View>
@@ -756,7 +775,7 @@ export const CenteredPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
                     <Text style={cntStyles.itemTitle}>{data.education[0].degree}{data.education[0].field ? ` in ${data.education[0].field}` : ''}</Text>
                     <Text style={[cntStyles.itemSubtitle, { color: themeColorText }]}>{data.education[0].institution}</Text>
                   </View>
-                  <Text style={cntStyles.itemDate}>{formatDate(data.education[0].endDate)}</Text>
+                  <Text style={cntStyles.itemDate}>{formatEducationDates(data.education[0].startDate, data.education[0].endDate)}</Text>
                 </View>
               </View>
             )}
@@ -769,7 +788,7 @@ export const CenteredPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
                   <Text style={cntStyles.itemTitle}>{edu.degree}{edu.field ? ` in ${edu.field}` : ''}</Text>
                   <Text style={[cntStyles.itemSubtitle, { color: themeColorText }]}>{edu.institution}</Text>
                 </View>
-                <Text style={cntStyles.itemDate}>{formatDate(edu.endDate)}</Text>
+                <Text style={cntStyles.itemDate}>{formatEducationDates(edu.startDate, edu.endDate)}</Text>
               </View>
             </View>
           ))}
@@ -982,7 +1001,7 @@ export const YellowSidebarPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCo
             <Text style={ysStyles.sectionTitleLeft}>Education</Text>
             {data.education.map((edu) => (
               <View key={edu.id} style={ysStyles.eduItemLeft}>
-                <Text style={ysStyles.eduDateLeft}>{formatDate(edu.endDate)}</Text>
+                <Text style={ysStyles.eduDateLeft}>{formatEducationDates(edu.startDate, edu.endDate)}</Text>
                 <Text style={ysStyles.eduDegreeLeft}>{edu.degree}</Text>
                 <Text style={ysStyles.eduInstLeft}>{edu.institution}</Text>
               </View>
@@ -1167,7 +1186,7 @@ export const NavySidebarPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColo
                   {edu.field ? `, ${edu.field}` : ''}, {edu.institution}
                 </Text>
                 <Text style={nsStyles.itemDate}>
-                  {formatDate(edu.startDate)} - {formatDate(edu.endDate)}
+                  {formatEducationDates(edu.startDate, edu.endDate)}
                 </Text>
               </View>
             ))}
@@ -1577,7 +1596,7 @@ export const TimelineDarkPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCol
                 <Text style={{ fontSize: 9, color: '#111827', fontWeight: 'bold' }}>{edu.degree}</Text>
                 <Text style={{ fontSize: 8, color: '#4B5563', marginTop: 2 }}>{edu.institution}</Text>
                 <Text style={{ fontSize: 8, color: '#6B7280', marginTop: 2 }}>
-                  {formatDate(edu.startDate)} - {formatDate(edu.endDate)}
+                  {formatEducationDates(edu.startDate, edu.endDate)}
                 </Text>
               </View>
             ))}
@@ -1992,7 +2011,7 @@ export const GeometricBluePDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCo
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' }} wrap={false}>
                       <Text style={[gbStyles.itemTitle, { flex: 1 }]}>{edu.degree}</Text>
                       <Text style={[gbStyles.itemDate, { flexShrink: 0 }]}>
-                        {formatDate(edu.startDate)} - {formatDate(edu.endDate)}
+                        {formatEducationDates(edu.startDate, edu.endDate)}
                       </Text>
                     </View>
                     <Text style={gbStyles.itemSubtitle}>{edu.institution}</Text>
@@ -2218,7 +2237,7 @@ export const ProfessionalNavyHeaderPDFLayout: React.FC<PDFLayoutProps> = ({ data
                     wrap={false}
                   >
                     <Text style={[pnhStyles.itemSubtitle, { color: accentText, flex: 1, paddingRight: 8 }]}>{edu.institution}</Text>
-                    <Text style={pnhStyles.itemDate}>{formatDateRange(edu.startDate, edu.endDate)}</Text>
+                    <Text style={pnhStyles.itemDate}>{formatEducationDates(edu.startDate, edu.endDate)}</Text>
                   </View>
                 </View>
               ))}
@@ -2416,7 +2435,7 @@ export const CleanBlueAccentPDFLayout: React.FC<PDFLayoutProps> = ({ data, theme
                   <View style={cbaStyles.itemMetaRow}>
                     <Text style={[cbaStyles.company, { color: primaryText }]}>{edu.institution}</Text>
                     <Text style={cbaStyles.itemDate}>
-                      {formatDate(edu.startDate)} - {formatDate(edu.endDate)}
+                      {formatEducationDates(edu.startDate, edu.endDate)}
                     </Text>
                   </View>
                 </View>
@@ -2492,6 +2511,534 @@ export const CleanBlueAccentPDFLayout: React.FC<PDFLayoutProps> = ({ data, theme
                   </Text>
                 ))}
               </View>
+            </View>
+          ) : null}
+        </View>
+      </View>
+    </Page>
+  );
+};
+
+const classicStyles = StyleSheet.create({
+  page: {
+    paddingVertical: 18,
+    paddingHorizontal: 24,
+    backgroundColor: '#FFFFFF',
+    fontFamily: 'Times-Roman',
+    flexDirection: 'column',
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#4B5563',
+    paddingBottom: 6,
+    marginBottom: 10,
+  },
+  name: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    fontFamily: 'Times-Bold',
+    textTransform: 'uppercase',
+    color: '#111827',
+    borderBottomWidth: 1,
+    borderBottomColor: '#D1D5DB',
+    paddingBottom: 1,
+    alignSelf: 'flex-start',
+  },
+  title: {
+    fontSize: 10.5,
+    fontFamily: 'Helvetica',
+    color: '#4B5563',
+    marginTop: 2,
+    letterSpacing: 0.8,
+  },
+  contactColumn: {
+    alignItems: 'flex-end',
+    fontSize: 8.5,
+    fontFamily: 'Helvetica',
+    color: '#4B5563',
+    gap: 2,
+  },
+  contactRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+  },
+  contactText: {
+    fontSize: 8.5,
+  },
+  contactIconCircle: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: '#1F2937',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  // Centered Summary Title
+  summaryHeaderContainer: {
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  summaryTitleWrapper: {
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: '#4B5563',
+    paddingVertical: 1.5,
+    paddingHorizontal: 12,
+    marginBottom: 4,
+  },
+  summaryTitle: {
+    fontSize: 9,
+    fontWeight: 'bold',
+    fontFamily: 'Times-Bold',
+    textTransform: 'uppercase',
+    letterSpacing: 1.2,
+  },
+  summaryBulletContainer: {
+    flexDirection: 'row',
+    marginBottom: 2,
+    paddingHorizontal: 10,
+  },
+  summaryBullet: {
+    width: 8,
+    fontSize: 9,
+  },
+  summaryBulletText: {
+    flex: 1,
+    fontSize: 9,
+    color: '#1F2937',
+    lineHeight: 1.25,
+  },
+  
+  // Columns
+  columnsContainer: {
+    flexDirection: 'row',
+    borderTopWidth: 1,
+    borderTopColor: '#D1D5DB',
+    paddingTop: 10,
+  },
+  leftColumn: {
+    width: '38%',
+    paddingRight: 8,
+    borderRightWidth: 1,
+    borderRightColor: '#9CA3AF',
+  },
+  rightColumn: {
+    width: '62%',
+    paddingLeft: 8,
+  },
+  
+  // Section Headers
+  sectionTitleWrapper: {
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: '#4B5563',
+    paddingVertical: 1.5,
+    paddingHorizontal: 5,
+    marginBottom: 6,
+    alignSelf: 'flex-start',
+  },
+  sectionTitle: {
+    fontSize: 9,
+    fontWeight: 'bold',
+    fontFamily: 'Times-Bold',
+    textTransform: 'uppercase',
+    letterSpacing: 1.0,
+  },
+  
+  // Left Column Details
+  eduItem: {
+    marginBottom: 6,
+  },
+  eduInst: {
+    fontSize: 9.5,
+    fontWeight: 'bold',
+    fontFamily: 'Times-Bold',
+    color: '#111827',
+  },
+  eduMeta: {
+    fontSize: 8.5,
+    color: '#4B5563',
+    marginTop: 1,
+  },
+  leftBulletContainer: {
+    flexDirection: 'row',
+    marginBottom: 2,
+  },
+  leftBulletText: {
+    flex: 1,
+    fontSize: 9,
+    color: '#1F2937',
+  },
+  
+  // Right Column Details
+  expItem: {
+    marginBottom: 10,
+  },
+  expTitle: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    fontFamily: 'Times-Bold',
+    color: '#111827',
+  },
+  expMeta: {
+    fontSize: 8.5,
+    fontFamily: 'Helvetica-Oblique',
+    color: '#4B5563',
+    marginTop: 1,
+    marginBottom: 2,
+  },
+  rightBulletContainer: {
+    flexDirection: 'row',
+    marginBottom: 2,
+  },
+  rightBulletText: {
+    flex: 1,
+    fontSize: 9,
+    color: '#1F2937',
+    lineHeight: 1.25,
+  },
+  
+  // Projects
+  projectItem: {
+    marginBottom: 8,
+  },
+  projectGrid: {
+    flexDirection: 'row',
+    marginBottom: 1,
+  },
+  projectKey: {
+    width: 80,
+    fontSize: 8.5,
+    fontFamily: 'Helvetica-Bold',
+    color: '#4B5563',
+  },
+  projectVal: {
+    flex: 1,
+    fontSize: 8.5,
+    fontFamily: 'Helvetica',
+    color: '#111827',
+  },
+  projectDesc: {
+    fontSize: 9,
+    color: '#1F2937',
+    lineHeight: 1.25,
+    marginTop: 2,
+  },
+  projectRoleRow: {
+    flexDirection: 'row',
+    fontSize: 8.5,
+    fontFamily: 'Helvetica',
+    color: '#374151',
+    marginBottom: 1,
+  },
+  projectRoleKey: {
+    width: 120,
+    fontFamily: 'Helvetica-Bold',
+    color: '#4B5563',
+  },
+  projectRoleVal: {
+    flex: 1,
+  }
+});
+
+export const ClassicSplitPDFLayout: React.FC<PDFLayoutProps> = ({ data }) => {
+  const nonEmptyProjects = getNonEmptyProjects(data);
+
+  const certificationsSection = data.customSections?.find(s => s.title.toLowerCase().includes('certif'));
+  const languagesSection = data.customSections?.find(s => s.title.toLowerCase().includes('lang'));
+  const hobbiesSection = data.customSections?.find(s => s.title.toLowerCase().includes('hobb'));
+  const otherCustomSections = data.customSections?.filter(s => 
+    s !== certificationsSection && s !== languagesSection && s !== hobbiesSection
+  ) || [];
+
+  return (
+    <Page size="A4" style={classicStyles.page} wrap>
+      {/* Header */}
+      <View style={classicStyles.headerContainer} wrap={false}>
+        <View style={{ flex: 1 }}>
+          <Text style={classicStyles.name}>
+            {data.personalInfo.firstName} {data.personalInfo.lastName}
+          </Text>
+          <Text style={classicStyles.title}>
+            {data.personalInfo.title}
+          </Text>
+        </View>
+        
+        {/* Contact details */}
+        <View style={classicStyles.contactColumn}>
+          {data.personalInfo.phone ? (
+            <View style={classicStyles.contactRow}>
+              <Text style={classicStyles.contactText}>{data.personalInfo.phone}</Text>
+              <View style={classicStyles.contactIconCircle}>
+                <PdfIconPhone color="#FFFFFF" />
+              </View>
+            </View>
+          ) : null}
+          {data.personalInfo.email ? (
+            <View style={classicStyles.contactRow}>
+              <Text style={classicStyles.contactText}>{data.personalInfo.email}</Text>
+              <View style={classicStyles.contactIconCircle}>
+                <PdfIconMail color="#FFFFFF" />
+              </View>
+            </View>
+          ) : null}
+          {data.personalInfo.location ? (
+            <View style={classicStyles.contactRow}>
+              <Text style={classicStyles.contactText}>{data.personalInfo.location}</Text>
+              <View style={classicStyles.contactIconCircle}>
+                <PdfIconMapPin color="#FFFFFF" />
+              </View>
+            </View>
+          ) : null}
+          {data.personalInfo.linkedin ? (
+            <View style={classicStyles.contactRow}>
+              <Text style={classicStyles.contactText}>{data.personalInfo.linkedin}</Text>
+              <View style={classicStyles.contactIconCircle}>
+                <PdfIconLinkedInGlyph color="#FFFFFF" />
+              </View>
+            </View>
+          ) : null}
+          {data.personalInfo.website ? (
+            <View style={classicStyles.contactRow}>
+              <Text style={classicStyles.contactText}>{data.personalInfo.website}</Text>
+              <View style={classicStyles.contactIconCircle}>
+                <PdfIconGlobe color="#FFFFFF" />
+              </View>
+            </View>
+          ) : null}
+        </View>
+      </View>
+
+      {/* Summary Section */}
+      {data.summary ? (
+        <View style={{ marginBottom: 10 }} wrap={false}>
+          <View style={classicStyles.summaryHeaderContainer}>
+            <View style={classicStyles.summaryTitleWrapper}>
+              <Text style={classicStyles.summaryTitle}>Summary</Text>
+            </View>
+          </View>
+          <View>
+            {data.summary.split('\n').map((line, index) => {
+              const trimmed = line.trim();
+              if (!trimmed) return null;
+              const content = trimmed.startsWith('•') ? trimmed.substring(1).trim() : trimmed;
+              return (
+                <View key={index} style={classicStyles.summaryBulletContainer}>
+                  <Text style={classicStyles.summaryBullet}>•</Text>
+                  <Text style={classicStyles.summaryBulletText}>{content}</Text>
+                </View>
+              );
+            })}
+          </View>
+        </View>
+      ) : null}
+
+      {/* Two Column Layout split by vertical line */}
+      <View style={classicStyles.columnsContainer}>
+        {/* Left Column (38%) */}
+        <View style={classicStyles.leftColumn}>
+          {/* Education */}
+          {data.education.length > 0 ? (
+            <View style={{ marginBottom: 8 }} wrap={false}>
+              <View style={classicStyles.sectionTitleWrapper}>
+                <Text style={classicStyles.sectionTitle}>Education</Text>
+              </View>
+              {data.education.map((edu) => (
+                <View key={edu.id} style={classicStyles.eduItem}>
+                  <Text style={classicStyles.eduInst}>{edu.institution}</Text>
+                  <Text style={classicStyles.eduMeta}>
+                    {edu.degree}{edu.field ? ` in ${edu.field}` : ''}{formatEducationDates(edu.startDate, edu.endDate) ? ` (${formatEducationDates(edu.startDate, edu.endDate)})` : ''}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          ) : null}
+
+          {/* Skills */}
+          {data.skills.length > 0 ? (
+            <View style={{ marginBottom: 8 }} wrap={false}>
+              <View style={classicStyles.sectionTitleWrapper}>
+                <Text style={classicStyles.sectionTitle}>Skills</Text>
+              </View>
+              {data.skills.map((skill) => (
+                <View key={skill.id} style={classicStyles.leftBulletContainer}>
+                  <Text style={{ width: 8, fontSize: 9.0 }}>•</Text>
+                  <Text style={classicStyles.leftBulletText}>{skill.name}</Text>
+                </View>
+              ))}
+            </View>
+          ) : null}
+
+          {/* Certifications */}
+          {certificationsSection && certificationsSection.items.length > 0 ? (
+            <View style={{ marginBottom: 8 }} wrap={false}>
+              <View style={classicStyles.sectionTitleWrapper}>
+                <Text style={classicStyles.sectionTitle}>{certificationsSection.title}</Text>
+              </View>
+              {certificationsSection.items.map((item) => (
+                <View key={item.id} style={classicStyles.leftBulletContainer}>
+                  <Text style={{ width: 8, fontSize: 9.0 }}>•</Text>
+                  <Text style={classicStyles.leftBulletText}>
+                    {item.name}{item.description ? ` - ${item.description}` : ''}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          ) : null}
+
+          {/* Languages */}
+          {languagesSection && languagesSection.items.length > 0 ? (
+            <View style={{ marginBottom: 8 }} wrap={false}>
+              <View style={classicStyles.sectionTitleWrapper}>
+                <Text style={classicStyles.sectionTitle}>{languagesSection.title}</Text>
+              </View>
+              {languagesSection.items.map((item) => (
+                <View key={item.id} style={classicStyles.leftBulletContainer}>
+                  <Text style={{ width: 8, fontSize: 9.0 }}>•</Text>
+                  <Text style={classicStyles.leftBulletText}>{item.name}</Text>
+                </View>
+              ))}
+            </View>
+          ) : null}
+
+          {/* Hobbies */}
+          {hobbiesSection && hobbiesSection.items.length > 0 ? (
+            <View style={{ marginBottom: 8 }} wrap={false}>
+              <View style={classicStyles.sectionTitleWrapper}>
+                <Text style={classicStyles.sectionTitle}>{hobbiesSection.title}</Text>
+              </View>
+              {hobbiesSection.items.map((item) => (
+                <View key={item.id} style={classicStyles.leftBulletContainer}>
+                  <Text style={{ width: 8, fontSize: 9.0 }}>•</Text>
+                  <Text style={classicStyles.leftBulletText}>{item.name}</Text>
+                </View>
+              ))}
+            </View>
+          ) : null}
+
+          {/* Other Custom Sections */}
+          {otherCustomSections.map((section) => (
+            <View key={section.id} style={{ marginBottom: 8 }} wrap={false}>
+              <View style={classicStyles.sectionTitleWrapper}>
+                <Text style={classicStyles.sectionTitle}>{section.title}</Text>
+              </View>
+              {section.items.map((item) => (
+                <View key={item.id} style={{ marginBottom: 4 }}>
+                  <Text style={{ fontSize: 9.5, fontWeight: 'bold', fontFamily: 'Times-Bold' }}>{item.name}</Text>
+                  {item.date ? <Text style={{ fontSize: 7.5, color: '#4B5563', marginBottom: 1 }}>{item.date}</Text> : null}
+                  {item.description ? <Text style={{ fontSize: 9.0, color: '#1F2937' }}>{item.description}</Text> : null}
+                </View>
+              ))}
+            </View>
+          ))}
+        </View>
+
+
+
+        {/* Right Column (62%) */}
+        <View style={classicStyles.rightColumn}>
+          {/* Professional Experience */}
+          {data.experience.length > 0 ? (
+            <View style={{ marginBottom: 8 }}>
+              <View style={classicStyles.sectionTitleWrapper} wrap={false}>
+                <Text style={classicStyles.sectionTitle}>Professional Experience</Text>
+              </View>
+              {data.experience.map((exp) => {
+                const hasCompanyOrLocation = exp.company.trim() || (exp.location && exp.location.trim());
+                const hasDates = exp.startDate.trim() || exp.endDate.trim();
+                
+                // If everything is completely empty, let's not render it
+                if (!exp.position.trim() && !hasCompanyOrLocation && !hasDates && (!exp.description || exp.description.length === 0)) {
+                  return null;
+                }
+
+                return (
+                  <View key={exp.id} style={classicStyles.expItem} wrap={false}>
+                    {exp.position.trim() ? (
+                      <Text style={classicStyles.expTitle}>{exp.position}</Text>
+                    ) : (
+                      <Text style={[classicStyles.expTitle, { color: '#9CA3AF', fontFamily: 'Times-Italic' }]}>Position</Text>
+                    )}
+                    
+                    {(hasCompanyOrLocation || hasDates) && (
+                      <Text style={classicStyles.expMeta}>
+                        {hasCompanyOrLocation && (
+                          <Text>{exp.company}{exp.location ? `, ${exp.location}` : ''}</Text>
+                        )}
+                        {hasCompanyOrLocation && hasDates && <Text>  |  </Text>}
+                        {hasDates && (
+                          <Text>
+                            {exp.startDate.trim() || 'Present'} - {exp.endDate.trim() || 'Present'}
+                          </Text>
+                        )}
+                      </Text>
+                    )}
+                    
+                    {exp.description.map((bullet, idx) => (
+                      <View key={idx} style={classicStyles.rightBulletContainer}>
+                        <Text style={{ width: 8, fontSize: 9.0 }}>•</Text>
+                        <Text style={classicStyles.rightBulletText}>{bullet}</Text>
+                      </View>
+                    ))}
+                  </View>
+                );
+              })}
+            </View>
+          ) : null}
+
+          {/* Projects */}
+          {nonEmptyProjects.length > 0 ? (
+            <View style={{ marginBottom: 8 }}>
+              <View style={classicStyles.sectionTitleWrapper} wrap={false}>
+                <Text style={classicStyles.sectionTitle}>Projects</Text>
+              </View>
+              {nonEmptyProjects.map((project) => (
+                <View key={project.id} style={classicStyles.projectItem} wrap={false}>
+                  <View style={classicStyles.projectGrid}>
+                    <Text style={classicStyles.projectKey}>Title</Text>
+                    <Text style={classicStyles.projectVal}>: {project.name}</Text>
+                  </View>
+                  {project.technologies.length > 0 ? (
+                    <View style={classicStyles.projectGrid}>
+                      <Text style={classicStyles.projectKey}>Technologies</Text>
+                      <Text style={classicStyles.projectVal}>: {project.technologies.join(', ')}</Text>
+                    </View>
+                  ) : null}
+                  {project.link ? (
+                    <View style={classicStyles.projectGrid}>
+                      <Text style={classicStyles.projectKey}>Link</Text>
+                      <Text style={[classicStyles.projectVal, { color: '#2563EB', textDecoration: 'underline' }]}>: {project.link}</Text>
+                    </View>
+                  ) : null}
+                  
+                  {project.description ? (
+                    <View style={{ marginTop: 2 }}>
+                      {project.description.split('\n').map((line, lineIdx) => {
+                        const trimmed = line.trim();
+                        if (!trimmed) return <View key={lineIdx} style={{ height: 2 }} />;
+                        const match = trimmed.match(/^([^:]+):(.*)$/);
+                        if (match && match[1].length < 20 && !trimmed.toLowerCase().startsWith('http')) {
+                          return (
+                            <View key={lineIdx} style={classicStyles.projectRoleRow}>
+                              <Text style={classicStyles.projectRoleKey}>{match[1].trim()}</Text>
+                              <Text style={classicStyles.projectRoleVal}>: {match[2].trim()}</Text>
+                            </View>
+                          );
+                        }
+                        return (
+                          <Text key={lineIdx} style={classicStyles.projectDesc}>
+                            {trimmed}
+                          </Text>
+                        );
+                      })}
+                    </View>
+                  ) : null}
+                </View>
+              ))}
             </View>
           ) : null}
         </View>
