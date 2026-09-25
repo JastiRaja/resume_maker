@@ -48,7 +48,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, templateId, onEdit,
   let defaultThemeColorBg = '#2563EB'; // bg-blue-600
   let defaultThemeColorBorder = '#BFDBFE'; // border-blue-200
 
-  if (templateId === 'fresher-cs-engineer' || templateId === 'developer-portfolio') {
+  if (templateId === 'fresher-cs-engineer' || templateId === 'fresher-ece-embedded' || templateId === 'developer-portfolio') {
     LayoutComponent = DeveloperPortfolioLayout;
   } else if (templateId === 'fresher-frontend-dev' || templateId === 'timeline-dark') {
     LayoutComponent = TimelineDarkLayout;
@@ -119,6 +119,8 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, templateId, onEdit,
     defaultThemeColorText = '#0369a1'; defaultThemeColorBg = '#0284c7'; defaultThemeColorBorder = '#cbd5e1';
   } else if (templateId === 'fresher-cs-engineer') {
     defaultThemeColorText = '#1D4ED8'; defaultThemeColorBg = '#2563EB'; defaultThemeColorBorder = '#BFDBFE';
+  } else if (templateId === 'fresher-ece-embedded') {
+    defaultThemeColorText = '#0369A1'; defaultThemeColorBg = '#0284C7'; defaultThemeColorBorder = '#BAE6FD';
   } else if (templateId === 'fresher-frontend-dev') {
     defaultThemeColorText = '#0369A1'; defaultThemeColorBg = '#0284C7'; defaultThemeColorBorder = '#BAE6FD';
   } else if (templateId === 'fresher-java-backend') {

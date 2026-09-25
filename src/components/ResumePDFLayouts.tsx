@@ -340,9 +340,9 @@ export const StandardPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
           <View style={[stdStyles.skillsContainer, { flexDirection: 'row', flexWrap: 'wrap', gap: 15 }]}>
             {data.skills.map((skill) => (
               <View key={skill.id} style={{ width: '45%' }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
-                  <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#1F2937' }}>{skill.name}</Text>
-                  {skill.level && <Text style={{ fontSize: 8, color: '#6B7280' }}>{skill.level}</Text>}
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 2 }}>
+                  <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#1F2937', flex: 1, paddingRight: 6 }}>{skill.name}</Text>
+                  {skill.level && <Text style={{ fontSize: 8, color: '#6B7280', flexShrink: 0 }}>{skill.level}</Text>}
                 </View>
                 {skill.level && (
                   <View style={{ width: '100%', height: 4, backgroundColor: '#E5E7EB', borderRadius: 2 }}>
@@ -893,16 +893,15 @@ export const CenteredPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
               <Text style={cntStyles.sectionTitle}>Technical Expertise</Text>
             </View>
           </View>
-          <View style={[cntStyles.skillsContainer, { gap: 15, justifyContent: 'center' }]}>
+          <View style={cntStyles.skillsContainer}>
             {data.skills.map((skill) => (
-              <View key={skill.id} style={{ width: '30%', minWidth: 120 }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
-                  <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#111827' }}>{skill.name}</Text>
-                  <Text style={{ fontSize: 8, color: '#6B7280', textTransform: 'uppercase' }}>{skill.level}</Text>
-                </View>
-                <View style={{ width: '100%', height: 4, backgroundColor: '#E5E7EB', borderRadius: 2 }}>
-                  <View style={{ height: 4, backgroundColor: themeColorBg, borderRadius: 2, width: skill.level === 'Beginner' ? '25%' : skill.level === 'Intermediate' ? '50%' : skill.level === 'Advanced' ? '75%' : '100%' }} />
-                </View>
+              <View key={skill.id} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={cntStyles.skillItem}>
+                  {skill.name}
+                  {skill.level ? (
+                    <Text style={cntStyles.skillLevel}> ({skill.level})</Text>
+                  ) : null}
+                </Text>
               </View>
             ))}
           </View>

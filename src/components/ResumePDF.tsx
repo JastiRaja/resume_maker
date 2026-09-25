@@ -49,7 +49,7 @@ export const ResumePDF: React.FC<ResumePDFProps> = ({ data, templateId = 'modern
     LayoutComponent = CleanBlueAccentPDFLayout;
   } else if (safeTemplateId === 'classic-split') {
     LayoutComponent = ClassicSplitPDFLayout;
-  } else if (safeTemplateId === 'developer-portfolio' || safeTemplateId === 'fresher-cs-engineer') {
+  } else if (safeTemplateId === 'developer-portfolio' || safeTemplateId === 'fresher-cs-engineer' || safeTemplateId === 'fresher-ece-embedded') {
     LayoutComponent = DeveloperPortfolioPDFLayout;
   } else if (isTwoColumnResumeTemplate(safeTemplateId)) {
     LayoutComponent = TwoColumnPDFLayout;
@@ -104,6 +104,8 @@ export const ResumePDF: React.FC<ResumePDFProps> = ({ data, templateId = 'modern
     defaultThemeColorText = '#065F46'; defaultThemeColorBg = '#065F46'; defaultThemeColorBorder = '#6EE7B7';
   } else if (safeTemplateId === 'fresher-cs-engineer') {
     defaultThemeColorText = '#1D4ED8'; defaultThemeColorBg = '#2563EB'; defaultThemeColorBorder = '#BFDBFE';
+  } else if (safeTemplateId === 'fresher-ece-embedded') {
+    defaultThemeColorText = '#0369A1'; defaultThemeColorBg = '#0284C7'; defaultThemeColorBorder = '#BAE6FD';
   } else if (safeTemplateId === 'fresher-frontend-dev') {
     defaultThemeColorText = '#0369A1'; defaultThemeColorBg = '#0284C7'; defaultThemeColorBorder = '#BAE6FD';
   } else if (safeTemplateId === 'fresher-java-backend') {

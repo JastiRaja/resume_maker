@@ -9,12 +9,58 @@ import {
   BorderStyle,
   AlignmentType,
   WidthType,
+  ImageRun,
 } from 'docx';
 import { ResumeData } from '../types/resume';
 import { CoverLetterData } from '../types/coverLetter';
 import { isCenteredResumeTemplate, isTwoColumnResumeTemplate } from '../constants/resumeTemplateLayouts';
 
 type DocAlignment = (typeof AlignmentType)[keyof typeof AlignmentType];
+
+export type DocxImageData = {
+  data: Uint8Array;
+  type: 'png' | 'jpg' | 'gif' | 'bmp';
+};
+
+const fetchImageUint8Array = async (url?: string): Promise<DocxImageData | null> => {
+  if (!url || typeof url !== 'string') return null;
+  const trimmed = url.trim();
+  if (!trimmed) return null;
+  try {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = (e) => reject(e);
+      img.src = trimmed;
+    });
+
+    if (!img.naturalWidth || !img.naturalHeight) return null;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+
+    ctx.drawImage(img, 0, 0);
+    const pngDataUrl = canvas.toDataURL('image/png');
+    const base64Part = pngDataUrl.split(',')[1];
+    if (!base64Part) return null;
+
+    const binaryString = atob(base64Part);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    return { data: bytes, type: 'png' };
+  } catch (err) {
+    console.warn('Could not load image for Word document:', err);
+    return null;
+  }
+};
 
 export const generateDOCX = async (
   data: ResumeData | CoverLetterData,
@@ -25,7 +71,9 @@ export const generateDOCX = async (
     let doc: Document;
 
     if (type === 'resume') {
-      doc = createResumeDocument(data as ResumeData, templateId);
+      const resumeData = data as ResumeData;
+      const imageBytes = await fetchImageUint8Array(resumeData.personalInfo?.imageUrl);
+      doc = createResumeDocument(resumeData, templateId, imageBytes);
     } else {
       doc = createCoverLetterDocument(data as CoverLetterData);
     }
@@ -86,61 +134,153 @@ const getNonEmptyProjects = (data: ResumeData) =>
       (p.technologies && p.technologies.some((t) => t.trim()))
   );
 
+const getContactIconRuns = (
+  info: ResumeData['personalInfo'],
+  accentColor?: string,
+  textColor: string = '4B5563',
+  separator: string = '   |   ',
+  fontSize: number = 18
+): TextRun[] => {
+  const runs: TextRun[] = [];
+  const items = [
+    { icon: '✉ ', val: info.email },
+    { icon: '📞 ', val: info.phone },
+    { icon: '📍 ', val: info.location },
+    { icon: 'in ', val: cleanUrl(info.linkedin), isLinkedIn: true },
+    { icon: '🌐 ', val: cleanUrl(info.website) },
+  ].filter((it) => Boolean(it.val));
+
+  items.forEach((it, idx) => {
+    if (idx > 0) {
+      runs.push(new TextRun({ text: separator, size: fontSize, color: '9CA3AF', font: 'Arial' }));
+    }
+    runs.push(
+      new TextRun({
+        text: it.icon,
+        size: fontSize - 2,
+        bold: Boolean(it.isLinkedIn),
+        color: accentColor || textColor,
+        font: it.isLinkedIn ? 'Arial' : 'Segoe UI Symbol',
+      })
+    );
+    runs.push(
+      new TextRun({
+        text: it.val as string,
+        size: fontSize,
+        color: textColor,
+        font: 'Arial',
+      })
+    );
+  });
+
+  return runs;
+};
+
 // =========================================================================
 // 1. STANDARD DOCX BUILDER (matches StandardPDFLayout)
 // =========================================================================
-const buildStandardDocx = (data: ResumeData, themeColorBg: string, themeColorText: string): Document => {
+const buildStandardDocx = (data: ResumeData, themeColorBg: string, themeColorText: string, imageBytes?: DocxImageData | null): Document => {
   const nonEmptyProjects = getNonEmptyProjects(data);
   const children: (Paragraph | Table)[] = [];
 
-  // Top accent bar + Header
-  children.push(
-    new Paragraph({
-      border: { top: { color: themeColorBg, space: 4, style: BorderStyle.SINGLE, size: 24 } },
-      spacing: { before: 100, after: 40 },
-      children: [
-        new TextRun({
-          text: `${data.personalInfo.firstName} ${data.personalInfo.lastName}`,
-          bold: true,
-          size: 48,
-          color: '111827',
-          font: 'Arial',
-        }),
-      ],
-    }),
-    new Paragraph({
-      spacing: { after: 100 },
-      children: [
-        new TextRun({
-          text: data.personalInfo.title,
-          size: 26,
-          bold: true,
-          color: themeColorText,
-          font: 'Arial',
-        }),
-      ],
-    }),
-    new Paragraph({
-      spacing: { after: 200 },
-      border: { bottom: { color: 'E5E7EB', space: 4, style: BorderStyle.SINGLE, size: 6 } },
-      children: [
-        new TextRun({
-          text: [
-            data.personalInfo.email,
-            data.personalInfo.phone,
-            data.personalInfo.location,
-            data.personalInfo.linkedin,
-            data.personalInfo.website,
-          ]
-            .filter(Boolean)
-            .join('   |   '),
-          size: 19,
-          color: '4B5563',
-          font: 'Arial',
-        }),
-      ],
-    })
-  );
+  if (imageBytes) {
+    children.push(
+      new Table({
+        borders: noBorders,
+        rows: [
+          new TableRow({
+            children: [
+              new TableCell({
+                width: { size: 75, type: WidthType.PERCENTAGE },
+                children: [
+                  new Paragraph({
+                    border: { top: { color: themeColorBg, space: 4, style: BorderStyle.SINGLE, size: 24 } },
+                    spacing: { before: 100, after: 40 },
+                    children: [
+                      new TextRun({
+                        text: `${data.personalInfo.firstName} ${data.personalInfo.lastName}`,
+                        bold: true,
+                        size: 44,
+                        color: '111827',
+                        font: 'Arial',
+                      }),
+                    ],
+                  }),
+                  new Paragraph({
+                    spacing: { after: 80 },
+                    children: [
+                      new TextRun({
+                        text: data.personalInfo.title,
+                        size: 24,
+                        bold: true,
+                        color: themeColorText,
+                        font: 'Arial',
+                      }),
+                    ],
+                  }),
+                  new Paragraph({
+                    spacing: { after: 150 },
+                    border: { bottom: { color: 'E5E7EB', space: 4, style: BorderStyle.SINGLE, size: 6 } },
+                    children: getContactIconRuns(data.personalInfo, themeColorText, '4B5563', '   |   ', 18),
+                  }),
+                ],
+              }),
+              new TableCell({
+                width: { size: 25, type: WidthType.PERCENTAGE },
+                children: [
+                  new Paragraph({
+                    alignment: AlignmentType.RIGHT,
+                    spacing: { before: 100, after: 150 },
+                    children: [
+                      new ImageRun({
+                        data: imageBytes.data,
+                        transformation: { width: 80, height: 80 },
+                        type: imageBytes.type,
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      })
+    );
+  } else {
+    // Top accent bar + Header
+    children.push(
+      new Paragraph({
+        border: { top: { color: themeColorBg, space: 4, style: BorderStyle.SINGLE, size: 24 } },
+        spacing: { before: 100, after: 40 },
+        children: [
+          new TextRun({
+            text: `${data.personalInfo.firstName} ${data.personalInfo.lastName}`,
+            bold: true,
+            size: 48,
+            color: '111827',
+            font: 'Arial',
+          }),
+        ],
+      }),
+      new Paragraph({
+        spacing: { after: 100 },
+        children: [
+          new TextRun({
+            text: data.personalInfo.title,
+            size: 26,
+            bold: true,
+            color: themeColorText,
+            font: 'Arial',
+          }),
+        ],
+      }),
+      new Paragraph({
+        spacing: { after: 200 },
+        border: { bottom: { color: 'E5E7EB', space: 4, style: BorderStyle.SINGLE, size: 6 } },
+        children: getContactIconRuns(data.personalInfo, themeColorText, '4B5563', '   |   ', 19),
+      })
+    );
+  }
 
   const addSecTitle = (title: string) =>
     new Paragraph({
@@ -309,7 +449,7 @@ const buildStandardDocx = (data: ResumeData, themeColorBg: string, themeColorTex
 // =========================================================================
 // 2. TWO COLUMN DOCX BUILDER (matches TwoColumnPDFLayout)
 // =========================================================================
-const buildTwoColumnDocx = (data: ResumeData, themeColorBg: string, themeColorText: string): Document => {
+const buildTwoColumnDocx = (data: ResumeData, themeColorBg: string, themeColorText: string, imageBytes?: DocxImageData | null): Document => {
   const nonEmptyProjects = getNonEmptyProjects(data);
   const leftCol: Paragraph[] = [];
   const rightCol: Paragraph[] = [];
@@ -330,6 +470,22 @@ const buildTwoColumnDocx = (data: ResumeData, themeColorBg: string, themeColorTe
     });
 
   // Left column content
+  if (imageBytes) {
+    leftCol.push(
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        spacing: { before: 50, after: 100 },
+        children: [
+          new ImageRun({
+            data: imageBytes.data,
+            transformation: { width: 65, height: 65 },
+            type: imageBytes.type,
+          }),
+        ],
+      })
+    );
+  }
+
   leftCol.push(
     new Paragraph({
       spacing: { before: 50, after: 30 },
@@ -358,11 +514,11 @@ const buildTwoColumnDocx = (data: ResumeData, themeColorBg: string, themeColorTe
   );
 
   const contactList = [
-    { label: 'Email', val: data.personalInfo.email },
-    { label: 'Phone', val: data.personalInfo.phone },
-    { label: 'Location', val: data.personalInfo.location },
-    { label: 'LinkedIn', val: data.personalInfo.linkedin },
-    { label: 'Website', val: data.personalInfo.website },
+    { icon: '✉ ', label: 'Email', val: data.personalInfo.email },
+    { icon: '📞 ', label: 'Phone', val: data.personalInfo.phone },
+    { icon: '📍 ', label: 'Location', val: data.personalInfo.location },
+    { icon: 'in ', label: 'LinkedIn', val: cleanUrl(data.personalInfo.linkedin), isLinkedIn: true },
+    { icon: '🌐 ', label: 'Website', val: cleanUrl(data.personalInfo.website) },
   ].filter((c) => Boolean(c.val));
 
   contactList.forEach((c) => {
@@ -370,7 +526,7 @@ const buildTwoColumnDocx = (data: ResumeData, themeColorBg: string, themeColorTe
       new Paragraph({
         spacing: { after: 40 },
         children: [
-          new TextRun({ text: `${c.label}: `, size: 16, color: 'E2E8F0', bold: true, font: 'Arial' }),
+          new TextRun({ text: c.icon, size: 16, color: 'E2E8F0', bold: Boolean(c.isLinkedIn), font: c.isLinkedIn ? 'Arial' : 'Segoe UI Symbol' }),
           new TextRun({ text: c.val as string, size: 16, color: 'FFFFFF', font: 'Arial' }),
         ],
       })
@@ -563,9 +719,25 @@ const buildTwoColumnDocx = (data: ResumeData, themeColorBg: string, themeColorTe
 // =========================================================================
 // 3. CENTERED DOCX BUILDER (matches CenteredPDFLayout)
 // =========================================================================
-const buildCenteredDocx = (data: ResumeData, themeColorBg: string, themeColorText: string): Document => {
+const buildCenteredDocx = (data: ResumeData, themeColorBg: string, themeColorText: string, imageBytes?: DocxImageData | null): Document => {
   const nonEmptyProjects = getNonEmptyProjects(data);
   const children: (Paragraph | Table)[] = [];
+
+  if (imageBytes) {
+    children.push(
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        spacing: { before: 80, after: 60 },
+        children: [
+          new ImageRun({
+            data: imageBytes.data,
+            transformation: { width: 70, height: 70 },
+            type: imageBytes.type,
+          }),
+        ],
+      })
+    );
+  }
 
   children.push(
     new Paragraph({
@@ -598,22 +770,7 @@ const buildCenteredDocx = (data: ResumeData, themeColorBg: string, themeColorTex
       alignment: AlignmentType.CENTER,
       spacing: { after: 220 },
       border: { bottom: { color: themeColorBg, space: 4, style: BorderStyle.SINGLE, size: 12 } },
-      children: [
-        new TextRun({
-          text: [
-            data.personalInfo.email,
-            data.personalInfo.phone,
-            data.personalInfo.location,
-            data.personalInfo.linkedin,
-            data.personalInfo.website,
-          ]
-            .filter(Boolean)
-            .join('   •   '),
-          size: 19,
-          color: '4B5563',
-          font: 'Arial',
-        }),
-      ],
+      children: getContactIconRuns(data.personalInfo, themeColorText, '4B5563', '   •   ', 19),
     })
   );
 
@@ -706,7 +863,7 @@ const buildCenteredDocx = (data: ResumeData, themeColorBg: string, themeColorTex
   }
 
   if (nonEmptyProjects.length > 0) {
-    children.push(addCenteredTitle('Key Projects'));
+    children.push(addCenteredTitle('Selected Projects'));
     nonEmptyProjects.forEach((proj) => {
       children.push(
         new Paragraph({
@@ -750,7 +907,7 @@ const buildCenteredDocx = (data: ResumeData, themeColorBg: string, themeColorTex
   }
 
   if (data.skills.length > 0) {
-    children.push(addCenteredTitle('Skills & Expertise'));
+    children.push(addCenteredTitle('Technical Expertise'));
     children.push(
       new Paragraph({
         alignment: AlignmentType.CENTER,
@@ -775,10 +932,25 @@ const buildCenteredDocx = (data: ResumeData, themeColorBg: string, themeColorTex
 // =========================================================================
 // 4. YELLOW SIDEBAR DOCX BUILDER (matches YellowSidebarPDFLayout)
 // =========================================================================
-const buildYellowSidebarDocx = (data: ResumeData, themeColorBg: string, themeColorText: string): Document => {
+const buildYellowSidebarDocx = (data: ResumeData, themeColorBg: string, themeColorText: string, imageBytes?: DocxImageData | null): Document => {
   const nonEmptyProjects = getNonEmptyProjects(data);
   const leftCol: Paragraph[] = [];
   const rightCol: Paragraph[] = [];
+
+  if (imageBytes) {
+    leftCol.push(
+      new Paragraph({
+        spacing: { before: 50, after: 100 },
+        children: [
+          new ImageRun({
+            data: imageBytes.data,
+            transformation: { width: 75, height: 75 },
+            type: imageBytes.type,
+          }),
+        ],
+      })
+    );
+  }
 
   const addLeftTitle = (title: string) =>
     new Paragraph({
@@ -796,20 +968,20 @@ const buildYellowSidebarDocx = (data: ResumeData, themeColorBg: string, themeCol
     });
 
   leftCol.push(addLeftTitle('Contact'));
-  const contactList = [
-    { label: 'Location', val: data.personalInfo.location },
-    { label: 'Phone', val: data.personalInfo.phone },
-    { label: 'Email', val: data.personalInfo.email },
-    { label: 'LinkedIn', val: data.personalInfo.linkedin },
-    { label: 'Website', val: data.personalInfo.website },
+  const yellowContactList = [
+    { icon: '📍 ', label: 'Location', val: data.personalInfo.location },
+    { icon: '📞 ', label: 'Phone', val: data.personalInfo.phone },
+    { icon: '✉ ', label: 'Email', val: data.personalInfo.email },
+    { icon: 'in ', label: 'LinkedIn', val: cleanUrl(data.personalInfo.linkedin), isLinkedIn: true },
+    { icon: '🌐 ', label: 'Website', val: cleanUrl(data.personalInfo.website) },
   ].filter((c) => Boolean(c.val));
 
-  contactList.forEach((c) => {
+  yellowContactList.forEach((c) => {
     leftCol.push(
       new Paragraph({
         spacing: { after: 40 },
         children: [
-          new TextRun({ text: `${c.label}: `, size: 16, color: '78350F', bold: true, font: 'Arial' }),
+          new TextRun({ text: c.icon, size: 16, color: '78350F', bold: Boolean(c.isLinkedIn), font: c.isLinkedIn ? 'Arial' : 'Segoe UI Symbol' }),
           new TextRun({ text: c.val as string, size: 16, color: '1F2937', font: 'Arial' }),
         ],
       })
@@ -992,12 +1164,27 @@ const buildYellowSidebarDocx = (data: ResumeData, themeColorBg: string, themeCol
 // =========================================================================
 // 5. NAVY SIDEBAR DOCX BUILDER (matches NavySidebarPDFLayout)
 // =========================================================================
-const buildNavySidebarDocx = (data: ResumeData, themeColorBg: string, themeColorText: string): Document => {
+const buildNavySidebarDocx = (data: ResumeData, themeColorBg: string, themeColorText: string, imageBytes?: DocxImageData | null): Document => {
   const nonEmptyProjects = getNonEmptyProjects(data);
   const leftCol: Paragraph[] = [];
   const rightCol: Paragraph[] = [];
 
   // Left Column Body (68%)
+  if (imageBytes) {
+    leftCol.push(
+      new Paragraph({
+        spacing: { before: 50, after: 60 },
+        children: [
+          new ImageRun({
+            data: imageBytes.data,
+            transformation: { width: 50, height: 50 },
+            type: imageBytes.type,
+          }),
+        ],
+      })
+    );
+  }
+
   leftCol.push(
     new Paragraph({
       spacing: { before: 50, after: 20 },
@@ -1168,20 +1355,20 @@ const buildNavySidebarDocx = (data: ResumeData, themeColorBg: string, themeColor
     });
 
   rightCol.push(addSidebarTitle('Details'));
-  const contactList = [
-    { label: 'Address', val: data.personalInfo.location },
-    { label: 'Phone', val: data.personalInfo.phone },
-    { label: 'Email', val: data.personalInfo.email },
-    { label: 'LinkedIn', val: data.personalInfo.linkedin },
-    { label: 'Website', val: data.personalInfo.website },
+  const navyContactList = [
+    { icon: '📍 ', label: 'Address', val: data.personalInfo.location },
+    { icon: '📞 ', label: 'Phone', val: data.personalInfo.phone },
+    { icon: '✉ ', label: 'Email', val: data.personalInfo.email },
+    { icon: 'in ', label: 'LinkedIn', val: cleanUrl(data.personalInfo.linkedin), isLinkedIn: true },
+    { icon: '🌐 ', label: 'Website', val: cleanUrl(data.personalInfo.website) },
   ].filter((c) => Boolean(c.val));
 
-  contactList.forEach((c) => {
+  navyContactList.forEach((c) => {
     rightCol.push(
       new Paragraph({
         spacing: { after: 40 },
         children: [
-          new TextRun({ text: `${c.label}\n`, size: 15, color: '94A3B8', bold: true, font: 'Arial' }),
+          new TextRun({ text: `${c.icon} `, size: 15, color: '94A3B8', bold: Boolean(c.isLinkedIn), font: c.isLinkedIn ? 'Arial' : 'Segoe UI Symbol' }),
           new TextRun({ text: c.val as string, size: 16, color: 'FFFFFF', font: 'Arial' }),
         ],
       })
@@ -1232,12 +1419,29 @@ const buildNavySidebarDocx = (data: ResumeData, themeColorBg: string, themeColor
 // =========================================================================
 // 6. FORMAL RED DOCX BUILDER (matches FormalRedPDFLayout)
 // =========================================================================
-const buildFormalRedDocx = (data: ResumeData, themeColorBg: string, themeColorText: string): Document => {
+const buildFormalRedDocx = (data: ResumeData, themeColorBg: string, themeColorText: string, imageBytes?: DocxImageData | null): Document => {
   const nonEmptyProjects = getNonEmptyProjects(data);
   const leftCol: Paragraph[] = [];
   const rightCol: Paragraph[] = [];
 
-  const headerChildren: Paragraph[] = [
+  const headerChildren: Paragraph[] = [];
+
+  if (imageBytes) {
+    headerChildren.push(
+      new Paragraph({
+        spacing: { before: 80, after: 30 },
+        children: [
+          new ImageRun({
+            data: imageBytes.data,
+            transformation: { width: 60, height: 60 },
+            type: imageBytes.type,
+          }),
+        ],
+      })
+    );
+  }
+
+  headerChildren.push(
     new Paragraph({
       spacing: { before: 80, after: 30 },
       children: [
@@ -1264,24 +1468,9 @@ const buildFormalRedDocx = (data: ResumeData, themeColorBg: string, themeColorTe
     new Paragraph({
       spacing: { after: 150 },
       border: { bottom: { color: 'E5E7EB', space: 4, style: BorderStyle.SINGLE, size: 6 } },
-      children: [
-        new TextRun({
-          text: [
-            data.personalInfo.location,
-            data.personalInfo.email,
-            data.personalInfo.phone,
-            data.personalInfo.linkedin,
-            data.personalInfo.website,
-          ]
-            .filter(Boolean)
-            .join('  |  '),
-          size: 18,
-          color: '6B7280',
-          font: 'Arial',
-        }),
-      ],
+      children: getContactIconRuns(data.personalInfo, themeColorText || 'BE123C', '6B7280', '  |  ', 18),
     }),
-  ];
+  );
 
   const addSecTitle = (title: string) =>
     new Paragraph({
@@ -1430,12 +1619,28 @@ const buildFormalRedDocx = (data: ResumeData, themeColorBg: string, themeColorTe
 // =========================================================================
 // 7. TIMELINE DARK DOCX BUILDER (matches TimelineDarkPDFLayout)
 // =========================================================================
-const buildTimelineDarkDocx = (data: ResumeData, themeColorBg: string, themeColorText: string): Document => {
+const buildTimelineDarkDocx = (data: ResumeData, themeColorBg: string, themeColorText: string, imageBytes?: DocxImageData | null): Document => {
   const nonEmptyProjects = getNonEmptyProjects(data);
   const leftCol: Paragraph[] = [];
   const rightCol: Paragraph[] = [];
 
   // Left Col (32%, Light Gray)
+  if (imageBytes) {
+    leftCol.push(
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        spacing: { before: 50, after: 100 },
+        children: [
+          new ImageRun({
+            data: imageBytes.data,
+            transformation: { width: 75, height: 75 },
+            type: imageBytes.type,
+          }),
+        ],
+      })
+    );
+  }
+
   const addLeftTitle = (title: string) =>
     new Paragraph({
       spacing: { before: 180, after: 60 },
@@ -1452,20 +1657,20 @@ const buildTimelineDarkDocx = (data: ResumeData, themeColorBg: string, themeColo
     });
 
   leftCol.push(addLeftTitle('Contact'));
-  const contactList = [
-    { label: 'Phone', val: data.personalInfo.phone },
-    { label: 'Email', val: data.personalInfo.email },
-    { label: 'Location', val: data.personalInfo.location },
-    { label: 'LinkedIn', val: data.personalInfo.linkedin },
-    { label: 'Website', val: data.personalInfo.website },
+  const timelineContactList = [
+    { icon: '📞 ', label: 'Phone', val: data.personalInfo.phone },
+    { icon: '✉ ', label: 'Email', val: data.personalInfo.email },
+    { icon: '📍 ', label: 'Location', val: data.personalInfo.location },
+    { icon: 'in ', label: 'LinkedIn', val: cleanUrl(data.personalInfo.linkedin), isLinkedIn: true },
+    { icon: '🌐 ', label: 'Website', val: cleanUrl(data.personalInfo.website) },
   ].filter((c) => Boolean(c.val));
 
-  contactList.forEach((c) => {
+  timelineContactList.forEach((c) => {
     leftCol.push(
       new Paragraph({
         spacing: { after: 40 },
         children: [
-          new TextRun({ text: `${c.label}: `, size: 16, color: '6B7280', bold: true, font: 'Arial' }),
+          new TextRun({ text: c.icon, size: 16, color: '6B7280', bold: Boolean(c.isLinkedIn), font: c.isLinkedIn ? 'Arial' : 'Segoe UI Symbol' }),
           new TextRun({ text: c.val as string, size: 16, color: '111827', font: 'Arial' }),
         ],
       })
@@ -1645,12 +1850,28 @@ const buildTimelineDarkDocx = (data: ResumeData, themeColorBg: string, themeColo
 // =========================================================================
 // 8. GEOMETRIC BLUE DOCX BUILDER (matches GeometricBluePDFLayout)
 // =========================================================================
-const buildGeometricBlueDocx = (data: ResumeData, themeColorBg: string, themeColorText: string): Document => {
+const buildGeometricBlueDocx = (data: ResumeData, themeColorBg: string, themeColorText: string, imageBytes?: DocxImageData | null): Document => {
   const nonEmptyProjects = getNonEmptyProjects(data);
   const leftCol: Paragraph[] = [];
   const rightCol: Paragraph[] = [];
 
   // Left Column
+  if (imageBytes) {
+    leftCol.push(
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        spacing: { before: 40, after: 80 },
+        children: [
+          new ImageRun({
+            data: imageBytes.data,
+            transformation: { width: 75, height: 75 },
+            type: imageBytes.type,
+          }),
+        ],
+      })
+    );
+  }
+
   leftCol.push(
     new Paragraph({
       spacing: { before: 40, after: 20 },
@@ -1673,19 +1894,22 @@ const buildGeometricBlueDocx = (data: ResumeData, themeColorBg: string, themeCol
     });
 
   leftCol.push(addSideTitle('Contact'));
-  const contactList = [
-    { label: 'Phone', val: data.personalInfo.phone },
-    { label: 'Email', val: data.personalInfo.email },
-    { label: 'Location', val: data.personalInfo.location },
-    { label: 'LinkedIn', val: data.personalInfo.linkedin },
-    { label: 'Website', val: data.personalInfo.website },
+  const geomContactList = [
+    { icon: '📞 ', label: 'Phone', val: data.personalInfo.phone },
+    { icon: '✉ ', label: 'Email', val: data.personalInfo.email },
+    { icon: '📍 ', label: 'Location', val: data.personalInfo.location },
+    { icon: 'in ', label: 'LinkedIn', val: cleanUrl(data.personalInfo.linkedin), isLinkedIn: true },
+    { icon: '🌐 ', label: 'Website', val: cleanUrl(data.personalInfo.website) },
   ].filter((c) => Boolean(c.val));
 
-  contactList.forEach((c) => {
+  geomContactList.forEach((c) => {
     leftCol.push(
       new Paragraph({
         spacing: { after: 35 },
-        children: [new TextRun({ text: `${c.val}`, size: 16, color: '4B5563', font: 'Arial' })],
+        children: [
+          new TextRun({ text: c.icon, size: 15, color: themeColorText || '2563EB', bold: Boolean(c.isLinkedIn), font: c.isLinkedIn ? 'Arial' : 'Segoe UI Symbol' }),
+          new TextRun({ text: `${c.val}`, size: 16, color: '4B5563', font: 'Arial' }),
+        ],
       })
     );
   });
@@ -1832,65 +2056,74 @@ const buildGeometricBlueDocx = (data: ResumeData, themeColorBg: string, themeCol
 // =========================================================================
 // 9. PROFESSIONAL NAVY HEADER DOCX BUILDER (matches ProfessionalNavyHeaderPDFLayout)
 // =========================================================================
-const buildProfessionalNavyDocx = (data: ResumeData, themeColorBg: string, themeColorText: string): Document => {
+const buildProfessionalNavyDocx = (data: ResumeData, themeColorBg: string, themeColorText: string, imageBytes?: DocxImageData | null): Document => {
   const nonEmptyProjects = getNonEmptyProjects(data);
   const leftCol: Paragraph[] = [];
   const rightCol: Paragraph[] = [];
 
   // Full-width Header Bar Table
-  const headerTable = new Table({
-    borders: noBorders,
-    rows: [
-      new TableRow({
+  const headerCells: TableCell[] = [
+    new TableCell({
+      width: { size: imageBytes ? 75 : 100, type: WidthType.PERCENTAGE },
+      shading: { fill: themeColorBg || '1E293B' },
+      margins: { top: 350, bottom: 350, left: 350, right: 350 },
+      children: [
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: `${data.personalInfo.firstName} ${data.personalInfo.lastName}`,
+              bold: true,
+              size: 44,
+              color: 'FFFFFF',
+              font: 'Arial',
+            }),
+          ],
+        }),
+        new Paragraph({
+          spacing: { after: 100 },
+          children: [
+            new TextRun({
+              text: data.personalInfo.title,
+              size: 20,
+              color: '94A3B8',
+              font: 'Arial',
+            }),
+          ],
+        }),
+        new Paragraph({
+          children: getContactIconRuns(data.personalInfo, '94A3B8', 'D1D5DB', '   |   ', 18),
+        }),
+      ],
+    }),
+  ];
+
+  if (imageBytes) {
+    headerCells.push(
+      new TableCell({
+        width: { size: 25, type: WidthType.PERCENTAGE },
+        shading: { fill: themeColorBg || '1E293B' },
+        margins: { top: 350, bottom: 350, left: 200, right: 350 },
         children: [
-          new TableCell({
-            width: { size: 100, type: WidthType.PERCENTAGE },
-            shading: { fill: themeColorBg || '1E293B' },
-            margins: { top: 350, bottom: 350, left: 350, right: 350 },
+          new Paragraph({
+            alignment: AlignmentType.RIGHT,
             children: [
-              new Paragraph({
-                children: [
-                  new TextRun({
-                    text: `${data.personalInfo.firstName} ${data.personalInfo.lastName}`,
-                    bold: true,
-                    size: 44,
-                    color: 'FFFFFF',
-                    font: 'Arial',
-                  }),
-                ],
-              }),
-              new Paragraph({
-                spacing: { after: 100 },
-                children: [
-                  new TextRun({
-                    text: data.personalInfo.title,
-                    size: 20,
-                    color: '94A3B8',
-                    font: 'Arial',
-                  }),
-                ],
-              }),
-              new Paragraph({
-                children: [
-                  new TextRun({
-                    text: [
-                      data.personalInfo.email,
-                      data.personalInfo.linkedin,
-                      data.personalInfo.location,
-                      data.personalInfo.phone,
-                      data.personalInfo.website,
-                    ]
-                      .filter(Boolean)
-                      .join('   |   '),
-                    size: 18,
-                    color: 'D1D5DB',
-                    font: 'Arial',
-                  }),
-                ],
+              new ImageRun({
+                data: imageBytes.data,
+                transformation: { width: 65, height: 65 },
+                type: imageBytes.type,
               }),
             ],
           }),
         ],
+      })
+    );
+  }
+
+  const headerTable = new Table({
+    borders: noBorders,
+    rows: [
+      new TableRow({
+        children: headerCells,
       }),
     ],
   });
@@ -2029,12 +2262,29 @@ const buildProfessionalNavyDocx = (data: ResumeData, themeColorBg: string, theme
 // =========================================================================
 // 10. CLEAN BLUE DOCX BUILDER (matches CleanBlueAccentPDFLayout)
 // =========================================================================
-const buildCleanBlueDocx = (data: ResumeData, themeColorBg: string, themeColorText: string): Document => {
+const buildCleanBlueDocx = (data: ResumeData, themeColorBg: string, themeColorText: string, imageBytes?: DocxImageData | null): Document => {
   const nonEmptyProjects = getNonEmptyProjects(data);
   const leftCol: Paragraph[] = [];
   const rightCol: Paragraph[] = [];
 
-  const headerChildren: Paragraph[] = [
+  const headerChildren: Paragraph[] = [];
+
+  if (imageBytes) {
+    headerChildren.push(
+      new Paragraph({
+        spacing: { before: 80, after: 30 },
+        children: [
+          new ImageRun({
+            data: imageBytes.data,
+            transformation: { width: 70, height: 70 },
+            type: imageBytes.type,
+          }),
+        ],
+      })
+    );
+  }
+
+  headerChildren.push(
     new Paragraph({
       spacing: { before: 80, after: 20 },
       children: [
@@ -2061,25 +2311,9 @@ const buildCleanBlueDocx = (data: ResumeData, themeColorBg: string, themeColorTe
     }),
     new Paragraph({
       spacing: { after: 180 },
-      children: [
-        new TextRun({
-          text: [
-            data.personalInfo.phone,
-            data.personalInfo.email,
-            data.personalInfo.linkedin,
-            data.personalInfo.location,
-            data.personalInfo.website,
-          ]
-            .filter(Boolean)
-            .join('   |   '),
-          size: 18,
-          color: '374151',
-          bold: true,
-          font: 'Arial',
-        }),
-      ],
+      children: getContactIconRuns(data.personalInfo, themeColorText || '2563EB', '374151', '   |   ', 18),
     }),
-  ];
+  );
 
   const addSecTitle = (title: string) =>
     new Paragraph({
@@ -2244,13 +2478,30 @@ const buildCleanBlueDocx = (data: ResumeData, themeColorBg: string, themeColorTe
 // =========================================================================
 // 11. CLASSIC SPLIT DOCX BUILDER (matches ClassicSplitPDFLayout)
 // =========================================================================
-const buildClassicSplitDocx = (data: ResumeData, themeColorBg: string, themeColorText: string): Document => {
+const buildClassicSplitDocx = (data: ResumeData, themeColorBg: string, themeColorText: string, imageBytes?: DocxImageData | null): Document => {
   const nonEmptyProjects = getNonEmptyProjects(data);
   const leftCol: Paragraph[] = [];
   const rightCol: Paragraph[] = [];
 
   // Header 2-column table
-  const headerLeft: Paragraph[] = [
+  const headerLeft: Paragraph[] = [];
+
+  if (imageBytes) {
+    headerLeft.push(
+      new Paragraph({
+        spacing: { after: 40 },
+        children: [
+          new ImageRun({
+            data: imageBytes.data,
+            transformation: { width: 60, height: 60 },
+            type: imageBytes.type,
+          }),
+        ],
+      })
+    );
+  }
+
+  headerLeft.push(
     new Paragraph({
       children: [
         new TextRun({
@@ -2272,23 +2523,26 @@ const buildClassicSplitDocx = (data: ResumeData, themeColorBg: string, themeColo
         }),
       ],
     }),
-  ];
+  );
 
   const headerRight: Paragraph[] = [];
-  const contactList = [
-    data.personalInfo.phone,
-    data.personalInfo.email,
-    data.personalInfo.location,
-    data.personalInfo.linkedin,
-    data.personalInfo.website,
-  ].filter(Boolean);
+  const classicContactList = [
+    { icon: '📞 ', label: 'Phone', val: data.personalInfo.phone },
+    { icon: '✉ ', label: 'Email', val: data.personalInfo.email },
+    { icon: '📍 ', label: 'Location', val: data.personalInfo.location },
+    { icon: 'in ', label: 'LinkedIn', val: cleanUrl(data.personalInfo.linkedin), isLinkedIn: true },
+    { icon: '🌐 ', label: 'Website', val: cleanUrl(data.personalInfo.website) },
+  ].filter((c) => Boolean(c.val));
 
-  contactList.forEach((c) => {
+  classicContactList.forEach((c) => {
     headerRight.push(
       new Paragraph({
         alignment: AlignmentType.RIGHT,
         spacing: { after: 20 },
-        children: [new TextRun({ text: c as string, size: 16, color: '374151', font: 'Arial' })],
+        children: [
+          new TextRun({ text: `${c.icon} `, size: 15, color: themeColorText || '6B7280', bold: Boolean(c.isLinkedIn), font: c.isLinkedIn ? 'Arial' : 'Segoe UI Symbol' }),
+          new TextRun({ text: c.val as string, size: 16, color: '374151', font: 'Arial' }),
+        ],
       })
     );
   });
@@ -2488,12 +2742,29 @@ const buildClassicSplitDocx = (data: ResumeData, themeColorBg: string, themeColo
 // =========================================================================
 // 12. DEVELOPER PORTFOLIO DOCX BUILDER (matches DeveloperPortfolioPDFLayout)
 // =========================================================================
-const buildDeveloperPortfolioDocx = (data: ResumeData, themeColorBg: string, themeColorText: string): Document => {
+const buildDeveloperPortfolioDocx = (data: ResumeData, themeColorBg: string, themeColorText: string, imageBytes?: DocxImageData | null): Document => {
   const nonEmptyProjects = getNonEmptyProjects(data);
   const children: (Paragraph | Table)[] = [];
 
   // Header: Name & Title Left, Contact Grid Right
-  const headerLeft: Paragraph[] = [
+  const headerLeft: Paragraph[] = [];
+
+  if (imageBytes) {
+    headerLeft.push(
+      new Paragraph({
+        spacing: { after: 40 },
+        children: [
+          new ImageRun({
+            data: imageBytes.data,
+            transformation: { width: 60, height: 60 },
+            type: imageBytes.type,
+          }),
+        ],
+      })
+    );
+  }
+
+  headerLeft.push(
     new Paragraph({
       children: [
         new TextRun({
@@ -2516,26 +2787,67 @@ const buildDeveloperPortfolioDocx = (data: ResumeData, themeColorBg: string, the
         }),
       ],
     }),
-  ];
+  );
 
-  const headerRight: Paragraph[] = [];
-  const contactList = [
-    data.personalInfo.email,
-    data.personalInfo.phone,
-    data.personalInfo.location,
-    data.personalInfo.linkedin,
-    data.personalInfo.website,
-  ].filter(Boolean);
+  const headerRightCol1: Paragraph[] = [];
+  const headerRightCol2: Paragraph[] = [];
 
-  contactList.forEach((c) => {
-    headerRight.push(
+  if (data.personalInfo.email) {
+    headerRightCol1.push(
       new Paragraph({
-        alignment: AlignmentType.RIGHT,
-        spacing: { after: 15 },
-        children: [new TextRun({ text: c as string, size: 16, color: '475569', font: 'Arial' })],
+        spacing: { after: 14 },
+        children: [
+          new TextRun({ text: '✉  ', size: 16, color: themeColorBg || '0284C7', font: 'Segoe UI Symbol' }),
+          new TextRun({ text: data.personalInfo.email, size: 16, color: '475569', font: 'Arial' }),
+        ],
       })
     );
-  });
+  }
+  if (data.personalInfo.phone) {
+    headerRightCol1.push(
+      new Paragraph({
+        spacing: { after: 14 },
+        children: [
+          new TextRun({ text: '📞  ', size: 16, color: themeColorBg || '0284C7', font: 'Segoe UI Symbol' }),
+          new TextRun({ text: data.personalInfo.phone, size: 16, color: '475569', font: 'Arial' }),
+        ],
+      })
+    );
+  }
+  if (data.personalInfo.location) {
+    headerRightCol1.push(
+      new Paragraph({
+        spacing: { after: 14 },
+        children: [
+          new TextRun({ text: '📍  ', size: 16, color: themeColorBg || '0284C7', font: 'Segoe UI Symbol' }),
+          new TextRun({ text: data.personalInfo.location, size: 16, color: '475569', font: 'Arial' }),
+        ],
+      })
+    );
+  }
+
+  if (data.personalInfo.website) {
+    headerRightCol2.push(
+      new Paragraph({
+        spacing: { after: 14 },
+        children: [
+          new TextRun({ text: '🌐  ', size: 16, color: themeColorBg || '0284C7', font: 'Segoe UI Symbol' }),
+          new TextRun({ text: cleanUrl(data.personalInfo.website), size: 16, color: '475569', font: 'Arial' }),
+        ],
+      })
+    );
+  }
+  if (data.personalInfo.linkedin) {
+    headerRightCol2.push(
+      new Paragraph({
+        spacing: { after: 14 },
+        children: [
+          new TextRun({ text: 'in  ', bold: true, size: 16, color: themeColorBg || '0284C7', font: 'Arial' }),
+          new TextRun({ text: cleanUrl(data.personalInfo.linkedin), size: 16, color: '475569', font: 'Arial' }),
+        ],
+      })
+    );
+  }
 
   children.push(
     new Table({
@@ -2544,14 +2856,19 @@ const buildDeveloperPortfolioDocx = (data: ResumeData, themeColorBg: string, the
         new TableRow({
           children: [
             new TableCell({
-              width: { size: 55, type: WidthType.PERCENTAGE },
-              margins: { top: 0, bottom: 100, left: 0, right: 100 },
+              width: { size: 48, type: WidthType.PERCENTAGE },
+              margins: { top: 0, bottom: 60, left: 0, right: 40 },
               children: headerLeft,
             }),
             new TableCell({
-              width: { size: 45, type: WidthType.PERCENTAGE },
-              margins: { top: 0, bottom: 100, left: 100, right: 0 },
-              children: headerRight,
+              width: { size: 26, type: WidthType.PERCENTAGE },
+              margins: { top: 0, bottom: 60, left: 20, right: 20 },
+              children: headerRightCol1,
+            }),
+            new TableCell({
+              width: { size: 26, type: WidthType.PERCENTAGE },
+              margins: { top: 0, bottom: 60, left: 20, right: 0 },
+              children: headerRightCol2,
             }),
           ],
         }),
@@ -2580,7 +2897,7 @@ const buildDeveloperPortfolioDocx = (data: ResumeData, themeColorBg: string, the
     });
 
   if (data.summary) {
-    children.push(addSecTitle('Summary'));
+    children.push(addSecTitle('Professional Summary'));
     children.push(
       new Paragraph({
         spacing: { after: 120 },
@@ -2598,17 +2915,47 @@ const buildDeveloperPortfolioDocx = (data: ResumeData, themeColorBg: string, the
       categories[cat].push(skill.name);
     });
 
-    Object.entries(categories).forEach(([catName, skillList]) => {
-      children.push(
-        new Paragraph({
-          spacing: { after: 30 },
+    const categoryEntries = Object.entries(categories);
+    const skillRows: TableRow[] = [];
+    for (let i = 0; i < categoryEntries.length; i += 2) {
+      const [c1, s1] = categoryEntries[i];
+      const second = categoryEntries[i + 1];
+      skillRows.push(
+        new TableRow({
           children: [
-            new TextRun({ text: `${catName}: `, bold: true, size: 18, color: '0F172A', font: 'Arial' }),
-            new TextRun({ text: skillList.join(', '), size: 18, color: '334155', font: 'Arial' }),
+            new TableCell({
+              width: { size: 50, type: WidthType.PERCENTAGE },
+              margins: { top: 40, bottom: 40, left: 0, right: 100 },
+              children: [
+                new Paragraph({
+                  spacing: { after: 20 },
+                  children: [
+                    new TextRun({ text: `${c1}: `, bold: true, size: 17, color: '0F172A', font: 'Arial' }),
+                    new TextRun({ text: s1.join(', '), size: 17, color: '334155', font: 'Arial' }),
+                  ],
+                }),
+              ],
+            }),
+            new TableCell({
+              width: { size: 50, type: WidthType.PERCENTAGE },
+              margins: { top: 40, bottom: 40, left: 100, right: 0 },
+              children: second
+                ? [
+                    new Paragraph({
+                      spacing: { after: 20 },
+                      children: [
+                        new TextRun({ text: `${second[0]}: `, bold: true, size: 17, color: '0F172A', font: 'Arial' }),
+                        new TextRun({ text: second[1].join(', '), size: 17, color: '334155', font: 'Arial' }),
+                      ],
+                    }),
+                  ]
+                : [new Paragraph({ children: [] })],
+            }),
           ],
         })
       );
-    });
+    }
+    children.push(new Table({ borders: noBorders, rows: skillRows }));
   }
 
   if (data.experience.length > 0) {
@@ -2685,22 +3032,122 @@ const buildDeveloperPortfolioDocx = (data: ResumeData, themeColorBg: string, the
 
   if (data.education.length > 0) {
     children.push(addSecTitle('Education'));
+    const eduRows: TableRow[] = [];
     data.education.forEach((edu) => {
-      children.push(
-        new Paragraph({
-          spacing: { after: 30 },
+      eduRows.push(
+        new TableRow({
           children: [
-            new TextRun({ text: edu.degree, bold: true, size: 19, color: '0F172A', font: 'Arial' }),
-            new TextRun({ text: ` — ${edu.institution}`, size: 18, color: '475569', font: 'Arial' }),
-            new TextRun({
-              text: `  (${formatEducationDates(edu.startDate, edu.endDate)})`,
-              size: 16,
-              color: '64748B',
-              font: 'Arial',
+            new TableCell({
+              width: { size: 75, type: WidthType.PERCENTAGE },
+              margins: { top: 40, bottom: 40, left: 0, right: 100 },
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({ text: edu.degree, bold: true, size: 19, color: '0F172A', font: 'Arial' }),
+                  ],
+                }),
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: `${edu.institution}${edu.field && edu.field !== edu.degree ? ` — ${edu.field}` : ''}${edu.gpa ? ` (GPA: ${edu.gpa})` : ''}`,
+                      size: 17,
+                      color: '475569',
+                      font: 'Arial',
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableCell({
+              width: { size: 25, type: WidthType.PERCENTAGE },
+              margins: { top: 40, bottom: 40, left: 100, right: 0 },
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.RIGHT,
+                  children: [
+                    new TextRun({
+                      text: formatEducationDates(edu.startDate, edu.endDate),
+                      bold: true,
+                      size: 16,
+                      color: '64748B',
+                      font: 'Arial',
+                    }),
+                  ],
+                }),
+              ],
             }),
           ],
         })
       );
+    });
+    children.push(new Table({ borders: noBorders, rows: eduRows }));
+  }
+
+  if (data.customSections && data.customSections.length > 0) {
+    data.customSections.forEach((section) => {
+      if (section.items && section.items.length > 0) {
+        children.push(addSecTitle(section.title));
+        const rows: TableRow[] = [];
+        for (let i = 0; i < section.items.length; i += 2) {
+          const item1 = section.items[i];
+          const item2 = section.items[i + 1];
+          rows.push(
+            new TableRow({
+              children: [
+                new TableCell({
+                  width: { size: 50, type: WidthType.PERCENTAGE },
+                  borders: {
+                    top: { style: BorderStyle.SINGLE, size: 4, color: 'E2E8F0' },
+                    bottom: { style: BorderStyle.SINGLE, size: 4, color: 'E2E8F0' },
+                    left: { style: BorderStyle.SINGLE, size: 4, color: 'E2E8F0' },
+                    right: { style: BorderStyle.SINGLE, size: 4, color: 'E2E8F0' },
+                  },
+                  shading: { fill: 'F8FAFC' },
+                  margins: { top: 120, bottom: 120, left: 150, right: 150 },
+                  children: [
+                    new Paragraph({
+                      alignment: AlignmentType.CENTER,
+                      children: [
+                        new TextRun({ text: item1.name, bold: true, size: 17, color: '0F172A', font: 'Arial' }),
+                        ...(item1.description
+                          ? [new TextRun({ text: `\n${item1.description}`, size: 15, color: '475569', font: 'Arial' })]
+                          : []),
+                      ],
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  width: { size: 50, type: WidthType.PERCENTAGE },
+                  borders: item2
+                    ? {
+                        top: { style: BorderStyle.SINGLE, size: 4, color: 'E2E8F0' },
+                        bottom: { style: BorderStyle.SINGLE, size: 4, color: 'E2E8F0' },
+                        left: { style: BorderStyle.SINGLE, size: 4, color: 'E2E8F0' },
+                        right: { style: BorderStyle.SINGLE, size: 4, color: 'E2E8F0' },
+                      }
+                    : noBorders,
+                  shading: item2 ? { fill: 'F8FAFC' } : undefined,
+                  margins: { top: 120, bottom: 120, left: 150, right: 150 },
+                  children: item2
+                    ? [
+                        new Paragraph({
+                          alignment: AlignmentType.CENTER,
+                          children: [
+                            new TextRun({ text: item2.name, bold: true, size: 17, color: '0F172A', font: 'Arial' }),
+                            ...(item2.description
+                              ? [new TextRun({ text: `\n${item2.description}`, size: 15, color: '475569', font: 'Arial' })]
+                              : []),
+                          ],
+                        }),
+                      ]
+                    : [new Paragraph({ children: [] })],
+                }),
+              ],
+            })
+          );
+        }
+        children.push(new Table({ borders: noBorders, rows }));
+      }
     });
   }
 
@@ -2712,7 +3159,7 @@ const buildDeveloperPortfolioDocx = (data: ResumeData, themeColorBg: string, the
 // =========================================================================
 // CREATE RESUME DOCUMENT (Master Router)
 // =========================================================================
-const createResumeDocument = (data: ResumeData, templateId?: string): Document => {
+const createResumeDocument = (data: ResumeData, templateId?: string, imageBytes?: DocxImageData | null): Document => {
   const safeTemplateId = String(templateId || 'modern-professional');
 
   // Default color values matching ResumePDF.tsx
@@ -2765,6 +3212,8 @@ const createResumeDocument = (data: ResumeData, templateId?: string): Document =
     defaultThemeColorText = '#0369a1'; defaultThemeColorBg = '#0284c7';
   } else if (safeTemplateId === 'fresher-cs-engineer') {
     defaultThemeColorText = '#1D4ED8'; defaultThemeColorBg = '#2563EB';
+  } else if (safeTemplateId === 'fresher-ece-embedded') {
+    defaultThemeColorText = '#0369A1'; defaultThemeColorBg = '#0284C7';
   } else if (safeTemplateId === 'fresher-frontend-dev') {
     defaultThemeColorText = '#0369A1'; defaultThemeColorBg = '#0284C7';
   } else if (safeTemplateId === 'fresher-java-backend') {
@@ -2781,29 +3230,29 @@ const createResumeDocument = (data: ResumeData, templateId?: string): Document =
   const themeColorBg = hexToDocxColor(data.theme?.themeColor || defaultThemeColorBg);
 
   if (safeTemplateId === 'modern-yellow') {
-    return buildYellowSidebarDocx(data, themeColorBg, themeColorText);
+    return buildYellowSidebarDocx(data, themeColorBg, themeColorText, imageBytes);
   } else if (safeTemplateId === 'navy-sidebar' || safeTemplateId === 'fresher-data-analyst') {
-    return buildNavySidebarDocx(data, themeColorBg, themeColorText);
+    return buildNavySidebarDocx(data, themeColorBg, themeColorText, imageBytes);
   } else if (safeTemplateId === 'formal-red') {
-    return buildFormalRedDocx(data, themeColorBg, themeColorText);
+    return buildFormalRedDocx(data, themeColorBg, themeColorText, imageBytes);
   } else if (safeTemplateId === 'timeline-dark' || safeTemplateId === 'fresher-frontend-dev') {
-    return buildTimelineDarkDocx(data, themeColorBg, themeColorText);
+    return buildTimelineDarkDocx(data, themeColorBg, themeColorText, imageBytes);
   } else if (safeTemplateId === 'geometric-blue' || safeTemplateId === 'fresher-cloud-devops') {
-    return buildGeometricBlueDocx(data, themeColorBg, themeColorText);
+    return buildGeometricBlueDocx(data, themeColorBg, themeColorText, imageBytes);
   } else if (safeTemplateId === 'professional-navy') {
-    return buildProfessionalNavyDocx(data, themeColorBg, themeColorText);
+    return buildProfessionalNavyDocx(data, themeColorBg, themeColorText, imageBytes);
   } else if (safeTemplateId === 'clean-blue') {
-    return buildCleanBlueDocx(data, themeColorBg, themeColorText);
+    return buildCleanBlueDocx(data, themeColorBg, themeColorText, imageBytes);
   } else if (safeTemplateId === 'classic-split') {
-    return buildClassicSplitDocx(data, themeColorBg, themeColorText);
-  } else if (safeTemplateId === 'developer-portfolio' || safeTemplateId === 'fresher-cs-engineer') {
-    return buildDeveloperPortfolioDocx(data, themeColorBg, themeColorText);
+    return buildClassicSplitDocx(data, themeColorBg, themeColorText, imageBytes);
+  } else if (safeTemplateId === 'developer-portfolio' || safeTemplateId === 'fresher-cs-engineer' || safeTemplateId === 'fresher-ece-embedded') {
+    return buildDeveloperPortfolioDocx(data, themeColorBg, themeColorText, imageBytes);
   } else if (isTwoColumnResumeTemplate(safeTemplateId)) {
-    return buildTwoColumnDocx(data, themeColorBg, themeColorText);
+    return buildTwoColumnDocx(data, themeColorBg, themeColorText, imageBytes);
   } else if (isCenteredResumeTemplate(safeTemplateId)) {
-    return buildCenteredDocx(data, themeColorBg, themeColorText);
+    return buildCenteredDocx(data, themeColorBg, themeColorText, imageBytes);
   } else {
-    return buildStandardDocx(data, themeColorBg, themeColorText);
+    return buildStandardDocx(data, themeColorBg, themeColorText, imageBytes);
   }
 };
 

@@ -5323,6 +5323,186 @@ const resumeTemplatesBase: ResumeTemplate[] = [
         }
       ]
     }
+  },
+  {
+    "id": "fresher-ece-embedded",
+    "name": "Fresher ECE & Embedded Systems Engineer",
+    "description": "ATS-optimized single-column layout crafted specifically for B.Tech ECE fresh graduates, highlighting IoT capstones, microcontroller firmware, and core electronics & software skills.",
+    "category": "Fresher",
+    "difficulty": "Easy",
+    "isPremium": false,
+    "sampleData": {
+      "personalInfo": {
+        "firstName": "Rohan",
+        "lastName": "Sharma",
+        "title": "B.Tech ECE Final Year | Aspiring Embedded & Software Engineer",
+        "email": "rohan.sharma@email.com",
+        "phone": "+91 98765 43210",
+        "location": "Hyderabad, India",
+        "linkedin": "linkedin.com/in/rohansharma-ece",
+        "website": "github.com/rohansharma-ece"
+      },
+      "summary": "Proactive final-year B.Tech Electronics & Communication Engineering (ECE) student with strong fundamentals in C, C++, Python, Embedded C, and Data Structures & Algorithms. Experienced in architecting IoT prototypes, STM32/ESP32 firmware, and sensor integration across 4+ academic capstone projects. Eager to contribute technical rigor and fast learning agility to an entry-level software or embedded engineering role.",
+      "experience": [],
+      "education": [
+        {
+          "id": "1",
+          "institution": "JNTU College of Engineering",
+          "degree": "Bachelor of Technology (B.Tech)",
+          "field": "Electronics & Communication Engineering",
+          "startDate": "2021",
+          "endDate": "2025",
+          "gpa": "8.4 / 10.0"
+        }
+      ],
+      "skills": [
+        {
+          "id": "1",
+          "name": "C & Embedded C",
+          "level": "Expert",
+          "category": "Programming Languages"
+        },
+        {
+          "id": "2",
+          "name": "C++ (OOPs & STL)",
+          "level": "Expert",
+          "category": "Programming Languages"
+        },
+        {
+          "id": "3",
+          "name": "Python",
+          "level": "Advanced",
+          "category": "Programming Languages"
+        },
+        {
+          "id": "4",
+          "name": "Data Structures & Algorithms (DSA)",
+          "level": "Advanced",
+          "category": "Core Fundamentals"
+        },
+        {
+          "id": "5",
+          "name": "STM32 & ARM Cortex-M",
+          "level": "Advanced",
+          "category": "Hardware & Microcontrollers"
+        },
+        {
+          "id": "6",
+          "name": "ESP32 & Arduino",
+          "level": "Expert",
+          "category": "Hardware & Microcontrollers"
+        },
+        {
+          "id": "7",
+          "name": "UART, SPI, I2C & MQTT",
+          "level": "Advanced",
+          "category": "Protocols & Communication"
+        },
+        {
+          "id": "8",
+          "name": "MATLAB & Simulink",
+          "level": "Intermediate",
+          "category": "Hardware & Tools"
+        },
+        {
+          "id": "9",
+          "name": "Git & GitHub",
+          "level": "Advanced",
+          "category": "Software & Tools"
+        },
+        {
+          "id": "10",
+          "name": "Linux / Bash & Keil µVision",
+          "level": "Intermediate",
+          "category": "Software & Tools"
+        }
+      ],
+      "projects": [
+        {
+          "id": "1",
+          "name": "IoT Smart Energy Meter & Fault Detection System (Final Year Capstone)",
+          "description": "Designed and deployed an IoT smart metering prototype that measures real-time AC voltage, current, and active power with 98.5% precision. Programmed ESP32 firmware using Embedded C and MQTT protocol to stream telemetry data to cloud dashboards with sub-2s alert latency during power surges.",
+          "technologies": [
+            "Embedded C",
+            "ESP32",
+            "MQTT",
+            "Python",
+            "Firebase",
+            "React.js"
+          ],
+          "link": "github.com/rohansharma-ece/iot-smart-meter"
+        },
+        {
+          "id": "2",
+          "name": "Autonomous Obstacle Avoidance & Surveillance Rover",
+          "description": "Engineered an autonomous 4WD rover powered by Arduino and Ultrasonic sensor arrays with multi-sensor fusion logic. Optimized sensor polling routines via timer interrupts, achieving a 35% reduction in CPU idle cycles and responsive 360-degree navigation.",
+          "technologies": [
+            "C++",
+            "Arduino",
+            "Ultrasonic Sensors",
+            "FreeRTOS",
+            "Motor Drivers"
+          ],
+          "link": "github.com/rohansharma-ece/obstacle-rover"
+        },
+        {
+          "id": "3",
+          "name": "Student Academic Record & GPA Management System",
+          "description": "Developed a robust C++ CLI application implementing Binary Search Trees and file serialization for sub-millisecond query retrieval and sorting across 5,000+ student academic records.",
+          "technologies": [
+            "C++",
+            "Data Structures",
+            "Algorithms",
+            "File I/O"
+          ],
+          "link": "github.com/rohansharma-ece/student-record-system"
+        }
+      ],
+      "customSections": [
+        {
+          "id": "certifications",
+          "title": "Certifications & Coursework",
+          "items": [
+            {
+              "id": "c1",
+              "name": "Data Structures & Algorithms in C++ - NPTEL / Coursera",
+              "description": "Scored in top 5% with Gold Elite certificate",
+              "date": "2024"
+            },
+            {
+              "id": "c2",
+              "name": "Embedded Systems and IoT Specialization",
+              "description": "Hands-on ARM microcontroller and sensor interfacing",
+              "date": "2024"
+            }
+          ]
+        },
+        {
+          "id": "achievements",
+          "title": "Academic Achievements & Extracurriculars",
+          "items": [
+            {
+              "id": "a1",
+              "name": "Competitive Programming & Problem Solving",
+              "description": "Solved 250+ DSA problems across LeetCode & HackerRank (C++ & Python)",
+              "date": "2024"
+            },
+            {
+              "id": "a2",
+              "name": "Finalist - State Level College IoT & Robotics Hackathon",
+              "description": "Competed among 80+ engineering teams across the state",
+              "date": "2024"
+            },
+            {
+              "id": "a3",
+              "name": "Technical Lead - College Electronics & Robotics Club",
+              "description": "Conducted hands-on workshops on Arduino and Microcontrollers for 120+ juniors",
+              "date": "2023 - 2024"
+            }
+          ]
+        }
+      ]
+    }
   }
 ];
 
