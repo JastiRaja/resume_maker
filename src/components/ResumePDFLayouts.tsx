@@ -42,10 +42,10 @@ export const getNonEmptyProjects = (data: ResumeData) => data.projects.filter(
 const PDF_PAGE_V_MARGIN = 40;
 
 /** Default icon tint for light backgrounds (Inter woff omits Unicode dingbats used earlier). */
-const PDF_ICON_GRAY = '#6B7280';
-const PDF_ICON_MUTED = '#9CA3AF';
-const PDF_ICON_ON_DARK = '#D1D5DB';
-const PDF_ICON_ON_THEME = 'rgba(255,255,255,0.88)';
+const PDF_ICON_GRAY = '#4B5563';
+const PDF_ICON_MUTED = '#6B7280';
+const PDF_ICON_ON_DARK = '#F1F5F9';
+const PDF_ICON_ON_THEME = '#FFFFFF';
 
 const PdfIconPhone = ({ color = PDF_ICON_GRAY }: { color?: string }) => (
   <Svg width={10} height={10} viewBox="0 0 24 24">
@@ -93,7 +93,12 @@ const PdfIconGlobe = ({ color = PDF_ICON_GRAY }: { color?: string }) => (
 );
 
 const PdfIconLinkedInGlyph = ({ color = PDF_ICON_GRAY }: { color?: string }) => (
-  <Text style={{ fontSize: 8, fontWeight: 'bold', color, width: 10, textAlign: 'center' }}>in</Text>
+  <Svg width={10} height={10} viewBox="0 0 24 24">
+    <Path
+      fill={color}
+      d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"
+    />
+  </Svg>
 );
 
 const pdfContactIconCell = (extra?: object): object => ({
@@ -283,9 +288,13 @@ export const StandardPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
           <View wrap={false}>
             <Text style={stdStyles.sectionTitle}>Projects</Text>
             {nonEmptyProjects.length > 0 && (
-              <View style={stdStyles.itemHeader}>
+              <View style={{ marginBottom: 4 }}>
                 <Text style={stdStyles.itemTitle}>{nonEmptyProjects[0].name}</Text>
-                {nonEmptyProjects[0].link ? <Text style={{ fontSize: 9, color: themeColorText, textDecoration: 'none' }}>{nonEmptyProjects[0].link as string}</Text> : null}
+                {nonEmptyProjects[0].link ? (
+                  <Text style={{ fontSize: 8.5, color: themeColorText, textDecoration: 'none', marginTop: 1, marginBottom: 2 }}>
+                    {String(nonEmptyProjects[0].link).replace(/^https?:\/\//, '')}
+                  </Text>
+                ) : null}
               </View>
             )}
             {nonEmptyProjects.length > 0 && (
@@ -304,9 +313,13 @@ export const StandardPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
 
           {nonEmptyProjects.slice(1).map((project) => (
             <View key={project.id} wrap={false} style={stdStyles.itemContainer}>
-              <View style={stdStyles.itemHeader}>
+              <View style={{ marginBottom: 4 }}>
                 <Text style={stdStyles.itemTitle}>{project.name}</Text>
-                {project.link ? <Text style={{ fontSize: 9, color: themeColorText, textDecoration: 'none' }}>{project.link as string}</Text> : null}
+                {project.link ? (
+                  <Text style={{ fontSize: 8.5, color: themeColorText, textDecoration: 'none', marginTop: 1, marginBottom: 2 }}>
+                    {String(project.link).replace(/^https?:\/\//, '')}
+                  </Text>
+                ) : null}
               </View>
               {project.description && <Text style={stdStyles.projectDesc}>{project.description}</Text>}
               {project.technologies.length > 0 && (
@@ -417,7 +430,7 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
           />
         ) : (
           <View style={colStyles.nameInitialsContainer}>
-            <Text style={colStyles.nameInitials}>{data.personalInfo.firstName[0]}{data.personalInfo.lastName[0]}</Text>
+            <Text style={colStyles.nameInitials}>{(data.personalInfo.firstName?.trim()?.[0] || '') + (data.personalInfo.lastName?.trim()?.[0] || '') || '?'}</Text>
           </View>
         )}
         <Text style={colStyles.sectionTitleLeft}>Contact</Text>
@@ -579,9 +592,13 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
             <View wrap={false}>
               <Text style={[colStyles.sectionTitleRight, { borderBottomColor: themeColorBg }]}>Projects</Text>
               {nonEmptyProjects.length > 0 && (
-                <View style={colStyles.expHeaderRight}>
+                <View style={{ marginBottom: 4 }}>
                   <Text style={colStyles.expTitleRight}>{nonEmptyProjects[0].name}</Text>
-                  {nonEmptyProjects[0].link ? <Text style={{ fontSize: 9, color: themeColorText }}>{nonEmptyProjects[0].link as string}</Text> : null}
+                  {nonEmptyProjects[0].link ? (
+                    <Text style={{ fontSize: 8.5, color: themeColorText, marginTop: 1, marginBottom: 2 }}>
+                      {String(nonEmptyProjects[0].link).replace(/^https?:\/\//, '')}
+                    </Text>
+                  ) : null}
                 </View>
               )}
               {nonEmptyProjects.length > 0 && (
@@ -600,9 +617,13 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
 
             {nonEmptyProjects.slice(1).map((project) => (
               <View key={project.id} wrap={false} style={colStyles.expItemRight}>
-                <View style={colStyles.expHeaderRight}>
+                <View style={{ marginBottom: 4 }}>
                   <Text style={colStyles.expTitleRight}>{project.name}</Text>
-                  {project.link ? <Text style={{ fontSize: 9, color: themeColorText }}>{project.link as string}</Text> : null}
+                  {project.link ? (
+                    <Text style={{ fontSize: 8.5, color: themeColorText, marginTop: 1, marginBottom: 2 }}>
+                      {String(project.link).replace(/^https?:\/\//, '')}
+                    </Text>
+                  ) : null}
                 </View>
                 {project.description && <Text style={colStyles.projectDescRight}>{project.description}</Text>}
                 {project.technologies && project.technologies.length > 0 && (
@@ -805,9 +826,13 @@ export const CenteredPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
               </View>
             </View>
             {nonEmptyProjects.length > 0 && (
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
+              <View style={{ marginBottom: 4 }}>
                 <Text style={cntStyles.itemTitle}>{nonEmptyProjects[0].name}</Text>
-                {nonEmptyProjects[0].link ? <Text style={{ fontSize: 9, color: themeColorText }}>{nonEmptyProjects[0].link as string}</Text> : null}
+                {nonEmptyProjects[0].link ? (
+                  <Text style={{ fontSize: 8.5, color: themeColorText, textAlign: 'center', marginTop: 1, marginBottom: 2 }}>
+                    {String(nonEmptyProjects[0].link).replace(/^https?:\/\//, '')}
+                  </Text>
+                ) : null}
               </View>
             )}
             {nonEmptyProjects.length > 0 && (
@@ -826,9 +851,13 @@ export const CenteredPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
 
           {nonEmptyProjects.slice(1).map((project) => (
             <View key={project.id} wrap={false} style={cntStyles.itemContainer}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
+              <View style={{ marginBottom: 4 }}>
                 <Text style={cntStyles.itemTitle}>{project.name}</Text>
-                {project.link ? <Text style={{ fontSize: 9, color: themeColorText }}>{project.link as string}</Text> : null}
+                {project.link ? (
+                  <Text style={{ fontSize: 8.5, color: themeColorText, textAlign: 'center', marginTop: 1, marginBottom: 2 }}>
+                    {String(project.link).replace(/^https?:\/\//, '')}
+                  </Text>
+                ) : null}
               </View>
               {project.description && <Text style={cntStyles.projectDesc}>{project.description}</Text>}
               {project.technologies && project.technologies.length > 0 && (
@@ -935,9 +964,10 @@ const ysStyles = StyleSheet.create({
   bulletTextRight: { flex: 1, fontSize: 10, color: '#374151', lineHeight: 1.4 }
 });
 
-export const YellowSidebarPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorBg }) => {
+export const YellowSidebarPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorBg, themeColorText }) => {
   const nonEmptyProjects = getNonEmptyProjects(data);
   const primaryBg = themeColorBg !== '#2563EB' ? themeColorBg : '#FECE2F';
+  const linkColor = themeColorText && themeColorText !== '#2563EB' ? themeColorText : (primaryBg.toLowerCase() === '#fece2f' ? '#B45309' : primaryBg);
 
   return (
     <Page size="A4" style={ysStyles.page}>
@@ -1012,7 +1042,7 @@ export const YellowSidebarPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCo
 
       <View style={ysStyles.rightCol}>
         <View style={{ marginBottom: 20 }}>
-          <Text style={ysStyles.name}>{data.personalInfo.firstName}   {data.personalInfo.lastName}</Text>
+          <Text style={ysStyles.name}>{data.personalInfo.firstName} {data.personalInfo.lastName}</Text>
           <View style={{ width: 40, height: 3, backgroundColor: primaryBg, marginTop: 5 }} />
         </View>
 
@@ -1062,9 +1092,13 @@ export const YellowSidebarPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCo
             <View wrap={false}>
               <Text style={ysStyles.sectionTitleRight}>Projects</Text>
               <View key={nonEmptyProjects[0].id} wrap={false} style={ysStyles.expItemRight}>
-                <View style={ysStyles.expHeaderRight}>
+                <View style={{ marginBottom: 4 }}>
                   <Text style={ysStyles.expTitleRight}>{nonEmptyProjects[0].name}</Text>
-                  {nonEmptyProjects[0].link ? <Text style={{ fontSize: 9, color: primaryBg }}>{nonEmptyProjects[0].link as string}</Text> : null}
+                  {nonEmptyProjects[0].link ? (
+                    <Text style={{ fontSize: 8.5, color: linkColor, marginTop: 1, marginBottom: 2 }}>
+                      {String(nonEmptyProjects[0].link).replace(/^https?:\/\//, '')}
+                    </Text>
+                  ) : null}
                 </View>
                 {nonEmptyProjects[0].description && (
                   <View style={ysStyles.bulletContainerRight}>
@@ -1076,9 +1110,13 @@ export const YellowSidebarPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCo
             </View>
             {nonEmptyProjects.slice(1).map((project) => (
               <View key={project.id} wrap={false} style={ysStyles.expItemRight}>
-                <View style={ysStyles.expHeaderRight}>
+                <View style={{ marginBottom: 4 }}>
                   <Text style={ysStyles.expTitleRight}>{project.name}</Text>
-                  {project.link ? <Text style={{ fontSize: 9, color: primaryBg }}>{project.link as string}</Text> : null}
+                  {project.link ? (
+                    <Text style={{ fontSize: 8.5, color: linkColor, marginTop: 1, marginBottom: 2 }}>
+                      {String(project.link).replace(/^https?:\/\//, '')}
+                    </Text>
+                  ) : null}
                 </View>
                 {project.description && (
                   <View style={ysStyles.bulletContainerRight}>
@@ -1208,7 +1246,9 @@ export const NavySidebarPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColo
                   </Text>
                 ) : null}
                 {nonEmptyProjects[0].link ? (
-                  <Text style={[nsStyles.itemSubtitle, { color: primaryText, marginTop: 2 }]}>{nonEmptyProjects[0].link as string}</Text>
+                  <Text style={{ fontSize: 8.5, color: primaryText, marginTop: 1, marginBottom: 2 }}>
+                    {String(nonEmptyProjects[0].link).replace(/^https?:\/\//, '')}
+                  </Text>
                 ) : null}
               </View>
             </View>
@@ -1224,7 +1264,9 @@ export const NavySidebarPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColo
                   </Text>
                 ) : null}
                 {project.link ? (
-                  <Text style={[nsStyles.itemSubtitle, { color: primaryText, marginTop: 2 }]}>{project.link as string}</Text>
+                  <Text style={{ fontSize: 8.5, color: primaryText, marginTop: 1, marginBottom: 2 }}>
+                    {String(project.link).replace(/^https?:\/\//, '')}
+                  </Text>
                 ) : null}
               </View>
             ))}
@@ -1450,9 +1492,13 @@ export const FormalRedPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
               <View wrap={false}>
                 <Text style={frStyles.sectionTitle}>Projects</Text>
                 <View key={nonEmptyProjects[0].id} wrap={false} style={frStyles.itemContainer}>
-                  <View style={frStyles.itemHeader}>
+                  <View style={{ marginBottom: 4 }}>
                     <Text style={frStyles.itemTitle}>{nonEmptyProjects[0].name || 'Project'}</Text>
-                    {nonEmptyProjects[0].link ? <Text style={frStyles.itemDate}>{nonEmptyProjects[0].link as string}</Text> : null}
+                    {nonEmptyProjects[0].link ? (
+                      <Text style={{ fontSize: 8.5, color: '#B91C1C', marginTop: 1, marginBottom: 2 }}>
+                        {String(nonEmptyProjects[0].link).replace(/^https?:\/\//, '')}
+                      </Text>
+                    ) : null}
                   </View>
                   {nonEmptyProjects[0].description && (
                     <View style={frStyles.bulletContainer}>
@@ -1464,9 +1510,13 @@ export const FormalRedPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
               </View>
               {nonEmptyProjects.slice(1).map((project) => (
                 <View key={project.id} wrap={false} style={frStyles.itemContainer}>
-                  <View style={frStyles.itemHeader}>
+                  <View style={{ marginBottom: 4 }}>
                     <Text style={frStyles.itemTitle}>{project.name || 'Project'}</Text>
-                    {project.link ? <Text style={frStyles.itemDate}>{project.link as string}</Text> : null}
+                    {project.link ? (
+                      <Text style={{ fontSize: 8.5, color: '#B91C1C', marginTop: 1, marginBottom: 2 }}>
+                        {String(project.link).replace(/^https?:\/\//, '')}
+                      </Text>
+                    ) : null}
                   </View>
                   {project.description && (
                     <View style={frStyles.bulletContainer}>
@@ -1662,9 +1712,13 @@ export const TimelineDarkPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCol
                 <Text style={tlStyles.sectionTitleRight}>Projects</Text>
                 <View key={nonEmptyProjects[0].id} wrap={false} style={tlStyles.timelineContainer}>
                   <View style={[tlStyles.timelineDot, { backgroundColor: primaryBg }]} />
-                  <View style={tlStyles.itemHeaderRow}>
+                  <View style={{ marginBottom: 4 }}>
                     <Text style={tlStyles.itemTitle}>{nonEmptyProjects[0].name}</Text>
-                    {nonEmptyProjects[0].link ? <Text style={tlStyles.itemDate}>{nonEmptyProjects[0].link as string}</Text> : null}
+                    {nonEmptyProjects[0].link ? (
+                      <Text style={{ fontSize: 8.5, color: primaryBg, marginTop: 1, marginBottom: 2 }}>
+                        {String(nonEmptyProjects[0].link).replace(/^https?:\/\//, '')}
+                      </Text>
+                    ) : null}
                   </View>
                   {nonEmptyProjects[0].description && (
                     <View style={[tlStyles.bulletContainer, { marginTop: 4 }]}>
@@ -1682,9 +1736,13 @@ export const TimelineDarkPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCol
               {nonEmptyProjects.slice(1).map((project) => (
                 <View key={project.id} wrap={false} style={tlStyles.timelineContainer}>
                   <View style={[tlStyles.timelineDot, { backgroundColor: primaryBg }]} />
-                  <View style={tlStyles.itemHeaderRow}>
+                  <View style={{ marginBottom: 4 }}>
                     <Text style={tlStyles.itemTitle}>{project.name}</Text>
-                    {project.link ? <Text style={tlStyles.itemDate}>{project.link as string}</Text> : null}
+                    {project.link ? (
+                      <Text style={{ fontSize: 8.5, color: primaryBg, marginTop: 1, marginBottom: 2 }}>
+                        {String(project.link).replace(/^https?:\/\//, '')}
+                      </Text>
+                    ) : null}
                   </View>
                   {project.description && (
                     <View style={[tlStyles.bulletContainer, { marginTop: 4 }]}>
@@ -2048,6 +2106,11 @@ export const GeometricBluePDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCo
                   <View key={project.id} style={gbStyles.timelineItem}>
                     <View style={[gbStyles.timelineDot, { backgroundColor: primaryBg }]} />
                     <Text style={gbStyles.itemTitle}>{project.name}</Text>
+                    {project.link ? (
+                      <Text style={{ fontSize: 8.5, color: primaryText, marginTop: 1, marginBottom: 2 }}>
+                        {String(project.link).replace(/^https?:\/\//, '')}
+                      </Text>
+                    ) : null}
                     {project.description ? <Text style={[gbStyles.bodyText, { marginTop: 3 }]}>{project.description}</Text> : null}
                     {project.technologies && project.technologies.length > 0 ? (
                       <Text style={[gbStyles.itemDate, { marginTop: 3 }]}>Tools: {project.technologies.join(', ')}</Text>
@@ -2451,30 +2514,36 @@ export const CleanBlueAccentPDFLayout: React.FC<PDFLayoutProps> = ({ data, theme
                 <Text style={cbaStyles.sectionTitle}>Projects</Text>
                 <View key={nonEmptyProjects[0].id} style={cbaStyles.itemContainer}>
                   <Text style={cbaStyles.itemTitle}>{nonEmptyProjects[0].name}</Text>
+                  {nonEmptyProjects[0].link ? (
+                    <Text style={{ fontSize: 8.5, color: primaryText, marginTop: 1, marginBottom: 3 }}>
+                      {String(nonEmptyProjects[0].link).replace(/^https?:\/\//, '')}
+                    </Text>
+                  ) : null}
                   {nonEmptyProjects[0].description ? (
                     <Text style={[cbaStyles.normalText, { marginBottom: 6 }]}>{nonEmptyProjects[0].description}</Text>
                   ) : null}
-                  {(nonEmptyProjects[0].technologies && nonEmptyProjects[0].technologies.length > 0) ? (
+                  {nonEmptyProjects[0].technologies && nonEmptyProjects[0].technologies.length > 0 ? (
                     <Text style={{ fontSize: 8, color: '#6B7280', fontWeight: 'bold' }}>
-                      Links/Tech: {nonEmptyProjects[0].link ? String(nonEmptyProjects[0].link) : nonEmptyProjects[0].technologies.join(', ')}
+                      Tech: {nonEmptyProjects[0].technologies.join(', ')}
                     </Text>
-                  ) : nonEmptyProjects[0].link ? (
-                    <Text style={{ fontSize: 8, color: '#6B7280' }}>{String(nonEmptyProjects[0].link)}</Text>
                   ) : null}
                 </View>
               </View>
               {nonEmptyProjects.slice(1).map((project) => (
                 <View key={project.id} style={cbaStyles.itemContainer}>
                   <Text style={cbaStyles.itemTitle}>{project.name}</Text>
+                  {project.link ? (
+                    <Text style={{ fontSize: 8.5, color: primaryText, marginTop: 1, marginBottom: 3 }}>
+                      {String(project.link).replace(/^https?:\/\//, '')}
+                    </Text>
+                  ) : null}
                   {project.description ? (
                     <Text style={[cbaStyles.normalText, { marginBottom: 6 }]}>{project.description}</Text>
                   ) : null}
-                  {(project.technologies && project.technologies.length > 0) ? (
+                  {project.technologies && project.technologies.length > 0 ? (
                     <Text style={{ fontSize: 8, color: '#6B7280', fontWeight: 'bold' }}>
-                      Links/Tech: {project.link ? String(project.link) : project.technologies.join(', ')}
+                      Tech: {project.technologies.join(', ')}
                     </Text>
-                  ) : project.link ? (
-                    <Text style={{ fontSize: 8, color: '#6B7280' }}>{String(project.link)}</Text>
                   ) : null}
                 </View>
               ))}
@@ -3046,3 +3115,406 @@ export const ClassicSplitPDFLayout: React.FC<PDFLayoutProps> = ({ data }) => {
     </Page>
   );
 };
+
+export const DeveloperPortfolioPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorText, themeColorBg, themeColorBorder }) => {
+  const nonEmptyProjects = getNonEmptyProjects(data);
+
+  // Group skills by category if available
+  const skillCategories = React.useMemo(() => {
+    const categories: Record<string, string[]> = {};
+    data.skills.forEach((skill) => {
+      const cat = skill.category?.trim() || 'Core Technologies';
+      if (!categories[cat]) {
+        categories[cat] = [];
+      }
+      categories[cat].push(skill.name);
+    });
+    return categories;
+  }, [data.skills]);
+
+  const styles = StyleSheet.create({
+    page: {
+      paddingHorizontal: 36,
+      paddingVertical: PDF_PAGE_V_MARGIN,
+      fontFamily: 'Helvetica',
+      fontSize: 8.5,
+      color: '#0f172a',
+      backgroundColor: '#ffffff'
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
+      borderBottomWidth: 1.5,
+      borderBottomColor: '#0f172a',
+      paddingBottom: 8,
+      marginBottom: 8
+    },
+    headerLeft: {
+      flex: 1,
+      paddingRight: 12
+    },
+    name: {
+      fontFamily: 'Times-Bold',
+      fontSize: 20,
+      color: '#0f172a',
+      lineHeight: 1.1
+    },
+    titleBadge: {
+      fontFamily: 'Helvetica-Bold',
+      fontSize: 8.0,
+      color: themeColorText,
+      textTransform: 'uppercase',
+      letterSpacing: 0.8,
+      marginTop: 3
+    },
+    headerRight: {
+      width: '46%',
+      flexDirection: 'row',
+      flexWrap: 'wrap'
+    },
+    contactCell: {
+      width: '50%',
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 3
+    },
+    contactText: {
+      fontSize: 7.5,
+      color: '#475569',
+      marginLeft: 4
+    },
+    section: {
+      marginBottom: 7
+    },
+    sectionTitle: {
+      fontFamily: 'Times-Bold',
+      fontSize: 9.0,
+      color: '#0f172a',
+      textTransform: 'uppercase',
+      letterSpacing: 0.8,
+      borderBottomWidth: 0.75,
+      borderBottomColor: '#cbd5e1',
+      paddingBottom: 2,
+      marginBottom: 4
+    },
+    summaryText: {
+      fontSize: 8.0,
+      color: '#334155',
+      lineHeight: 1.35
+    },
+    skillsGrid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap'
+    },
+    skillRow: {
+      width: '50%',
+      flexDirection: 'row',
+      paddingRight: 8,
+      marginBottom: 2.5
+    },
+    skillCategoryLabel: {
+      fontFamily: 'Helvetica-Bold',
+      fontSize: 7.8,
+      color: '#0f172a'
+    },
+    skillValues: {
+      fontSize: 7.8,
+      color: '#334155',
+      flex: 1
+    },
+    expItem: {
+      marginBottom: 5
+    },
+    expHeaderRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'baseline',
+      marginBottom: 1.5
+    },
+    expPosition: {
+      fontFamily: 'Helvetica-Bold',
+      fontSize: 8.5,
+      color: '#0f172a'
+    },
+    expCompany: {
+      fontFamily: 'Helvetica-Bold',
+      fontSize: 8.2,
+      color: themeColorText
+    },
+    expDate: {
+      fontFamily: 'Helvetica',
+      fontSize: 7.5,
+      color: '#64748b'
+    },
+    bulletRow: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      marginTop: 1,
+      paddingLeft: 4
+    },
+    bulletDot: {
+      width: 8,
+      fontSize: 8,
+      color: '#64748b'
+    },
+    bulletText: {
+      flex: 1,
+      fontSize: 7.8,
+      color: '#334155',
+      lineHeight: 1.3
+    },
+    projectCard: {
+      backgroundColor: '#f8fafc',
+      borderWidth: 0.75,
+      borderColor: '#e2e8f0',
+      borderRadius: 4,
+      padding: 5,
+      marginBottom: 3.5
+    },
+    projectHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'baseline',
+      marginBottom: 1.5
+    },
+    projectName: {
+      fontFamily: 'Helvetica-Bold',
+      fontSize: 8.2,
+      color: '#0f172a'
+    },
+    projectTech: {
+      fontFamily: 'Helvetica-Bold',
+      fontSize: 7.2,
+      color: themeColorText
+    },
+    projectLink: {
+      fontSize: 7.0,
+      color: '#64748b',
+      marginBottom: 1
+    },
+    projectDesc: {
+      fontSize: 7.6,
+      color: '#334155',
+      lineHeight: 1.28
+    },
+    eduItem: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'baseline',
+      marginBottom: 3
+    },
+    eduDegree: {
+      fontFamily: 'Helvetica-Bold',
+      fontSize: 8.2,
+      color: '#0f172a'
+    },
+    eduSchool: {
+      fontFamily: 'Helvetica',
+      fontSize: 7.8,
+      color: '#475569'
+    },
+    gridRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between'
+    },
+    gridCard: {
+      flex: 1,
+      backgroundColor: '#f8fafc',
+      borderWidth: 0.75,
+      borderColor: '#e2e8f0',
+      borderRadius: 3,
+      padding: 3.5,
+      marginHorizontal: 2,
+      alignItems: 'center'
+    },
+    gridCardTitle: {
+      fontFamily: 'Helvetica-Bold',
+      fontSize: 7.8,
+      color: '#0f172a',
+      textAlign: 'center'
+    },
+    gridCardDesc: {
+      fontSize: 6.8,
+      color: '#64748b',
+      textAlign: 'center',
+      marginTop: 1
+    }
+  });
+
+  return (
+    <Page size="A4" style={styles.page}>
+      {/* Header */}
+      <View style={styles.header} wrap={false}>
+        <View style={styles.headerLeft}>
+          <Text style={styles.name}>{data.personalInfo.firstName} {data.personalInfo.lastName}</Text>
+          {data.personalInfo.title ? (
+            <Text style={styles.titleBadge}>{data.personalInfo.title}</Text>
+          ) : null}
+        </View>
+
+        <View style={styles.headerRight}>
+          {data.personalInfo.email ? (
+            <View style={styles.contactCell}>
+              <PdfIconMail color={themeColorText} />
+              <Text style={styles.contactText}>{data.personalInfo.email}</Text>
+            </View>
+          ) : null}
+          {data.personalInfo.website ? (
+            <View style={styles.contactCell}>
+              <PdfIconGlobe color={themeColorText} />
+              <Text style={styles.contactText}>{data.personalInfo.website.replace(/^https?:\/\//, '')}</Text>
+            </View>
+          ) : null}
+          {data.personalInfo.phone ? (
+            <View style={styles.contactCell}>
+              <PdfIconPhone color={themeColorText} />
+              <Text style={styles.contactText}>{data.personalInfo.phone}</Text>
+            </View>
+          ) : null}
+          {data.personalInfo.linkedin ? (
+            <View style={styles.contactCell}>
+              <PdfIconLinkedInGlyph color={themeColorText} />
+              <Text style={styles.contactText}>{data.personalInfo.linkedin.replace(/^https?:\/\/(www\.)?/, '')}</Text>
+            </View>
+          ) : null}
+          {data.personalInfo.location ? (
+            <View style={styles.contactCell}>
+              <PdfIconMapPin color={themeColorText} />
+              <Text style={styles.contactText}>{data.personalInfo.location}</Text>
+            </View>
+          ) : null}
+        </View>
+      </View>
+
+      {/* Professional Summary */}
+      {data.summary ? (
+        <View style={styles.section} wrap={false}>
+          <Text style={styles.sectionTitle}>PROFESSIONAL SUMMARY</Text>
+          <Text style={styles.summaryText}>{data.summary}</Text>
+        </View>
+      ) : null}
+
+      {/* Technical Skills */}
+      {data.skills.length > 0 ? (
+        <View style={styles.section} wrap={false}>
+          <Text style={styles.sectionTitle}>TECHNICAL SKILLS</Text>
+          <View style={styles.skillsGrid}>
+            {Object.entries(skillCategories).map(([catName, skillNames]) => (
+              <View key={catName} style={styles.skillRow}>
+                <Text style={styles.skillCategoryLabel}>{catName}: </Text>
+                <Text style={styles.skillValues}>{skillNames.join(', ')}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      ) : null}
+
+      {/* Work Experience */}
+      {data.experience.length > 0 ? (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle} wrap={false}>WORK EXPERIENCE</Text>
+          {data.experience.map((exp) => (
+            <View key={exp.id} style={styles.expItem} wrap={false}>
+              <View style={styles.expHeaderRow}>
+                <View style={{ flexDirection: 'row', alignItems: 'baseline', flex: 1, paddingRight: 8 }}>
+                  <Text style={styles.expPosition}>{exp.position}</Text>
+                  {exp.company ? (
+                    <Text style={styles.expCompany}> — {exp.company}</Text>
+                  ) : null}
+                </View>
+                {(exp.startDate || exp.endDate) ? (
+                  <Text style={styles.expDate}>
+                    {exp.startDate || 'Present'} – {exp.current ? 'Present' : (exp.endDate || 'Present')}
+                  </Text>
+                ) : null}
+              </View>
+              {exp.description && exp.description.length > 0 ? (
+                exp.description.map((bullet, idx) => (
+                  <View key={idx} style={styles.bulletRow}>
+                    <Text style={styles.bulletDot}>•</Text>
+                    <Text style={styles.bulletText}>{bullet}</Text>
+                  </View>
+                ))
+              ) : null}
+            </View>
+          ))}
+        </View>
+      ) : null}
+
+      {/* Selected Technical Projects */}
+      {nonEmptyProjects.length > 0 ? (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle} wrap={false}>TECHNICAL PROJECTS</Text>
+          {nonEmptyProjects.map((project) => (
+            <View key={project.id} style={styles.projectCard} wrap={false}>
+              <View style={styles.projectHeader}>
+                <Text style={styles.projectName}>{project.name}</Text>
+                {project.technologies.length > 0 ? (
+                  <Text style={styles.projectTech}>{project.technologies.join(' · ')}</Text>
+                ) : null}
+              </View>
+              {project.link ? (
+                <Text style={styles.projectLink}>{project.link.replace(/^https?:\/\//, '')}</Text>
+              ) : null}
+              {project.description ? (
+                project.description.includes('\n') ? (
+                  project.description.split('\n').filter(l => l.trim()).map((line, lIdx) => (
+                    <View key={lIdx} style={styles.bulletRow}>
+                      <Text style={styles.bulletDot}>•</Text>
+                      <Text style={styles.bulletText}>{line.trim()}</Text>
+                    </View>
+                  ))
+                ) : (
+                  <Text style={styles.projectDesc}>{project.description}</Text>
+                )
+              ) : null}
+            </View>
+          ))}
+        </View>
+      ) : null}
+
+      {/* Education */}
+      {data.education.length > 0 ? (
+        <View style={styles.section} wrap={false}>
+          <Text style={styles.sectionTitle}>EDUCATION</Text>
+          {data.education.map((edu) => (
+            <View key={edu.id} style={styles.eduItem}>
+              <View>
+                <Text style={styles.eduDegree}>{edu.degree}</Text>
+                <Text style={styles.eduSchool}>
+                  {edu.institution}
+                  {edu.field && edu.field !== edu.degree ? ` — ${edu.field}` : ''}
+                  {edu.gpa ? ` (GPA: ${edu.gpa})` : ''}
+                </Text>
+              </View>
+              {(edu.startDate || edu.endDate) ? (
+                <Text style={styles.expDate}>{formatEducationDates(edu.startDate, edu.endDate)}</Text>
+              ) : null}
+            </View>
+          ))}
+        </View>
+      ) : null}
+
+      {/* Custom Sections / Key Strengths */}
+      {data.customSections && data.customSections.length > 0 ? (
+        data.customSections.map((section) => (
+          <View key={section.id} style={styles.section} wrap={false}>
+            <Text style={styles.sectionTitle}>{section.title}</Text>
+            <View style={styles.gridRow}>
+              {section.items.map((item) => (
+                <View key={item.id} style={styles.gridCard}>
+                  <Text style={styles.gridCardTitle}>{item.name}</Text>
+                  {item.description ? (
+                    <Text style={styles.gridCardDesc}>{item.description}</Text>
+                  ) : null}
+                </View>
+              ))}
+            </View>
+          </View>
+        ))
+      ) : null}
+    </Page>
+  );
+};
+

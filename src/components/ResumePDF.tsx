@@ -7,7 +7,7 @@ import {
   YellowSidebarPDFLayout, NavySidebarPDFLayout, FormalRedPDFLayout,
   TimelineDarkPDFLayout, GeometricBluePDFLayout,
   ProfessionalNavyHeaderPDFLayout, CleanBlueAccentPDFLayout,
-  ClassicSplitPDFLayout
+  ClassicSplitPDFLayout, DeveloperPortfolioPDFLayout
 } from './ResumePDFLayouts';
 
 // Register standard fonts
@@ -35,13 +35,13 @@ export const ResumePDF: React.FC<ResumePDFProps> = ({ data, templateId = 'modern
 
   if (safeTemplateId === 'modern-yellow') {
     LayoutComponent = YellowSidebarPDFLayout;
-  } else if (safeTemplateId === 'navy-sidebar') {
+  } else if (safeTemplateId === 'navy-sidebar' || safeTemplateId === 'fresher-data-analyst') {
     LayoutComponent = NavySidebarPDFLayout;
   } else if (safeTemplateId === 'formal-red') {
     LayoutComponent = FormalRedPDFLayout;
-  } else if (safeTemplateId === 'timeline-dark') {
+  } else if (safeTemplateId === 'timeline-dark' || safeTemplateId === 'fresher-frontend-dev') {
     LayoutComponent = TimelineDarkPDFLayout;
-  } else if (safeTemplateId === 'geometric-blue') {
+  } else if (safeTemplateId === 'geometric-blue' || safeTemplateId === 'fresher-cloud-devops') {
     LayoutComponent = GeometricBluePDFLayout;
   } else if (safeTemplateId === 'professional-navy') {
     LayoutComponent = ProfessionalNavyHeaderPDFLayout;
@@ -49,6 +49,8 @@ export const ResumePDF: React.FC<ResumePDFProps> = ({ data, templateId = 'modern
     LayoutComponent = CleanBlueAccentPDFLayout;
   } else if (safeTemplateId === 'classic-split') {
     LayoutComponent = ClassicSplitPDFLayout;
+  } else if (safeTemplateId === 'developer-portfolio' || safeTemplateId === 'fresher-cs-engineer') {
+    LayoutComponent = DeveloperPortfolioPDFLayout;
   } else if (isTwoColumnResumeTemplate(safeTemplateId)) {
     LayoutComponent = TwoColumnPDFLayout;
   } else if (isCenteredResumeTemplate(safeTemplateId)) {
@@ -74,6 +76,8 @@ export const ResumePDF: React.FC<ResumePDFProps> = ({ data, templateId = 'modern
     defaultThemeColorText = '#2563EB'; defaultThemeColorBg = '#2563EB'; defaultThemeColorBorder = '#bfdbfe';
   } else if (safeTemplateId === 'classic-split') {
     defaultThemeColorText = '#1F2937'; defaultThemeColorBg = '#1F2937'; defaultThemeColorBorder = '#D1D5DB';
+  } else if (safeTemplateId === 'developer-portfolio') {
+    defaultThemeColorText = '#0369a1'; defaultThemeColorBg = '#0284c7'; defaultThemeColorBorder = '#cbd5e1';
   } else if (safeTemplateId === 'creative-designer') {
     defaultThemeColorText = '#9333EA'; defaultThemeColorBg = '#9333EA'; defaultThemeColorBorder = '#E9D5FF';
   } else if (safeTemplateId === 'executive-premium') {
@@ -98,6 +102,18 @@ export const ResumePDF: React.FC<ResumePDFProps> = ({ data, templateId = 'modern
     defaultThemeColorText = '#27272A'; defaultThemeColorBg = '#27272A'; defaultThemeColorBorder = '#D4D4D8';
   } else if (safeTemplateId === 'forest-modern') {
     defaultThemeColorText = '#065F46'; defaultThemeColorBg = '#065F46'; defaultThemeColorBorder = '#6EE7B7';
+  } else if (safeTemplateId === 'fresher-cs-engineer') {
+    defaultThemeColorText = '#1D4ED8'; defaultThemeColorBg = '#2563EB'; defaultThemeColorBorder = '#BFDBFE';
+  } else if (safeTemplateId === 'fresher-frontend-dev') {
+    defaultThemeColorText = '#0369A1'; defaultThemeColorBg = '#0284C7'; defaultThemeColorBorder = '#BAE6FD';
+  } else if (safeTemplateId === 'fresher-java-backend') {
+    defaultThemeColorText = '#B91C1C'; defaultThemeColorBg = '#DC2626'; defaultThemeColorBorder = '#FECACA';
+  } else if (safeTemplateId === 'fresher-data-analyst') {
+    defaultThemeColorText = '#047857'; defaultThemeColorBg = '#059669'; defaultThemeColorBorder = '#A7F3D0';
+  } else if (safeTemplateId === 'fresher-cloud-devops') {
+    defaultThemeColorText = '#6D28D9'; defaultThemeColorBg = '#7C3AED'; defaultThemeColorBorder = '#DDD6FE';
+  } else if (safeTemplateId === 'fresher-business-analyst') {
+    defaultThemeColorText = '#B45309'; defaultThemeColorBg = '#D97706'; defaultThemeColorBorder = '#FDE68A';
   }
 
   const hexToRgba = (hex: string, alpha: number) => {

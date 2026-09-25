@@ -180,7 +180,7 @@ export const StandardLayout: React.FC<LayoutProps> = ({ data, themeColorText, th
           <div className="space-y-6">
             {nonEmptyProjects.map((project) => (
               <div key={project.id} className="border-l-4 pl-5" style={{ borderColor: themeColorBorder }}>
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-1 mb-2">
                   <h3 className="text-lg font-bold text-gray-900">{project.name}</h3>
                   {(() => {
                     const link = project.link || '';
@@ -305,7 +305,7 @@ export const TwoColumnLayout: React.FC<LayoutProps> = ({ data, themeColorText, t
             />
           ) : (
             <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mb-6 text-white text-4xl font-bold mx-auto">
-              {data.personalInfo.firstName[0]}{data.personalInfo.lastName[0]}
+              {(data.personalInfo.firstName?.trim()?.[0] || '') + (data.personalInfo.lastName?.trim()?.[0] || '') || '?'}
             </div>
           )}
           <h1 className="text-4xl font-bold text-white mb-2 leading-tight">
@@ -2178,4 +2178,256 @@ export const ClassicSplitLayout: React.FC<LayoutProps> = ({ data, themeColorText
     </div>
   );
 };
+
+export const DeveloperPortfolioLayout: React.FC<LayoutProps> = ({ data, themeColorText, themeColorBg, themeColorBorder }) => {
+  const nonEmptyProjects = getNonEmptyProjects(data);
+
+  // Group skills by category if available
+  const skillCategories = React.useMemo(() => {
+    const categories: Record<string, string[]> = {};
+    data.skills.forEach((skill) => {
+      const cat = skill.category?.trim() || 'Core Technologies';
+      if (!categories[cat]) {
+        categories[cat] = [];
+      }
+      categories[cat].push(skill.name);
+    });
+    return categories;
+  }, [data.skills]);
+
+  return (
+    <div className="font-sans text-slate-900 leading-normal max-w-4xl mx-auto">
+      {/* Header */}
+      <header className="border-b-2 border-slate-900 pb-5 mb-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="font-serif text-3xl font-bold tracking-tight text-slate-900 leading-tight">
+            {data.personalInfo.firstName} {data.personalInfo.lastName}
+          </h1>
+          {data.personalInfo.title && (
+            <div 
+              className="text-xs sm:text-sm font-bold uppercase tracking-widest mt-1"
+              style={{ color: themeColorText }}
+            >
+              {data.personalInfo.title}
+            </div>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-1.5 text-xs text-slate-600 font-medium">
+          {data.personalInfo.email && (
+            <div className="flex items-center gap-1.5">
+              <Mail className="h-3.5 w-3.5 shrink-0" style={{ color: themeColorText }} />
+              <a href={`mailto:${data.personalInfo.email}`} className="hover:underline">{data.personalInfo.email}</a>
+            </div>
+          )}
+          {data.personalInfo.website && (
+            <div className="flex items-center gap-1.5">
+              <Globe className="h-3.5 w-3.5 shrink-0" style={{ color: themeColorText }} />
+              <a 
+                href={data.personalInfo.website.startsWith('http') ? data.personalInfo.website : `https://${data.personalInfo.website}`} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:underline"
+              >
+                {data.personalInfo.website.replace(/^https?:\/\//, '')}
+              </a>
+            </div>
+          )}
+          {data.personalInfo.phone && (
+            <div className="flex items-center gap-1.5">
+              <Phone className="h-3.5 w-3.5 shrink-0" style={{ color: themeColorText }} />
+              <a href={`tel:${data.personalInfo.phone}`} className="hover:underline">{data.personalInfo.phone}</a>
+            </div>
+          )}
+          {data.personalInfo.linkedin && (
+            <div className="flex items-center gap-1.5">
+              <Linkedin className="h-3.5 w-3.5 shrink-0" style={{ color: themeColorText }} />
+              <a 
+                href={data.personalInfo.linkedin.startsWith('http') ? data.personalInfo.linkedin : `https://${data.personalInfo.linkedin}`} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:underline"
+              >
+                {data.personalInfo.linkedin.replace(/^https?:\/\/(www\.)?/, '')}
+              </a>
+            </div>
+          )}
+          {data.personalInfo.location && (
+            <div className="flex items-center gap-1.5">
+              <MapPin className="h-3.5 w-3.5 shrink-0" style={{ color: themeColorText }} />
+              <span>{data.personalInfo.location}</span>
+            </div>
+          )}
+        </div>
+      </header>
+
+      {/* Professional Summary */}
+      {data.summary && (
+        <section className="mb-4">
+          <h2 className="font-serif text-sm font-bold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-1.5">
+            PROFESSIONAL SUMMARY
+          </h2>
+          <p className="text-xs sm:text-[13px] leading-relaxed text-slate-700">
+            {data.summary}
+          </p>
+        </section>
+      )}
+
+      {/* Technical Skills */}
+      {data.skills.length > 0 && (
+        <section className="mb-4">
+          <h2 className="font-serif text-sm font-bold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-1.5">
+            TECHNICAL SKILLS
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5 text-xs sm:text-[12.5px] text-slate-700">
+            {Object.entries(skillCategories).map(([catName, skillNames]) => (
+              <div key={catName}>
+                <strong className="text-slate-900 font-semibold">{catName}: </strong>
+                <span>{skillNames.join(', ')}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Work Experience */}
+      {data.experience.length > 0 && (
+        <section className="mb-4">
+          <h2 className="font-serif text-sm font-bold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-2">
+            WORK EXPERIENCE
+          </h2>
+          <div className="space-y-3">
+            {data.experience.map((exp) => (
+              <div key={exp.id} className="avoid-break">
+                <div className="flex flex-wrap items-baseline justify-between text-xs sm:text-[13px]">
+                  <div>
+                    <strong className="font-bold text-slate-900">{exp.position}</strong>
+                    {exp.company && (
+                      <>
+                        <span> — </span>
+                        <span className="font-semibold" style={{ color: themeColorText }}>{exp.company}</span>
+                      </>
+                    )}
+                  </div>
+                  {(exp.startDate || exp.endDate) && (
+                    <span className="font-semibold text-slate-500 text-xs">
+                      {exp.startDate || 'Present'} – {exp.current ? 'Present' : (exp.endDate || 'Present')}
+                    </span>
+                  )}
+                </div>
+                {exp.description && exp.description.length > 0 && (
+                  <ul className="list-disc pl-4 mt-1 text-xs sm:text-[12.5px] text-slate-700 space-y-0.5 leading-relaxed">
+                    {exp.description.map((bullet, idx) => (
+                      <li key={idx}>{bullet}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Selected Technical Projects */}
+      {nonEmptyProjects.length > 0 && (
+        <section className="mb-4">
+          <h2 className="font-serif text-sm font-bold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-2">
+            TECHNICAL PROJECTS
+          </h2>
+          <div className="space-y-2.5 text-xs sm:text-[12.5px]">
+            {nonEmptyProjects.map((project) => (
+              <div key={project.id} className="rounded-lg border border-slate-200 bg-slate-50/80 p-3">
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <div className="font-bold text-slate-900 text-xs sm:text-[13px]">{project.name}</div>
+                  {project.technologies.length > 0 && (
+                    <div className="font-semibold text-xs" style={{ color: themeColorText }}>
+                      {project.technologies.join(' · ')}
+                    </div>
+                  )}
+                </div>
+                {project.link && (
+                  <div className="mt-0.5 text-[11.5px]">
+                    <a 
+                      href={project.link.startsWith('http') ? project.link : `https://${project.link}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="hover:underline text-slate-500"
+                    >
+                      {project.link.replace(/^https?:\/\//, '')}
+                    </a>
+                  </div>
+                )}
+                {project.description && (
+                  <div className="mt-1 text-slate-700 leading-relaxed">
+                    {project.description.includes('\n') ? (
+                      <ul className="list-disc pl-4 space-y-0.5">
+                        {project.description.split('\n').filter(l => l.trim()).map((line, lIdx) => (
+                          <li key={lIdx}>{line.trim()}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p>{project.description}</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Education */}
+      {data.education.length > 0 && (
+        <section className="mb-4">
+          <h2 className="font-serif text-sm font-bold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-2">
+            EDUCATION
+          </h2>
+          <div className="space-y-1.5 text-xs sm:text-[12.5px] text-slate-700">
+            {data.education.map((edu) => (
+              <div key={edu.id} className="flex justify-between items-baseline">
+                <div>
+                  <strong className="text-slate-900">{edu.degree}</strong>
+                  <div className="text-slate-600">
+                    {edu.institution}
+                    {edu.field && edu.field !== edu.degree ? ` — ${edu.field}` : ''}
+                    {edu.gpa ? ` (GPA: ${edu.gpa})` : ''}
+                  </div>
+                </div>
+                {(edu.startDate || edu.endDate) && (
+                  <span className="font-semibold text-slate-500 text-xs">
+                    {formatEducationDates(edu.startDate, edu.endDate)}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Custom Sections / Core Competencies */}
+      {data.customSections && data.customSections.length > 0 && (
+        <div>
+          {data.customSections.map((section) => (
+            <section key={section.id} className="mb-4">
+              <h2 className="font-serif text-sm font-bold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-2">
+                {section.title}
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs text-slate-700">
+                {section.items.map((item) => (
+                  <div key={item.id} className="bg-slate-50 border border-slate-200 rounded p-2 text-center">
+                    <strong className="text-slate-900 block font-semibold">{item.name}</strong>
+                    {item.description && (
+                      <span className="text-[11px] text-slate-600 block mt-0.5">{item.description}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 

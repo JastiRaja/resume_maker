@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Edit3, Download, Palette } from 'lucide-react';
+import { Edit3, Download, Palette, FileText } from 'lucide-react';
 import { ResumeData } from '../types/resume';
 import { isCenteredResumeTemplate, isTwoColumnResumeTemplate } from '../constants/resumeTemplateLayouts';
-import { StandardLayout, TwoColumnLayout, CenteredLayout, YellowSidebarLayout, NavySidebarLayout, FormalRedLayout, TimelineDarkLayout, GeometricBlueLayout, ProfessionalNavyHeaderLayout, CleanBlueAccentLayout, ClassicSplitLayout } from './ResumePreviewLayouts';
+import { StandardLayout, TwoColumnLayout, CenteredLayout, YellowSidebarLayout, NavySidebarLayout, FormalRedLayout, TimelineDarkLayout, GeometricBlueLayout, ProfessionalNavyHeaderLayout, CleanBlueAccentLayout, ClassicSplitLayout, DeveloperPortfolioLayout } from './ResumePreviewLayouts';
 
 interface ResumePreviewProps {
   data: ResumeData | null;
@@ -48,20 +48,22 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, templateId, onEdit,
   let defaultThemeColorBg = '#2563EB'; // bg-blue-600
   let defaultThemeColorBorder = '#BFDBFE'; // border-blue-200
 
-  if (isTwoColumnResumeTemplate(templateId)) {
+  if (templateId === 'fresher-cs-engineer' || templateId === 'developer-portfolio') {
+    LayoutComponent = DeveloperPortfolioLayout;
+  } else if (templateId === 'fresher-frontend-dev' || templateId === 'timeline-dark') {
+    LayoutComponent = TimelineDarkLayout;
+  } else if (templateId === 'fresher-data-analyst' || templateId === 'navy-sidebar') {
+    LayoutComponent = NavySidebarLayout;
+  } else if (templateId === 'fresher-cloud-devops' || templateId === 'geometric-blue') {
+    LayoutComponent = GeometricBlueLayout;
+  } else if (isTwoColumnResumeTemplate(templateId)) {
     LayoutComponent = TwoColumnLayout;
   } else if (isCenteredResumeTemplate(templateId)) {
     LayoutComponent = CenteredLayout;
   } else if (templateId === 'modern-yellow') {
     LayoutComponent = YellowSidebarLayout;
-  } else if (templateId === 'navy-sidebar') {
-    LayoutComponent = NavySidebarLayout;
   } else if (templateId === 'formal-red') {
     LayoutComponent = FormalRedLayout;
-  } else if (templateId === 'timeline-dark') {
-    LayoutComponent = TimelineDarkLayout;
-  } else if (templateId === 'geometric-blue') {
-    LayoutComponent = GeometricBlueLayout;
   } else if (templateId === 'professional-navy') {
     LayoutComponent = ProfessionalNavyHeaderLayout;
   } else if (templateId === 'clean-blue') {
@@ -113,6 +115,20 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, templateId, onEdit,
     defaultThemeColorText = '#2563EB'; defaultThemeColorBg = '#2563EB'; defaultThemeColorBorder = '#bfdbfe';
   } else if (templateId === 'classic-split') {
     defaultThemeColorText = '#1F2937'; defaultThemeColorBg = '#1F2937'; defaultThemeColorBorder = '#D1D5DB';
+  } else if (templateId === 'developer-portfolio') {
+    defaultThemeColorText = '#0369a1'; defaultThemeColorBg = '#0284c7'; defaultThemeColorBorder = '#cbd5e1';
+  } else if (templateId === 'fresher-cs-engineer') {
+    defaultThemeColorText = '#1D4ED8'; defaultThemeColorBg = '#2563EB'; defaultThemeColorBorder = '#BFDBFE';
+  } else if (templateId === 'fresher-frontend-dev') {
+    defaultThemeColorText = '#0369A1'; defaultThemeColorBg = '#0284C7'; defaultThemeColorBorder = '#BAE6FD';
+  } else if (templateId === 'fresher-java-backend') {
+    defaultThemeColorText = '#B91C1C'; defaultThemeColorBg = '#DC2626'; defaultThemeColorBorder = '#FECACA';
+  } else if (templateId === 'fresher-data-analyst') {
+    defaultThemeColorText = '#047857'; defaultThemeColorBg = '#059669'; defaultThemeColorBorder = '#A7F3D0';
+  } else if (templateId === 'fresher-cloud-devops') {
+    defaultThemeColorText = '#6D28D9'; defaultThemeColorBg = '#7C3AED'; defaultThemeColorBorder = '#DDD6FE';
+  } else if (templateId === 'fresher-business-analyst') {
+    defaultThemeColorText = '#B45309'; defaultThemeColorBg = '#D97706'; defaultThemeColorBorder = '#FDE68A';
   }
 
   const themeColorText = data?.theme?.textColor || defaultThemeColorText;
@@ -213,10 +229,17 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, templateId, onEdit,
                 </button>
                 <button
                   onClick={() => handleDownload('pdf')}
-                  className="w-full flex items-center justify-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  className="w-full flex items-center justify-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm font-medium"
                 >
                   <Download className="w-4 h-4" />
                   <span>Download PDF</span>
+                </button>
+                <button
+                  onClick={() => handleDownload('docx')}
+                  className="w-full flex items-center justify-center space-x-2 bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-colors shadow-sm font-medium"
+                >
+                  <FileText className="w-4 h-4 text-blue-600" />
+                  <span>Download Word (.docx)</span>
                 </button>
               </div>
               

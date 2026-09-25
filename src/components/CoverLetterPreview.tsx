@@ -1,5 +1,5 @@
 import React from 'react';
-import { Edit3, Download } from 'lucide-react';
+import { Edit3, Download, FileText } from 'lucide-react';
 import { CoverLetterData } from '../types/coverLetter';
 
 interface CoverLetterPreviewProps {
@@ -86,10 +86,17 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({ data, templateI
               </button>
               <button
                 onClick={() => onDownload && onDownload('pdf')}
-                className="w-full flex items-center justify-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                className="w-full flex items-center justify-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm font-medium"
               >
                 <Download className="w-4 h-4" />
                 <span>Download PDF</span>
+              </button>
+              <button
+                onClick={() => onDownload && onDownload('docx')}
+                className="w-full flex items-center justify-center space-x-2 bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-colors shadow-sm font-medium"
+              >
+                <FileText className="w-4 h-4 text-blue-600" />
+                <span>Download Word (.docx)</span>
               </button>
             </div>
             

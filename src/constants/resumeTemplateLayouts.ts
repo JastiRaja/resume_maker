@@ -9,6 +9,7 @@ export const RESUME_TWO_COLUMN_TEMPLATE_IDS = [
   'navy-professional',
   'charcoal-executive',
   'forest-modern',
+  'fresher-java-backend',
 ] as const;
 
 export const RESUME_CENTERED_TEMPLATE_IDS = [
@@ -16,6 +17,7 @@ export const RESUME_CENTERED_TEMPLATE_IDS = [
   'minimalist-elegant',
   'academic-researcher',
   'marketing-specialist',
+  'fresher-business-analyst',
 ] as const;
 
 export function isTwoColumnResumeTemplate(templateId: string): boolean {

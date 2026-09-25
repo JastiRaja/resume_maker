@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { ArrowLeft, Download, Eye, Edit3, Palette } from 'lucide-react';
+import { ArrowLeft, Download, Eye, Edit3, Palette, FileText } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import ResumeTemplateSelector from './ResumeTemplateSelector';
 import ResumeEditor from './ResumeEditor';
@@ -206,10 +206,18 @@ const ResumeBuilder: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => handleDownload('pdf')}
-                  className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  className="flex items-center space-x-1.5 bg-blue-600 text-white px-3.5 py-1.5 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-sm"
                 >
                   <Download className="w-4 h-4" />
                   <span>PDF</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDownload('docx')}
+                  className="flex items-center space-x-1.5 bg-white text-gray-700 border border-gray-300 px-3.5 py-1.5 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-colors text-sm font-medium shadow-sm"
+                >
+                  <FileText className="w-4 h-4 text-blue-600" />
+                  <span>Word (.docx)</span>
                 </button>
               </div>
             )}
