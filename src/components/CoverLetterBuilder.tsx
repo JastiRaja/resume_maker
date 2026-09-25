@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import CoverLetterTemplateSelector from './CoverLetterTemplateSelector';
 import CoverLetterEditor from './CoverLetterEditor';
 import CoverLetterPreview from './CoverLetterPreview';
+import { WordWarningModal } from './WordWarningModal';
 import { CoverLetterData } from '../types/coverLetter';
 import {
   COVER_LETTER_BASE,
@@ -79,7 +80,9 @@ const CoverLetterBuilder: React.FC = () => {
     setCoverLetterData(data);
   };
 
-  const handleDownload = async (format: 'pdf' | 'docx') => {
+  const [isWordWarningOpen, setIsWordWarningOpen] = useState(false);
+
+  const executeDownload = async (format: 'pdf' | 'docx') => {
     if (!coverLetterData) return;
 
     try {
@@ -93,6 +96,17 @@ const CoverLetterBuilder: React.FC = () => {
     } catch (error) {
       console.error('Download failed:', error);
     }
+  };
+
+  const handleDownload = async (format: 'pdf' | 'docx') => {
+    if (!coverLetterData) return;
+
+    if (format === 'docx') {
+      setIsWordWarningOpen(true);
+      return;
+    }
+
+    await executeDownload('pdf');
   };
 
   const handleBack = () => {
@@ -211,6 +225,14 @@ const CoverLetterBuilder: React.FC = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {renderStep()}
       </main>
+
+      {/* Word Warning Modal */}
+      <WordWarningModal
+        isOpen={isWordWarningOpen}
+        onClose={() => setIsWordWarningOpen(false)}
+        onConfirmWord={() => executeDownload('docx')}
+        onDownloadPdf={() => executeDownload('pdf')}
+      />
     </div>
   );
 };

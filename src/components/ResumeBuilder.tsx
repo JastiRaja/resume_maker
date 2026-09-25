@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import ResumeTemplateSelector from './ResumeTemplateSelector';
 import ResumeEditor from './ResumeEditor';
 import ResumePreview from './ResumePreview';
+import { WordWarningModal } from './WordWarningModal';
 import { ResumeData } from '../types/resume';
 import {
   RESUME_BASE,
@@ -84,8 +85,11 @@ const ResumeBuilder: React.FC = () => {
     setResumeData(data);
   };
 
-  const handleDownload = async (format: 'pdf' | 'docx', snapshot?: ResumeData) => {
-    const source = snapshot ?? previewDataRef.current ?? resumeData;
+  const [isWordWarningOpen, setIsWordWarningOpen] = useState(false);
+  const [pendingDocxData, setPendingDocxData] = useState<ResumeData | null>(null);
+
+  const executeDownload = async (format: 'pdf' | 'docx', sourceData?: ResumeData) => {
+    const source = sourceData ?? previewDataRef.current ?? resumeData;
     if (!source) return;
 
     const payload = structuredClone(source);
@@ -101,6 +105,19 @@ const ResumeBuilder: React.FC = () => {
     } catch (error) {
       console.error('Download failed:', error);
     }
+  };
+
+  const handleDownload = async (format: 'pdf' | 'docx', snapshot?: ResumeData) => {
+    const source = snapshot ?? previewDataRef.current ?? resumeData;
+    if (!source) return;
+
+    if (format === 'docx') {
+      setPendingDocxData(source);
+      setIsWordWarningOpen(true);
+      return;
+    }
+
+    await executeDownload('pdf', source);
   };
 
   const handleBack = () => {
@@ -229,6 +246,25 @@ const ResumeBuilder: React.FC = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {renderStep()}
       </main>
+
+      {/* Word Warning Modal */}
+      <WordWarningModal
+        isOpen={isWordWarningOpen}
+        onClose={() => {
+          setIsWordWarningOpen(false);
+          setPendingDocxData(null);
+        }}
+        onConfirmWord={() => {
+          if (pendingDocxData) {
+            executeDownload('docx', pendingDocxData);
+          }
+        }}
+        onDownloadPdf={() => {
+          if (pendingDocxData) {
+            executeDownload('pdf', pendingDocxData);
+          }
+        }}
+      />
     </div>
   );
 };

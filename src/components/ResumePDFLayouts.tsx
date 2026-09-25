@@ -118,7 +118,7 @@ const stdStyles = StyleSheet.create({
   contactInfo: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: 4 },
   contactItem: { fontSize: 10, color: '#4B5563' },
   section: { marginBottom: 15 },
-  sectionTitle: { fontSize: 12, fontWeight: 'bold', color: '#111827', marginBottom: 8, textTransform: 'uppercase' },
+  sectionTitle: { fontSize: 12, fontWeight: 'bold', color: '#111827', marginBottom: 8, textTransform: 'uppercase', borderBottomWidth: 1.5, borderBottomColor: '#E5E7EB', paddingBottom: 3 },
   summaryText: { fontSize: 10, color: '#374151', lineHeight: 1.5 },
   itemContainer: { marginBottom: 10 },
   itemHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 },
@@ -391,30 +391,33 @@ const colStyles = StyleSheet.create({
     paddingTop: PDF_PAGE_V_MARGIN,
     paddingBottom: PDF_PAGE_V_MARGIN,
   },
-  leftCol: { width: '35%', padding: 30, color: '#FFFFFF' },
-  rightCol: { width: '65%', padding: 30, backgroundColor: '#FFFFFF' },
-  nameInitialsContainer: { width: 60, height: 60, borderRadius: 30, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center', marginBottom: 20 },
-  nameInitials: { fontSize: 24, fontWeight: 'bold', color: '#FFFFFF' },
-  name: { fontSize: 24, fontWeight: 'bold', color: '#111827', marginBottom: 5 },
-  title: { fontSize: 14, marginBottom: 20 },
-  contactItemLeft: { fontSize: 10, color: 'rgba(255,255,255,0.9)', marginBottom: 8 },
-  sectionTitleLeft: { fontSize: 12, fontWeight: 'bold', color: '#FFFFFF', marginTop: 20, marginBottom: 10, textTransform: 'uppercase', borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.3)', paddingBottom: 5 },
-  sectionTitleRight: { fontSize: 14, fontWeight: 'bold', color: '#111827', marginBottom: 12, textTransform: 'uppercase', borderBottomWidth: 2, paddingBottom: 4 },
-  skillItemLeft: { fontSize: 10, color: '#FFFFFF', marginBottom: 4 },
-  eduItemLeft: { marginBottom: 10 },
-  eduDegreeLeft: { fontSize: 10, fontWeight: 'bold', color: '#FFFFFF' },
-  eduInstLeft: { fontSize: 9, color: 'rgba(255,255,255,0.8)' },
-  eduDateLeft: { fontSize: 8, color: 'rgba(255,255,255,0.6)', marginBottom: 2 },
-  summaryTextRight: { fontSize: 10, color: '#374151', lineHeight: 1.5, marginBottom: 15 },
+  leftCol: { width: '38%', padding: 22, color: '#FFFFFF' },
+  rightCol: { width: '62%', padding: 24, backgroundColor: '#FFFFFF' },
+  nameInitialsContainer: { width: 56, height: 56, borderRadius: 28, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center', alignSelf: 'center', marginBottom: 12 },
+  nameInitials: { fontSize: 20, fontWeight: 'bold', color: '#FFFFFF' },
+  nameLeft: { fontSize: 18, fontWeight: 'bold', color: '#FFFFFF', textAlign: 'center', marginBottom: 4, lineHeight: 1.2 },
+  titleLeft: { fontSize: 9.5, color: 'rgba(255,255,255,0.9)', textAlign: 'center', marginBottom: 14, lineHeight: 1.3 },
+  contactItemLeft: { fontSize: 8.5, color: 'rgba(255,255,255,0.95)', marginBottom: 6 },
+  sectionTitleLeft: { fontSize: 10, fontWeight: 'bold', color: 'rgba(255,255,255,0.8)', marginTop: 14, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.25)', paddingBottom: 3 },
+  sectionTitleRowRight: { flexDirection: 'row', alignItems: 'center', marginBottom: 10, marginTop: 6 },
+  sectionTitleRightBar: { width: 14, height: 3.5, borderRadius: 2, marginRight: 6 },
+  sectionTitleRightText: { fontSize: 13, fontWeight: 'bold', color: '#111827' },
+  skillItemLeft: { fontSize: 8.5, color: '#FFFFFF', marginBottom: 4 },
+  eduItemLeft: { marginBottom: 8 },
+  eduDegreeLeft: { fontSize: 9, fontWeight: 'bold', color: '#FFFFFF' },
+  eduInstLeft: { fontSize: 8.5, color: 'rgba(255,255,255,0.85)' },
+  eduDateLeft: { fontSize: 7.5, color: 'rgba(255,255,255,0.65)', marginBottom: 1 },
+  summaryTextRight: { fontSize: 9.5, color: '#374151', lineHeight: 1.5, marginBottom: 14 },
   expItemRight: { marginBottom: 12 },
-  expHeaderRight: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
-  expTitleRight: { fontSize: 12, fontWeight: 'bold', color: '#111827' },
-  expCompanyRight: { fontSize: 11, fontWeight: 'bold' },
-  expDateRight: { fontSize: 9, color: '#FFFFFF' },
-  bulletContainerRight: { flexDirection: 'row', marginBottom: 3 },
-  bulletPointRight: { width: 10, fontSize: 10, color: '#9CA3AF' },
-  bulletTextRight: { flex: 1, fontSize: 10, color: '#374151', lineHeight: 1.4 },
-  projectDescRight: { fontSize: 10, color: '#374151', lineHeight: 1.4, marginBottom: 4 }
+  expHeaderRight: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 },
+  expTitleRight: { fontSize: 11, fontWeight: 'bold', color: '#111827' },
+  expCompanyRight: { fontSize: 10, fontWeight: 'bold' },
+  expDateBadge: { backgroundColor: '#F3F4F6', borderRadius: 3, paddingHorizontal: 5, paddingVertical: 2 },
+  expDateText: { fontSize: 8, color: '#4B5563', fontWeight: 'bold' },
+  bulletContainerRight: { flexDirection: 'row', marginBottom: 2.5 },
+  bulletPointRight: { width: 10, fontSize: 9 },
+  bulletTextRight: { flex: 1, fontSize: 9, color: '#374151', lineHeight: 1.4 },
+  projectDescRight: { fontSize: 9, color: '#374151', lineHeight: 1.4, marginBottom: 3 }
 });
 
 export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorText, themeColorBg, themeColorBorder }) => {
@@ -422,20 +425,25 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
 
   return (
     <Page size="A4" style={[colStyles.page, { borderTop: `4px solid ${themeColorBorder}` }]}>
+      {/* Left Column Sidebar */}
       <View style={[colStyles.leftCol, { backgroundColor: themeColorBg }]}>
         {data.personalInfo.imageUrl ? (
           <Image
             src={data.personalInfo.imageUrl}
-            style={{ width: 70, height: 70, borderRadius: 35, marginBottom: 20, alignSelf: 'center', objectFit: 'cover' }}
+            style={{ width: 64, height: 64, borderRadius: 32, marginBottom: 12, alignSelf: 'center', objectFit: 'cover', borderWidth: 2, borderColor: 'rgba(255,255,255,0.2)' }}
           />
         ) : (
           <View style={colStyles.nameInitialsContainer}>
             <Text style={colStyles.nameInitials}>{(data.personalInfo.firstName?.trim()?.[0] || '') + (data.personalInfo.lastName?.trim()?.[0] || '') || '?'}</Text>
           </View>
         )}
+
+        <Text style={colStyles.nameLeft}>{data.personalInfo.firstName} {data.personalInfo.lastName}</Text>
+        <Text style={colStyles.titleLeft}>{data.personalInfo.title}</Text>
+
         <Text style={colStyles.sectionTitleLeft}>Contact</Text>
         {data.personalInfo.email ? (
-          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8 }} wrap={false}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 6 }} wrap={false}>
             <View style={pdfContactIconCell()}>
               <PdfIconMail color={PDF_ICON_ON_THEME} />
             </View>
@@ -443,7 +451,7 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
           </View>
         ) : null}
         {data.personalInfo.phone ? (
-          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8 }} wrap={false}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 6 }} wrap={false}>
             <View style={pdfContactIconCell()}>
               <PdfIconPhone color={PDF_ICON_ON_THEME} />
             </View>
@@ -451,7 +459,7 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
           </View>
         ) : null}
         {data.personalInfo.location ? (
-          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8 }} wrap={false}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 6 }} wrap={false}>
             <View style={pdfContactIconCell()}>
               <PdfIconMapPin color={PDF_ICON_ON_THEME} />
             </View>
@@ -459,7 +467,7 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
           </View>
         ) : null}
         {data.personalInfo.linkedin ? (
-          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8 }} wrap={false}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 6 }} wrap={false}>
             <View style={pdfContactIconCell()}>
               <PdfIconLinkedInGlyph color={PDF_ICON_ON_THEME} />
             </View>
@@ -467,7 +475,7 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
           </View>
         ) : null}
         {data.personalInfo.website ? (
-          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8 }} wrap={false}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 6 }} wrap={false}>
             <View style={pdfContactIconCell()}>
               <PdfIconGlobe color={PDF_ICON_ON_THEME} />
             </View>
@@ -479,13 +487,13 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
           <View wrap={false}>
             <Text style={colStyles.sectionTitleLeft}>Skills</Text>
             {data.skills.map((skill) => (
-              <View key={skill.id} style={{ marginBottom: 8 }}>
+              <View key={skill.id} style={{ marginBottom: 6 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
-                  <Text style={{ fontSize: 10, color: '#FFFFFF' }}>{skill.name}</Text>
+                  <Text style={{ fontSize: 8.5, color: '#FFFFFF' }}>{skill.name}</Text>
                 </View>
                 {skill.level && (
-                  <View style={{ width: '100%', height: 4, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 2 }}>
-                    <View style={{ height: 4, backgroundColor: '#FFFFFF', borderRadius: 2, width: skill.level === 'Beginner' ? '25%' : skill.level === 'Intermediate' ? '50%' : skill.level === 'Advanced' ? '75%' : '100%' }} />
+                  <View style={{ width: '100%', height: 3.5, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 2 }}>
+                    <View style={{ height: 3.5, backgroundColor: '#FFFFFF', borderRadius: 2, width: skill.level === 'Beginner' ? '25%' : skill.level === 'Intermediate' ? '50%' : skill.level === 'Advanced' ? '75%' : '100%' }} />
                   </View>
                 )}
               </View>
@@ -506,20 +514,18 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
           </View>
         )}
 
-        {/* Custom Sections (Moved to left sidebar) */}
+        {/* Custom Sections (in left sidebar) */}
         {data.customSections?.map((section) => section.items.length > 0 && (
-          <View key={section.id} wrap={false} style={{ marginBottom: 10 }}>
+          <View key={section.id} wrap={false} style={{ marginBottom: 8 }}>
             <Text style={colStyles.sectionTitleLeft}>{section.title}</Text>
             {section.items.map((item) => (
-              <View key={item.id} style={{ marginBottom: 8 }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
-                  <Text style={{ fontSize: 10, color: '#FFFFFF', fontWeight: 'bold' }}>{item.name}</Text>
-                </View>
+              <View key={item.id} style={{ marginBottom: 6 }}>
+                <Text style={{ fontSize: 9, color: '#FFFFFF', fontWeight: 'bold' }}>{item.name}</Text>
                 {item.date && (
-                  <Text style={{ fontSize: 8, color: 'rgba(255,255,255,0.6)', marginBottom: 2 }}>{item.date}</Text>
+                  <Text style={{ fontSize: 7.5, color: 'rgba(255,255,255,0.6)', marginBottom: 1 }}>{item.date}</Text>
                 )}
                 {item.description && (
-                  <Text style={{ fontSize: 9, color: 'rgba(255,255,255,0.8)', lineHeight: 1.3 }}>{item.description}</Text>
+                  <Text style={{ fontSize: 8, color: 'rgba(255,255,255,0.8)', lineHeight: 1.3 }}>{item.description}</Text>
                 )}
               </View>
             ))}
@@ -527,13 +533,14 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
         ))}
       </View>
 
+      {/* Right Column Body */}
       <View style={colStyles.rightCol}>
-        <Text style={colStyles.name}>{data.personalInfo.firstName} {data.personalInfo.lastName}</Text>
-        <Text style={[colStyles.title, { color: themeColorText }]}>{data.personalInfo.title}</Text>
-
         {data.summary && (
           <View wrap={false}>
-            <Text style={[colStyles.sectionTitleRight, { borderBottomColor: themeColorBg }]}>Profile</Text>
+            <View style={colStyles.sectionTitleRowRight}>
+              <View style={[colStyles.sectionTitleRightBar, { backgroundColor: themeColorBg }]} />
+              <Text style={colStyles.sectionTitleRightText}>Profile</Text>
+            </View>
             <Text style={colStyles.summaryTextRight}>{data.summary}</Text>
           </View>
         )}
@@ -541,23 +548,26 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
         {data.experience.length > 0 && (
           <View>
             <View wrap={false}>
-              <Text style={[colStyles.sectionTitleRight, { borderBottomColor: themeColorBg }]}>Experience</Text>
+              <View style={colStyles.sectionTitleRowRight}>
+                <View style={[colStyles.sectionTitleRightBar, { backgroundColor: themeColorBg }]} />
+                <Text style={colStyles.sectionTitleRightText}>Experience</Text>
+              </View>
               {data.experience.length > 0 && (
                 <View style={colStyles.expHeaderRight}>
-                  <View>
+                  <View style={{ flex: 1, paddingRight: 6 }}>
                     <Text style={colStyles.expTitleRight}>{data.experience[0].position}</Text>
                     <Text style={[colStyles.expCompanyRight, { color: themeColorText }]}>{data.experience[0].company}</Text>
                   </View>
-                  <View style={{ backgroundColor: '#F3F4F6', borderRadius: 4, paddingHorizontal: 6, paddingVertical: 3 }}>
-                    <Text style={{ fontSize: 9, color: '#4B5563', fontWeight: 'bold' }}>{formatDate(data.experience[0].startDate)} - {formatDate(data.experience[0].endDate)}</Text>
+                  <View style={colStyles.expDateBadge}>
+                    <Text style={colStyles.expDateText}>{formatDate(data.experience[0].startDate)} - {formatDate(data.experience[0].endDate)}</Text>
                   </View>
                 </View>
               )}
               {data.experience.length > 0 && (
-                <View style={{ marginBottom: 12 }}>
+                <View style={{ marginBottom: 10 }}>
                   {data.experience[0].description.map((desc, idx) => (
                     <View key={idx} style={colStyles.bulletContainerRight}>
-                      <Text style={[colStyles.bulletPointRight, { color: themeColorText }]}>•</Text>
+                      <Text style={[colStyles.bulletPointRight, { color: themeColorText }]}>▹</Text>
                       <Text style={colStyles.bulletTextRight}>{desc}</Text>
                     </View>
                   ))}
@@ -568,17 +578,17 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
             {data.experience.slice(1).map((exp) => (
               <View key={exp.id} wrap={false} style={colStyles.expItemRight}>
                 <View style={colStyles.expHeaderRight}>
-                  <View>
+                  <View style={{ flex: 1, paddingRight: 6 }}>
                     <Text style={colStyles.expTitleRight}>{exp.position}</Text>
                     <Text style={[colStyles.expCompanyRight, { color: themeColorText }]}>{exp.company}</Text>
                   </View>
-                  <View style={{ backgroundColor: '#F3F4F6', borderRadius: 4, paddingHorizontal: 6, paddingVertical: 3 }}>
-                    <Text style={{ fontSize: 9, color: '#4B5563', fontWeight: 'bold' }}>{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</Text>
+                  <View style={colStyles.expDateBadge}>
+                    <Text style={colStyles.expDateText}>{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</Text>
                   </View>
                 </View>
                 {exp.description.map((desc, idx) => (
                   <View key={idx} style={colStyles.bulletContainerRight}>
-                    <Text style={[colStyles.bulletPointRight, { color: themeColorText }]}>•</Text>
+                    <Text style={[colStyles.bulletPointRight, { color: themeColorText }]}>▹</Text>
                     <Text style={colStyles.bulletTextRight}>{desc}</Text>
                   </View>
                 ))}
@@ -590,24 +600,27 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
         {nonEmptyProjects.length > 0 && (
           <View>
             <View wrap={false}>
-              <Text style={[colStyles.sectionTitleRight, { borderBottomColor: themeColorBg }]}>Projects</Text>
+              <View style={colStyles.sectionTitleRowRight}>
+                <View style={[colStyles.sectionTitleRightBar, { backgroundColor: themeColorBg }]} />
+                <Text style={colStyles.sectionTitleRightText}>Projects</Text>
+              </View>
               {nonEmptyProjects.length > 0 && (
-                <View style={{ marginBottom: 4 }}>
+                <View style={{ marginBottom: 3 }}>
                   <Text style={colStyles.expTitleRight}>{nonEmptyProjects[0].name}</Text>
                   {nonEmptyProjects[0].link ? (
-                    <Text style={{ fontSize: 8.5, color: themeColorText, marginTop: 1, marginBottom: 2 }}>
+                    <Text style={{ fontSize: 8, color: themeColorText, marginTop: 1, marginBottom: 2 }}>
                       {String(nonEmptyProjects[0].link).replace(/^https?:\/\//, '')}
                     </Text>
                   ) : null}
                 </View>
               )}
               {nonEmptyProjects.length > 0 && (
-                <View style={{ marginBottom: 12 }}>
+                <View style={{ marginBottom: 10 }}>
                   {nonEmptyProjects[0].description && <Text style={colStyles.projectDescRight}>{nonEmptyProjects[0].description}</Text>}
                   {nonEmptyProjects[0].technologies && nonEmptyProjects[0].technologies.length > 0 && (
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 4 }}>
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 3 }}>
                       {nonEmptyProjects[0].technologies.map((tech, idx) => (
-                        <Text key={idx} style={{ fontSize: 8, color: '#6B7280', backgroundColor: '#F3F4F6', paddingVertical: 2, paddingHorizontal: 4, borderRadius: 2 }}>{tech}</Text>
+                        <Text key={idx} style={{ fontSize: 7.5, color: '#4B5563', backgroundColor: '#F3F4F6', paddingVertical: 1.5, paddingHorizontal: 4, borderRadius: 2 }}>{tech}</Text>
                       ))}
                     </View>
                   )}
@@ -617,19 +630,19 @@ export const TwoColumnPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
 
             {nonEmptyProjects.slice(1).map((project) => (
               <View key={project.id} wrap={false} style={colStyles.expItemRight}>
-                <View style={{ marginBottom: 4 }}>
+                <View style={{ marginBottom: 3 }}>
                   <Text style={colStyles.expTitleRight}>{project.name}</Text>
                   {project.link ? (
-                    <Text style={{ fontSize: 8.5, color: themeColorText, marginTop: 1, marginBottom: 2 }}>
+                    <Text style={{ fontSize: 8, color: themeColorText, marginTop: 1, marginBottom: 2 }}>
                       {String(project.link).replace(/^https?:\/\//, '')}
                     </Text>
                   ) : null}
                 </View>
                 {project.description && <Text style={colStyles.projectDescRight}>{project.description}</Text>}
                 {project.technologies && project.technologies.length > 0 && (
-                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 4 }}>
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 3 }}>
                     {project.technologies.map((tech, idx) => (
-                      <Text key={idx} style={{ fontSize: 8, color: '#6B7280', backgroundColor: '#F3F4F6', paddingVertical: 2, paddingHorizontal: 4, borderRadius: 2 }}>{tech}</Text>
+                      <Text key={idx} style={{ fontSize: 7.5, color: '#4B5563', backgroundColor: '#F3F4F6', paddingVertical: 1.5, paddingHorizontal: 4, borderRadius: 2 }}>{tech}</Text>
                     ))}
                   </View>
                 )}
@@ -941,7 +954,7 @@ export const CenteredPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorTe
 
 const ysStyles = StyleSheet.create({
   page: { flexDirection: 'row', backgroundColor: '#FFFFFF', fontFamily: 'Inter', padding: 30 },
-  leftCol: { width: '35%', paddingRight: 20, borderRightWidth: 4, borderLeftWidth: 8, paddingLeft: 15 },
+  leftCol: { width: '35%', paddingRight: 20, borderRightWidth: 4, borderLeftWidth: 8, paddingLeft: 15, backgroundColor: '#FFFBF0' },
   rightCol: { width: '65%', paddingLeft: 20 },
   name: { fontSize: 32, fontWeight: 'bold', color: '#111827', marginBottom: 5, letterSpacing: 2, textTransform: 'uppercase' },
   title: { fontSize: 13, marginBottom: 20, color: '#111827', fontWeight: 'bold' },
@@ -972,6 +985,12 @@ export const YellowSidebarPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCo
   return (
     <Page size="A4" style={ysStyles.page}>
       <View style={[ysStyles.leftCol, { borderRightColor: primaryBg, borderLeftColor: primaryBg }]}>
+        {data.personalInfo.imageUrl ? (
+          <Image
+            src={data.personalInfo.imageUrl}
+            style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 2, borderWidth: 2, borderColor: linkColor, marginBottom: 15, alignSelf: 'flex-start' }}
+          />
+        ) : null}
         <Text style={ysStyles.sectionTitleLeft}>Contact</Text>
         {data.personalInfo.location ? (
           <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 6 }} wrap={false}>
@@ -1166,8 +1185,18 @@ export const NavySidebarPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColo
   return (
     <Page size="A4" style={nsStyles.page}>
       <View style={nsStyles.leftCol}>
-        <Text style={nsStyles.name}>{data.personalInfo.firstName} {data.personalInfo.lastName}</Text>
-        <Text style={nsStyles.title}>{data.personalInfo.title}</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15, paddingBottom: 15, borderBottomWidth: 1, borderBottomColor: '#E5E7EB' }}>
+          {data.personalInfo.imageUrl ? (
+            <Image
+              src={data.personalInfo.imageUrl}
+              style={{ width: 50, height: 50, borderRadius: 25, marginRight: 15, objectFit: 'cover' }}
+            />
+          ) : null}
+          <View style={{ flex: 1 }}>
+            <Text style={nsStyles.name}>{data.personalInfo.firstName} {data.personalInfo.lastName}</Text>
+            <Text style={nsStyles.title}>{data.personalInfo.title}</Text>
+          </View>
+        </View>
 
         {data.summary && (
           <View wrap={false} style={{ marginBottom: 20 }}>
@@ -1353,26 +1382,30 @@ export const NavySidebarPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColo
 };
 
 const frStyles = StyleSheet.create({
-  page: { flexDirection: 'column', backgroundColor: '#FFFFFF', padding: 40, fontFamily: 'Inter' },
-  header: { alignItems: 'center', marginBottom: 25 },
-  name: { fontSize: 28, fontWeight: 'bold', color: '#7F1D1D', marginBottom: 4, fontFamily: 'Inter' },
-  title: { fontSize: 13, color: '#4B5563', letterSpacing: 1, textTransform: 'uppercase' },
-  contactInfo: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 10, marginTop: 10 },
-  contactItem: { fontSize: 9, color: '#6B7280', textTransform: 'uppercase' },
-  bodyRow: { flexDirection: 'row' },
-  leftCol: { width: '70%', paddingRight: 25, borderRightWidth: 1, borderRightColor: '#E5E7EB' },
-  rightCol: { width: '30%', paddingLeft: 25 },
-  sectionTitle: { fontSize: 13, fontWeight: 'bold', color: '#111827', textTransform: 'uppercase', marginBottom: 15, letterSpacing: 1 },
-  summaryText: { fontSize: 10, color: '#374151', lineHeight: 1.6, textAlign: 'justify', marginBottom: 20 },
-  itemContainer: { marginBottom: 15 },
-  itemHeader: { marginBottom: 4 },
-  itemTitle: { fontSize: 11, fontWeight: 'bold', color: '#111827' },
-  itemSubtitle: { fontSize: 10, color: '#4B5563', marginTop: 2 },
-  itemDate: { fontSize: 9, color: '#6B7280', marginTop: 2 },
-  bulletContainer: { flexDirection: 'row', marginBottom: 4 },
-  bulletPoint: { width: 10, fontSize: 10, color: '#111827' },
-  bulletText: { flex: 1, fontSize: 10, color: '#374151', lineHeight: 1.5, textAlign: 'justify' },
-  skillItem: { fontSize: 10, color: '#374151', marginBottom: 8, paddingBottom: 8, borderBottomWidth: 1, borderBottomColor: '#F3F4F6' }
+  page: { flexDirection: 'row', backgroundColor: '#FAFAFA', padding: 35, fontFamily: 'Inter' },
+  leftCol: { width: '75%', paddingRight: 20, borderRightWidth: 1, borderRightColor: '#D1D5DB' },
+  rightCol: { width: '25%', paddingLeft: 15 },
+  headerRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 15, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: '#D1D5DB' },
+  profileImage: { width: 55, height: 55, objectFit: 'cover', borderWidth: 1, borderColor: '#E5E7EB', marginRight: 12, backgroundColor: '#FFFFFF' },
+  name: { fontSize: 22, fontWeight: 'bold', color: '#7F1D1D', marginBottom: 3 },
+  title: { fontSize: 11, color: '#374151', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: 0.5 },
+  contactInfo: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 6 },
+  contactItem: { fontSize: 8, color: '#6B7280', textTransform: 'uppercase' },
+  sectionTitle: { fontSize: 11, fontWeight: 'bold', color: '#1F2937', textTransform: 'uppercase', marginBottom: 10, letterSpacing: 1 },
+  summaryText: { fontSize: 9.5, color: '#374151', lineHeight: 1.5, textAlign: 'justify', marginBottom: 14 },
+  itemContainer: { marginBottom: 12 },
+  itemHeader: { marginBottom: 3 },
+  itemTitle: { fontSize: 10.5, fontWeight: 'bold', color: '#111827' },
+  itemSubtitle: { fontSize: 9, color: '#4B5563', marginTop: 1 },
+  itemDate: { fontSize: 8.5, color: '#6B7280', fontStyle: 'italic', marginTop: 1 },
+  bulletContainer: { flexDirection: 'row', marginBottom: 3 },
+  bulletPoint: { width: 10, fontSize: 9, color: '#111827' },
+  bulletText: { flex: 1, fontSize: 9, color: '#374151', lineHeight: 1.4, textAlign: 'justify' },
+  skillItem: { fontSize: 9, color: '#1F2937', marginBottom: 6, paddingBottom: 6, borderBottomWidth: 1, borderBottomColor: '#E5E7EB' },
+  projectItem: { marginBottom: 10 },
+  projectName: { fontSize: 9.5, fontWeight: 'bold', color: '#111827', marginBottom: 2 },
+  projectLink: { fontSize: 8, color: '#B91C1C', marginBottom: 2 },
+  projectTech: { fontSize: 8, color: '#4B5563', fontStyle: 'italic' }
 });
 
 export const FormalRedPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorText }) => {
@@ -1381,165 +1414,135 @@ export const FormalRedPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorT
 
   return (
     <Page size="A4" style={frStyles.page}>
-      <View style={frStyles.header}>
-        <Text style={[frStyles.name, { color: primaryColor }]}>
-          {(data.personalInfo.firstName || '')} {(data.personalInfo.lastName || '')}
-        </Text>
-        {data.personalInfo.title && <Text style={frStyles.title}>{data.personalInfo.title}</Text>}
-        <View style={frStyles.contactInfo}>
-          {data.personalInfo.location ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }} wrap={false}>
-              <PdfIconMapPin color="#6B7280" />
-              <Text style={[frStyles.contactItem, { marginLeft: 4 }]}>{data.personalInfo.location}</Text>
+      {/* Left Main Column (75%) */}
+      <View style={frStyles.leftCol}>
+        <View style={frStyles.headerRow}>
+          {data.personalInfo.imageUrl ? (
+            <Image src={data.personalInfo.imageUrl} style={frStyles.profileImage} />
+          ) : null}
+          <View style={{ flex: 1 }}>
+            <Text style={[frStyles.name, { color: primaryColor }]}>
+              {(data.personalInfo.firstName || '')} {(data.personalInfo.lastName || '')}
+              {data.personalInfo.title ? <Text style={{ color: '#374151', fontWeight: 'normal', fontSize: 14 }}>, {data.personalInfo.title}</Text> : null}
+            </Text>
+            <View style={frStyles.contactInfo}>
+              {data.personalInfo.location ? (
+                <Text style={frStyles.contactItem}>{data.personalInfo.location}</Text>
+              ) : null}
+              {data.personalInfo.location && (data.personalInfo.email || data.personalInfo.phone) ? (
+                <Text style={frStyles.contactItem}>•</Text>
+              ) : null}
+              {data.personalInfo.email ? (
+                <Text style={frStyles.contactItem}>{data.personalInfo.email}</Text>
+              ) : null}
+              {data.personalInfo.email && data.personalInfo.phone ? (
+                <Text style={frStyles.contactItem}>•</Text>
+              ) : null}
+              {data.personalInfo.phone ? (
+                <Text style={frStyles.contactItem}>{data.personalInfo.phone}</Text>
+              ) : null}
             </View>
-          ) : null}
-          {data.personalInfo.location &&
-          (data.personalInfo.email || data.personalInfo.phone || data.personalInfo.linkedin || data.personalInfo.website) ? (
-            <Text style={frStyles.contactItem}> | </Text>
-          ) : null}
-          {data.personalInfo.email ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }} wrap={false}>
-              <PdfIconMail color="#6B7280" />
-              <Text style={[frStyles.contactItem, { marginLeft: 4 }]}>{data.personalInfo.email}</Text>
-            </View>
-          ) : null}
-          {data.personalInfo.email &&
-          (data.personalInfo.phone || data.personalInfo.linkedin || data.personalInfo.website) ? (
-            <Text style={frStyles.contactItem}> | </Text>
-          ) : null}
-          {data.personalInfo.phone ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }} wrap={false}>
-              <PdfIconPhone color="#6B7280" />
-              <Text style={[frStyles.contactItem, { marginLeft: 4 }]}>{data.personalInfo.phone}</Text>
-            </View>
-          ) : null}
-          {data.personalInfo.phone && (data.personalInfo.linkedin || data.personalInfo.website) ? (
-            <Text style={frStyles.contactItem}> | </Text>
-          ) : null}
-          {data.personalInfo.linkedin ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }} wrap={false}>
-              <PdfIconLinkedInGlyph color="#6B7280" />
-              <Text style={[frStyles.contactItem, { marginLeft: 4 }]}>{data.personalInfo.linkedin}</Text>
-            </View>
-          ) : null}
-          {data.personalInfo.linkedin && data.personalInfo.website ? <Text style={frStyles.contactItem}> | </Text> : null}
-          {data.personalInfo.website ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }} wrap={false}>
-              <PdfIconGlobe color="#6B7280" />
-              <Text style={[frStyles.contactItem, { marginLeft: 4 }]}>{data.personalInfo.website}</Text>
-            </View>
-          ) : null}
+          </View>
         </View>
+
+        {data.summary && (
+          <View wrap={false} style={{ marginBottom: 10 }}>
+            <Text style={frStyles.sectionTitle}>Profile</Text>
+            <Text style={frStyles.summaryText}>{data.summary}</Text>
+          </View>
+        )}
+
+        {data.experience.length > 0 && (
+          <View style={{ marginBottom: 10 }}>
+            <View wrap={false}>
+              <Text style={frStyles.sectionTitle}>Employment History</Text>
+              <View key={data.experience[0].id} wrap={false} style={frStyles.itemContainer}>
+                <Text style={frStyles.itemTitle}>{data.experience[0].position || 'Position'}, {(data.experience[0].company || 'Company')}</Text>
+                <Text style={frStyles.itemDate}>{formatDate(data.experience[0].startDate)} — {formatDate(data.experience[0].endDate)}</Text>
+                {data.experience[0].description && data.experience[0].description.map((desc, idx) => (
+                   <View key={idx} style={frStyles.bulletContainer}>
+                     <Text style={frStyles.bulletPoint}>•</Text>
+                     <Text style={frStyles.bulletText}>{desc}</Text>
+                   </View>
+                ))}
+              </View>
+            </View>
+            {data.experience.slice(1).map((exp) => (
+              <View key={exp.id} wrap={false} style={frStyles.itemContainer}>
+                <Text style={frStyles.itemTitle}>{exp.position || 'Position'}, {(exp.company || 'Company')}</Text>
+                <Text style={frStyles.itemDate}>{formatDate(exp.startDate)} — {formatDate(exp.endDate)}</Text>
+                {exp.description && exp.description.map((desc, idx) => (
+                   <View key={idx} style={frStyles.bulletContainer}>
+                     <Text style={frStyles.bulletPoint}>•</Text>
+                     <Text style={frStyles.bulletText}>{desc}</Text>
+                   </View>
+                ))}
+              </View>
+            ))}
+          </View>
+        )}
+
+        {data.education.length > 0 && (
+          <View wrap={false} style={{ marginTop: 6 }}>
+            <Text style={frStyles.sectionTitle}>Education</Text>
+            {data.education.map((edu) => (
+              <View key={edu.id} style={frStyles.itemContainer} wrap={false}>
+                <Text style={frStyles.itemTitle}>{(edu.institution || '')}, {edu.degree || ''}</Text>
+                <Text style={frStyles.itemDate}>{formatEducationDates(edu.startDate, edu.endDate)}</Text>
+              </View>
+            ))}
+          </View>
+        )}
       </View>
 
-      <View style={frStyles.bodyRow}>
-        <View style={frStyles.leftCol}>
-          {data.summary && (
+      {/* Right Sidebar Column (25%) */}
+      <View style={frStyles.rightCol}>
+        {data.skills.length > 0 && (
+          <View wrap={false} style={{ marginBottom: 15 }}>
+            <Text style={frStyles.sectionTitle}>Skills</Text>
+            {data.skills.map((skill) => (
+               <Text key={skill.id} style={frStyles.skillItem}>{skill.name || 'Skill'}</Text>
+            ))}
+          </View>
+        )}
+
+        {nonEmptyProjects.length > 0 && (
+          <View style={{ marginTop: 10 }}>
             <View wrap={false}>
-              <Text style={frStyles.sectionTitle}>Profile</Text>
-              <Text style={frStyles.summaryText}>{data.summary}</Text>
-            </View>
-          )}
-
-          {data.experience.length > 0 && (
-            <View>
-              <View wrap={false}>
-                <Text style={frStyles.sectionTitle}>Employment History</Text>
-                <View key={data.experience[0].id} wrap={false} style={frStyles.itemContainer}>
-                  <View style={frStyles.itemHeader}>
-                    <Text style={frStyles.itemTitle}>{data.experience[0].position || 'Position'}, {(data.experience[0].company || 'Company')}</Text>
-                    <Text style={frStyles.itemDate}>{formatDate(data.experience[0].startDate)} - {formatDate(data.experience[0].endDate)}</Text>
-                  </View>
-                  {data.experience[0].description && data.experience[0].description.map((desc, idx) => (
-                     <View key={idx} style={frStyles.bulletContainer}>
-                       <Text style={frStyles.bulletPoint}>•</Text>
-                       <Text style={frStyles.bulletText}>{desc}</Text>
-                     </View>
-                  ))}
-                </View>
+              <Text style={frStyles.sectionTitle}>Projects</Text>
+              <View key={nonEmptyProjects[0].id} wrap={false} style={frStyles.projectItem}>
+                <Text style={frStyles.projectName}>{nonEmptyProjects[0].name || 'Project'}</Text>
+                {nonEmptyProjects[0].link ? (
+                  <Text style={frStyles.projectLink}>
+                    {String(nonEmptyProjects[0].link).replace(/^https?:\/\//, '')}
+                  </Text>
+                ) : null}
+                {nonEmptyProjects[0].technologies && nonEmptyProjects[0].technologies.length > 0 ? (
+                  <Text style={frStyles.projectTech}>{nonEmptyProjects[0].technologies.join(', ')}</Text>
+                ) : null}
+                {nonEmptyProjects[0].description ? (
+                  <Text style={[frStyles.bulletText, { marginTop: 2 }]}>{nonEmptyProjects[0].description}</Text>
+                ) : null}
               </View>
-              {data.experience.slice(1).map((exp) => (
-                <View key={exp.id} wrap={false} style={frStyles.itemContainer}>
-                  <View style={frStyles.itemHeader}>
-                    <Text style={frStyles.itemTitle}>{exp.position || 'Position'}, {(exp.company || 'Company')}</Text>
-                    <Text style={frStyles.itemDate}>{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</Text>
-                  </View>
-                  {exp.description && exp.description.map((desc, idx) => (
-                     <View key={idx} style={frStyles.bulletContainer}>
-                       <Text style={frStyles.bulletPoint}>•</Text>
-                       <Text style={frStyles.bulletText}>{desc}</Text>
-                     </View>
-                  ))}
-                </View>
-              ))}
             </View>
-          )}
-
-          {data.education.length > 0 && (
-            <View wrap={false} style={{ marginTop: 10 }}>
-              <Text style={frStyles.sectionTitle}>Education</Text>
-              {data.education.map((edu) => (
-                <View key={edu.id} style={frStyles.itemContainer}>
-                  <Text style={frStyles.itemTitle}>{(edu.institution || '')}, {edu.degree || ''}</Text>
-                  <Text style={frStyles.itemDate}>{formatDate(edu.endDate)}</Text>
-                </View>
-              ))}
-            </View>
-          )}
-
-          {nonEmptyProjects.length > 0 && (
-            <View style={{ marginTop: 10 }}>
-              <View wrap={false}>
-                <Text style={frStyles.sectionTitle}>Projects</Text>
-                <View key={nonEmptyProjects[0].id} wrap={false} style={frStyles.itemContainer}>
-                  <View style={{ marginBottom: 4 }}>
-                    <Text style={frStyles.itemTitle}>{nonEmptyProjects[0].name || 'Project'}</Text>
-                    {nonEmptyProjects[0].link ? (
-                      <Text style={{ fontSize: 8.5, color: '#B91C1C', marginTop: 1, marginBottom: 2 }}>
-                        {String(nonEmptyProjects[0].link).replace(/^https?:\/\//, '')}
-                      </Text>
-                    ) : null}
-                  </View>
-                  {nonEmptyProjects[0].description && (
-                    <View style={frStyles.bulletContainer}>
-                      <Text style={frStyles.bulletPoint}>•</Text>
-                      <Text style={frStyles.bulletText}>{nonEmptyProjects[0].description}</Text>
-                    </View>
-                  )}
-                </View>
+            {nonEmptyProjects.slice(1).map((project) => (
+              <View key={project.id} wrap={false} style={frStyles.projectItem}>
+                <Text style={frStyles.projectName}>{project.name || 'Project'}</Text>
+                {project.link ? (
+                  <Text style={frStyles.projectLink}>
+                    {String(project.link).replace(/^https?:\/\//, '')}
+                  </Text>
+                ) : null}
+                {project.technologies && project.technologies.length > 0 ? (
+                  <Text style={frStyles.projectTech}>{project.technologies.join(', ')}</Text>
+                ) : null}
+                {project.description ? (
+                  <Text style={[frStyles.bulletText, { marginTop: 2 }]}>{project.description}</Text>
+                ) : null}
               </View>
-              {nonEmptyProjects.slice(1).map((project) => (
-                <View key={project.id} wrap={false} style={frStyles.itemContainer}>
-                  <View style={{ marginBottom: 4 }}>
-                    <Text style={frStyles.itemTitle}>{project.name || 'Project'}</Text>
-                    {project.link ? (
-                      <Text style={{ fontSize: 8.5, color: '#B91C1C', marginTop: 1, marginBottom: 2 }}>
-                        {String(project.link).replace(/^https?:\/\//, '')}
-                      </Text>
-                    ) : null}
-                  </View>
-                  {project.description && (
-                    <View style={frStyles.bulletContainer}>
-                      <Text style={frStyles.bulletPoint}>•</Text>
-                      <Text style={frStyles.bulletText}>{project.description}</Text>
-                    </View>
-                  )}
-                </View>
-              ))}
-            </View>
-          )}
-        </View>
-
-        <View style={frStyles.rightCol}>
-          {data.skills.length > 0 && (
-            <View wrap={false}>
-              <Text style={frStyles.sectionTitle}>Skills</Text>
-              {data.skills.map((skill) => (
-                 <Text key={skill.id} style={frStyles.skillItem}>{skill.name || 'Skill'}</Text>
-              ))}
-            </View>
-          )}
-        </View>
+            ))}
+          </View>
+        )}
       </View>
     </Page>
   );
@@ -1553,25 +1556,25 @@ const tlStyles = StyleSheet.create({
     paddingTop: PDF_PAGE_V_MARGIN,
     paddingBottom: PDF_PAGE_V_MARGIN,
   },
-  leftCol: { width: '35%', padding: 25, backgroundColor: '#F3F4F6' },
-  rightCol: { width: '65%', backgroundColor: '#FFFFFF' },
-  headerRight: { padding: 30, backgroundColor: '#334155', justifyContent: 'center' },
-  name: { fontSize: 28, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 5 },
-  title: { fontSize: 14, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 1 },
-  bodyRight: { padding: 30 },
-  sectionTitleLeft: { fontSize: 12, fontWeight: 'bold', color: '#111827', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 12, paddingBottom: 5, borderBottomWidth: 1, borderBottomColor: '#D1D5DB' },
-  sectionTitleRight: { fontSize: 14, fontWeight: 'bold', color: '#111827', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 15, paddingBottom: 5, borderBottomWidth: 1, borderBottomColor: '#E5E7EB' },
-  normalTextLeft: { fontSize: 9, color: '#4B5563', lineHeight: 1.5, marginBottom: 8 },
-  normalTextRight: { fontSize: 10, color: '#4B5563', lineHeight: 1.5, textAlign: 'justify' },
-  timelineContainer: { borderLeftWidth: 1, borderLeftColor: '#E5E7EB', paddingLeft: 12, marginLeft: 5, marginBottom: 15 },
-  itemHeaderRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 },
-  itemTitle: { fontSize: 12, fontWeight: 'bold', color: '#111827' },
-  itemSubtitle: { fontSize: 10, color: '#4B5563', fontWeight: 'bold' },
-  itemDate: { fontSize: 9, color: '#6B7280' },
+  leftCol: { width: '32%', padding: 22, backgroundColor: '#E5E7EB' },
+  rightCol: { width: '68%', backgroundColor: '#FFFFFF' },
+  headerRight: { padding: 25, backgroundColor: '#334155', justifyContent: 'center' },
+  name: { fontSize: 24, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 4, textTransform: 'uppercase' },
+  title: { fontSize: 12, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 1 },
+  bodyRight: { padding: 25 },
+  sectionTitleLeft: { fontSize: 11, fontWeight: 'bold', color: '#111827', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 10, paddingBottom: 4, borderBottomWidth: 1.5, borderBottomColor: '#9CA3AF' },
+  sectionTitleRight: { fontSize: 13, fontWeight: 'bold', color: '#111827', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 12, paddingBottom: 4, borderBottomWidth: 1, borderBottomColor: '#E5E7EB' },
+  normalTextLeft: { fontSize: 8.5, color: '#1F2937', lineHeight: 1.4, marginBottom: 6 },
+  normalTextRight: { fontSize: 9.5, color: '#374151', lineHeight: 1.5, textAlign: 'justify' },
+  timelineContainer: { borderLeftWidth: 1, borderLeftColor: '#D1D5DB', paddingLeft: 12, marginLeft: 5, marginBottom: 14 },
+  itemHeaderRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 3 },
+  itemTitle: { fontSize: 11, fontWeight: 'bold', color: '#111827' },
+  itemSubtitle: { fontSize: 9.5, color: '#374151', fontWeight: 'bold' },
+  itemDate: { fontSize: 8.5, color: '#6B7280' },
   bulletContainer: { flexDirection: 'row', marginBottom: 3 },
-  bulletPoint: { width: 10, fontSize: 10, color: '#4B5563' },
-  bulletText: { flex: 1, fontSize: 10, color: '#4B5563', lineHeight: 1.4 },
-  timelineDot: { position: 'absolute', left: -16, top: 4, width: 7, height: 7, borderRadius: 3.5, backgroundColor: '#334155', borderWidth: 1, borderColor: '#FFFFFF' }
+  bulletPoint: { width: 10, fontSize: 9, color: '#4B5563' },
+  bulletText: { flex: 1, fontSize: 9, color: '#4B5563', lineHeight: 1.35 },
+  timelineDot: { position: 'absolute', left: -16, top: 3, width: 7, height: 7, borderRadius: 3.5, backgroundColor: '#334155', borderWidth: 1, borderColor: '#FFFFFF' }
 });
 
 export const TimelineDarkPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeColorBg }) => {
@@ -1582,11 +1585,11 @@ export const TimelineDarkPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCol
     <Page size="A4" style={tlStyles.page}>
       <View style={tlStyles.leftCol}>
         {data.personalInfo.imageUrl && (
-           <Image src={data.personalInfo.imageUrl} style={{ width: 90, height: 90, borderRadius: 45, marginBottom: 20, alignSelf: 'center', objectFit: 'cover' }} />
+           <Image src={data.personalInfo.imageUrl} style={{ width: 80, height: 80, borderRadius: 40, marginBottom: 16, alignSelf: 'center', objectFit: 'cover', borderWidth: 3, borderColor: '#FFFFFF' }} />
         )}
         <Text style={tlStyles.sectionTitleLeft}>Contact</Text>
         {data.personalInfo.phone ? (
-          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8 }} wrap={false}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 7 }} wrap={false}>
             <View style={pdfContactIconCell()}>
               <PdfIconPhone color={PDF_ICON_GRAY} />
             </View>
@@ -1594,7 +1597,7 @@ export const TimelineDarkPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCol
           </View>
         ) : null}
         {data.personalInfo.email ? (
-          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8 }} wrap={false}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 7 }} wrap={false}>
             <View style={pdfContactIconCell()}>
               <PdfIconMail color={PDF_ICON_GRAY} />
             </View>
@@ -1602,7 +1605,7 @@ export const TimelineDarkPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCol
           </View>
         ) : null}
         {data.personalInfo.location ? (
-          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8 }} wrap={false}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 7 }} wrap={false}>
             <View style={pdfContactIconCell()}>
               <PdfIconMapPin color={PDF_ICON_GRAY} />
             </View>
@@ -1610,7 +1613,7 @@ export const TimelineDarkPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCol
           </View>
         ) : null}
         {data.personalInfo.linkedin ? (
-          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8 }} wrap={false}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 7 }} wrap={false}>
             <View style={pdfContactIconCell()}>
               <PdfIconLinkedInGlyph color={PDF_ICON_GRAY} />
             </View>
@@ -1618,7 +1621,7 @@ export const TimelineDarkPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCol
           </View>
         ) : null}
         {data.personalInfo.website ? (
-          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8 }} wrap={false}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 7 }} wrap={false}>
             <View style={pdfContactIconCell()}>
               <PdfIconGlobe color={PDF_ICON_GRAY} />
             </View>
@@ -1627,27 +1630,12 @@ export const TimelineDarkPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCol
         ) : null}
 
         {data.skills.length > 0 && (
-          <View wrap={false} style={{ marginTop: 20 }}>
+          <View wrap={false} style={{ marginTop: 15 }}>
             <Text style={tlStyles.sectionTitleLeft}>Skills</Text>
             {data.skills.map((skill) => (
-              <View key={skill.id} style={{ marginBottom: 6 }}>
-                <Text style={{ fontSize: 9, color: '#111827', fontWeight: 'bold' }}>{skill.name}</Text>
-                {skill.level && <Text style={{ fontSize: 8, color: '#6B7280' }}>{skill.level}</Text>}
-              </View>
-            ))}
-          </View>
-        )}
-
-        {data.education.length > 0 && (
-          <View wrap={false} style={{ marginTop: 20 }}>
-            <Text style={tlStyles.sectionTitleLeft}>Education</Text>
-            {data.education.map((edu) => (
-              <View key={edu.id} style={{ marginBottom: 12 }}>
-                <Text style={{ fontSize: 9, color: '#111827', fontWeight: 'bold' }}>{edu.degree}</Text>
-                <Text style={{ fontSize: 8, color: '#4B5563', marginTop: 2 }}>{edu.institution}</Text>
-                <Text style={{ fontSize: 8, color: '#6B7280', marginTop: 2 }}>
-                  {formatEducationDates(edu.startDate, edu.endDate)}
-                </Text>
+              <View key={skill.id} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
+                <Text style={{ width: 8, fontSize: 9, color: '#1F2937' }}>•</Text>
+                <Text style={{ fontSize: 9, color: '#1F2937', fontWeight: 'bold', flex: 1 }}>{skill.name}</Text>
               </View>
             ))}
           </View>
@@ -1662,14 +1650,14 @@ export const TimelineDarkPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCol
 
         <View style={tlStyles.bodyRight}>
           {data.summary && (
-            <View wrap={false} style={{ marginBottom: 20 }}>
+            <View wrap={false} style={{ marginBottom: 16 }}>
               <Text style={tlStyles.sectionTitleRight}>Profile</Text>
               <Text style={tlStyles.normalTextRight}>{data.summary}</Text>
             </View>
           )}
 
           {data.experience.length > 0 && (
-            <View>
+            <View style={{ marginBottom: 16 }}>
               <View wrap={false}>
                 <Text style={tlStyles.sectionTitleRight}>Work Experience</Text>
                 <View key={data.experience[0].id} wrap={false} style={tlStyles.timelineContainer}>
@@ -1678,7 +1666,7 @@ export const TimelineDarkPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCol
                     <Text style={tlStyles.itemTitle}>{data.experience[0].company}</Text>
                     <Text style={tlStyles.itemDate}>{formatDate(data.experience[0].startDate)} - {formatDate(data.experience[0].endDate)}</Text>
                   </View>
-                  <Text style={[tlStyles.itemSubtitle, { marginBottom: 6 }]}>{data.experience[0].position}</Text>
+                  <Text style={[tlStyles.itemSubtitle, { marginBottom: 4 }]}>{data.experience[0].position}</Text>
                   {data.experience[0].description.map((desc, idx) => (
                     <View key={idx} style={tlStyles.bulletContainer}>
                       <Text style={tlStyles.bulletPoint}>•</Text>
@@ -1694,7 +1682,7 @@ export const TimelineDarkPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCol
                     <Text style={tlStyles.itemTitle}>{exp.company}</Text>
                     <Text style={tlStyles.itemDate}>{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</Text>
                   </View>
-                  <Text style={[tlStyles.itemSubtitle, { marginBottom: 6 }]}>{exp.position}</Text>
+                  <Text style={[tlStyles.itemSubtitle, { marginBottom: 4 }]}>{exp.position}</Text>
                   {exp.description.map((desc, idx) => (
                     <View key={idx} style={tlStyles.bulletContainer}>
                       <Text style={tlStyles.bulletPoint}>•</Text>
@@ -1706,13 +1694,39 @@ export const TimelineDarkPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCol
             </View>
           )}
 
+          {data.education.length > 0 && (
+            <View style={{ marginBottom: 16 }}>
+              <View wrap={false}>
+                <Text style={tlStyles.sectionTitleRight}>Education</Text>
+                <View key={data.education[0].id} wrap={false} style={tlStyles.timelineContainer}>
+                  <View style={[tlStyles.timelineDot, { backgroundColor: primaryBg }]} />
+                  <View style={tlStyles.itemHeaderRow}>
+                    <Text style={tlStyles.itemTitle}>{data.education[0].degree}</Text>
+                    <Text style={tlStyles.itemDate}>{formatEducationDates(data.education[0].startDate, data.education[0].endDate)}</Text>
+                  </View>
+                  <Text style={tlStyles.itemSubtitle}>{data.education[0].institution}</Text>
+                </View>
+              </View>
+              {data.education.slice(1).map((edu) => (
+                <View key={edu.id} wrap={false} style={tlStyles.timelineContainer}>
+                  <View style={[tlStyles.timelineDot, { backgroundColor: primaryBg }]} />
+                  <View style={tlStyles.itemHeaderRow}>
+                    <Text style={tlStyles.itemTitle}>{edu.degree}</Text>
+                    <Text style={tlStyles.itemDate}>{formatEducationDates(edu.startDate, edu.endDate)}</Text>
+                  </View>
+                  <Text style={tlStyles.itemSubtitle}>{edu.institution}</Text>
+                </View>
+              ))}
+            </View>
+          )}
+
           {nonEmptyProjects.length > 0 && (
             <View>
               <View wrap={false}>
                 <Text style={tlStyles.sectionTitleRight}>Projects</Text>
                 <View key={nonEmptyProjects[0].id} wrap={false} style={tlStyles.timelineContainer}>
                   <View style={[tlStyles.timelineDot, { backgroundColor: primaryBg }]} />
-                  <View style={{ marginBottom: 4 }}>
+                  <View style={{ marginBottom: 3 }}>
                     <Text style={tlStyles.itemTitle}>{nonEmptyProjects[0].name}</Text>
                     {nonEmptyProjects[0].link ? (
                       <Text style={{ fontSize: 8.5, color: primaryBg, marginTop: 1, marginBottom: 2 }}>
@@ -1721,13 +1735,13 @@ export const TimelineDarkPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCol
                     ) : null}
                   </View>
                   {nonEmptyProjects[0].description && (
-                    <View style={[tlStyles.bulletContainer, { marginTop: 4 }]}>
+                    <View style={[tlStyles.bulletContainer, { marginTop: 2 }]}>
                       <Text style={tlStyles.bulletPoint}>•</Text>
                       <Text style={tlStyles.bulletText}>{nonEmptyProjects[0].description}</Text>
                     </View>
                   )}
                   {nonEmptyProjects[0].technologies && nonEmptyProjects[0].technologies.length > 0 ? (
-                    <Text style={[tlStyles.itemDate, { marginTop: 4 }]}>
+                    <Text style={[tlStyles.itemDate, { marginTop: 2 }]}>
                       Tech: {nonEmptyProjects[0].technologies.join(', ')}
                     </Text>
                   ) : null}
@@ -1736,7 +1750,7 @@ export const TimelineDarkPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCol
               {nonEmptyProjects.slice(1).map((project) => (
                 <View key={project.id} wrap={false} style={tlStyles.timelineContainer}>
                   <View style={[tlStyles.timelineDot, { backgroundColor: primaryBg }]} />
-                  <View style={{ marginBottom: 4 }}>
+                  <View style={{ marginBottom: 3 }}>
                     <Text style={tlStyles.itemTitle}>{project.name}</Text>
                     {project.link ? (
                       <Text style={{ fontSize: 8.5, color: primaryBg, marginTop: 1, marginBottom: 2 }}>
@@ -1745,13 +1759,13 @@ export const TimelineDarkPDFLayout: React.FC<PDFLayoutProps> = ({ data, themeCol
                     ) : null}
                   </View>
                   {project.description && (
-                    <View style={[tlStyles.bulletContainer, { marginTop: 4 }]}>
+                    <View style={[tlStyles.bulletContainer, { marginTop: 2 }]}>
                       <Text style={tlStyles.bulletPoint}>•</Text>
                       <Text style={tlStyles.bulletText}>{project.description}</Text>
                     </View>
                   )}
                   {project.technologies && project.technologies.length > 0 ? (
-                    <Text style={[tlStyles.itemDate, { marginTop: 4 }]}>
+                    <Text style={[tlStyles.itemDate, { marginTop: 2 }]}>
                       Tech: {project.technologies.join(', ')}
                     </Text>
                   ) : null}
